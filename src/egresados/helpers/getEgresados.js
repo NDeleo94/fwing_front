@@ -17,7 +17,6 @@ export const getEgresados = async (id) => {
     trabajaComo: data.trabajo.trabajaComo.nombre,
     trabajaEn: data.trabajo.trabajaEn.nombre,
   };
-  console.log(egresado)
   return egresado;
 };
 
