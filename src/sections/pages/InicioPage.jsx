@@ -18,7 +18,7 @@ export const InicioPage = () => {
         </div>
           {/* Logo UNT-FACET */}
           <div className="row my-2 text-center">
-            <a href=""><img src="https://www.facet.unt.edu.ar/wp-content/uploads/2022/04/FACET-cabecera-2022.png" alt="" /></a>
+            <a href=""><img src="https://www.facet.unt.edu.ar/wp-content/uploads/2022/04/FACET-cabecera-2022.png" alt="Logo Facet y UNT" /></a>
           </div>
           {/* /Logo UNT-FACET */}
         {/* ¡A explorar! */}
