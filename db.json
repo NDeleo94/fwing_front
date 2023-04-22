@@ -1,0 +1,104 @@
+{
+  "egresado": [
+    {
+      "id": 1,
+      "apellido": "Pérez",
+      "nombre": "José",
+      "carrera": "Ingeniería en Computación",
+      "fechanac": "1993/02/14",
+      "anioEgresado": "2017",
+      "ciudadActual": "San Miguel de Tucumán",
+      "ciudadNatal": "San Miguel de Tucumán",
+      "trabajo": {
+        "trabajaComo": {
+          "nombre": "Scrum Master",
+          "descripcion": "líder de equipo a cargo de establecer la metodología Scrum"
+        },
+        "trabajaEn": {
+          "nombre": "Accenture",
+          "descripcion": "Accenture Limited es una empresa multinacional de consultoría estratégica, servicios tecnológicos y externalización"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "apellido": "González",
+      "nombre": "Marcelo",
+      "carrera": "Ingeniería en Computación",
+      "fechanac": "1992/01/11",
+      "anioEgresado": "2016",
+      "ciudadActual": "Salta",
+      "ciudadNatal": "San Salvador de Jujuy",
+      "trabajo": {
+        "trabajaComo": {
+          "nombre": "Full Stack Senior",
+          "descripcion": "descripciónA"
+        },
+        "trabajaEn": {
+          "nombre": "EmpresaB",
+          "descripcion": "DescripciónEmpresa B"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "apellido": "Ahumada",
+      "nombre": "Gastón",
+      "carrera": "Ingeniería en Computación",
+      "fechanac": "1980/08/20",
+      "anioEgresado": "2001",
+      "ciudadActual": "CABA",
+      "ciudadNatal": "San Miguel de Tucumán",
+      "trabajo": {
+        "trabajaComo": {
+          "nombre": "Trabajo1",
+          "descripcion": "Descripcióntrabajo B"
+        },
+        "trabajaEn": {
+          "nombre": "EmpresaC",
+          "descripcion": "DescripciónEmpresa c"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "apellido": "Martinez",
+      "nombre": "Christian",
+      "carrera": "Ingeniería en Computación",
+      "fechanac": "1990/10/30",
+      "anioEgresado": "2010",
+      "ciudadActual": "Sillicon Valey",
+      "ciudadNatal": "San Miguel de Tucumán",
+      "trabajo": {
+        "trabajaComo": {
+          "nombre": "Puesto D",
+          "descripcion": "Descripcióntrabajo D"
+        },
+        "trabajaEn": {
+          "nombre": "EmpresaD",
+          "descripcion": "DescripciónEmpresa D"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "apellido": "Maza",
+      "nombre": "Laura",
+      "carrera": "Ingeniería en Computación",
+      "fechanac": "1988/01/02",
+      "anioEgresado": "2008",
+      "ciudadActual": "Barcelona, España",
+      "ciudadNatal": "Tartagal, Salta",
+      "trabajo": {
+        "trabajaComo": {
+          "nombre": "Puesto E",
+          "descripcion": "Descripcióntrabajo E"
+        },
+        "trabajaEn": {
+          "nombre": "EmpresaE",
+          "descripcion": "DescripciónEmpresa E"
+        }
+      }
+    }
+  ]
+}
