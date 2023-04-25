@@ -1,7 +1,7 @@
 export const QueEsFollowing = () => {
   return (
     <>
-      <h1 className="display-6">¿Qué es Following?</h1>
+      <h1 className="display-3">¿Qué es Following?</h1>
       <p className="text-center">
         Es una Aplicación Web sobre seguimiento de graduados, que combina dos
         formas de hacerlo: Encuestas (forma tradicional) y Perfiles de Red

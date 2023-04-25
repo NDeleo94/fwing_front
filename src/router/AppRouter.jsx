@@ -11,7 +11,7 @@ import {
   MPaisPage,
   UniversidadPage,
 } from "../sections/pages";
-import { Navbar } from "../ui/components/Navbar";
+import { Footer, Navbar } from "../ui/components";
 
 export const AppRouter = () => {
   return (
@@ -32,6 +32,8 @@ export const AppRouter = () => {
           <Route path="/*" element={<EgresadosRoutes />} />
         </Routes>
       </div>
+
+      <Footer />
     </>
   );
 };
