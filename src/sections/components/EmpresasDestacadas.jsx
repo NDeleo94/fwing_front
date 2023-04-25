@@ -6,7 +6,7 @@ export const EmpresasDestacadas = () => {
       <div className="card border-primary mb-3">
         <div className="card-header">
           <h1 className="lead text-center">
-            <b>Empresas Destacadas</b>
+            <b>Organizaciones Destacadas</b>
           </h1>
           <div className="row">
             <div className="col-4">
