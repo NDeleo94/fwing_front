@@ -4,6 +4,7 @@ export const DatosPersonalesEgresadoCard = ({
   nombres,
   apellidos,
   fecha_nac,
+  email,
   egresos,
   ciudad_natal,
   ciudad_actual,
@@ -11,10 +12,10 @@ export const DatosPersonalesEgresadoCard = ({
   const [anioEgreso, setAnioEgreso] = useState(null);
 
   useEffect(() => {
-    if(egresos){
-      setAnioEgreso(egresos[0].ciclo_egreso)
+    if (egresos) {
+      setAnioEgreso(egresos[0].ciclo_egreso);
     }
-  }, [egresos])
+  }, [egresos]);
   return (
     <>
       <div className="card border-secondary mb-3">
@@ -25,6 +26,13 @@ export const DatosPersonalesEgresadoCard = ({
           <div className="col-8">
             {nombres} {apellidos}
           </div>
+        </div>
+        <hr />
+        <div className="row mx-2">
+          <div className="col-4">
+            <b>Correo Electrónico:</b>
+          </div>
+          <div className="col-8">{email}</div>
         </div>
         <hr />
         <div className="row mx-2">
