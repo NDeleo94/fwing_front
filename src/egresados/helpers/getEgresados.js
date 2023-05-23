@@ -5,19 +5,7 @@ export const getEgresados = async (id) => {
   const resp = await fetch(url);
   // guardo lo que recibo
   const data = await resp.json();
-  const egresado = {
-    id: data.id,
-    anioEgresado: data.anioEgresado,
-    apellido: data.apellido,
-    carrera: data.carrera,
-    ciudadActual: data.ciudadActual,
-    ciudadNatal: data.ciudadNatal,
-    fechanac: data.fechanac,
-    nombre: data.nombre,
-    trabajaComo: data.trabajo.trabajaComo.nombre,
-    trabajaEn: data.trabajo.trabajaEn.nombre,
-  };
-  return egresado;
+  return data;
 };
 
 /* export const getGifs = async(category) => {

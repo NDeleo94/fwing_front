@@ -1,8 +1,12 @@
-import { DatosLaboralesEgresadosCard, DatosPersonalesEgresadoCard, PerfilEgresadoCard } from "../components";
+import {
+  DatosLaboralesEgresadosCard,
+  DatosPersonalesEgresadoCard,
+  PerfilEgresadoCard,
+} from "../components";
 import { useFetchEgresados } from "../hooks/useFetchEgresados";
 
 export const PerfilPage = () => {
-  const { data, loading } = useFetchEgresados("4");
+  const { data, loading } = useFetchEgresados("2");
 
   return (
     <>

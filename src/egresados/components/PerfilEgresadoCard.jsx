@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export const PerfilEgresadoCard = ({ nombre, carrera, ciudadNatal }) => {
+export const PerfilEgresadoCard = ({ nombres, egresos, ciudad_natal }) => {
+  const [primeraCarrera, setPrimeraCarrera] = useState(null);
+
+  useEffect(() => {
+    if(egresos){
+      setPrimeraCarrera(egresos[0].carrera.carrera)
+    }
+  }, [egresos])
+
   return (
     <>
       <div className="card border-primary mb-3">
@@ -12,9 +20,9 @@ export const PerfilEgresadoCard = ({ nombre, carrera, ciudadNatal }) => {
           />
         </div>
         <div className="card-body text-center">
-          <h3 className="card-title text-primary">{nombre}</h3>
-          <h4 className="card-title">{carrera}</h4>
-          <h5 className="card-title">{ciudadNatal}</h5>
+          <h3 className="card-title text-primary">{nombres}</h3>
+          <h4 className="card-title">{primeraCarrera}</h4>
+          <h5 className="card-title">{ciudad_natal}</h5>
         </div>
       </div>
     </>
