@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-export const DatosLaboralesEgresadosCard = ({ actividades }) => {
+export const DatosLaboralesEgresadosCard = ({ historial }) => {
   const [actividad, setActividad] = useState(null);
 
   useEffect(() => {
-    setActividad(actividades);
-  }, [actividades]);
+    setActividad(historial);
+  }, [historial]);
 
   return (
     <>
