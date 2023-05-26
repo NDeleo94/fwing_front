@@ -63,21 +63,6 @@ export const IngresarUsuarioForm = () => {
               <div className="form-group input-group">
                 <div className="input-group-prepend">
                   <span className="input-group-text">
-                    <i className="bi bi-calendar-check"></i>
-                  </span>
-                </div>
-                <input
-                  name=""
-                  className="form-control"
-                  placeholder="Fecha Egreso"
-                  type="text"
-                  id="fechaEgresoEgresado"
-                />
-              </div>
-
-              <div className="form-group input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
                     <i className="bi bi-mortarboard"></i>
                   </span>
                 </div>
@@ -87,6 +72,21 @@ export const IngresarUsuarioForm = () => {
                   placeholder="Carrera"
                   type="text"
                   id="carreraEgresado"
+                />
+              </div>
+
+              <div className="form-group input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text">
+                    <i className="bi bi-calendar-check"></i>
+                  </span>
+                </div>
+                <input
+                  name=""
+                  className="form-control"
+                  placeholder="Fecha Egreso"
+                  type="text"
+                  id="fechaEgresoEgresado"
                 />
               </div>
 
@@ -199,6 +199,7 @@ export const IngresarUsuarioForm = () => {
                 <button
                   type="submit"
                   className="btn btn-primary my-2 d-grid mx-auto"
+                  id="submitButton"
                 >
                   Crear Egresado
                 </button>
