@@ -21,7 +21,7 @@
             "facultad": {
               "id": 1,
               "facultad": "Facultad de Ciencias Exactas y Tecnología",
-              "aconimo": "FACET",
+              "acronimo": "FACET",
               "universidad": {
                 "id": 1,
                 "universidad": "Universidad Nacional de Tucumán",
@@ -31,7 +31,7 @@
           }
         }
       ],
-      "actividades": [
+      "historial": [
         {
           "id": 12,
           "inicio": "2022-05-22",
@@ -69,7 +69,7 @@
             "facultad": {
               "id": 1,
               "facultad": "Facultad de Ciencias Exactas y Tecnología",
-              "aconimo": "FACET",
+              "acronimo": "FACET",
               "universidad": {
                 "id": 1,
                 "universidad": "Universidad Nacional de Tucumán",
@@ -88,7 +88,7 @@
             "facultad": {
               "id": 4,
               "facultad": "Fund. Magister Tucumán",
-              "aconimo": "FMTSXXI",
+              "acronimo": "FMTSXXI",
               "universidad": {
                 "id": 3,
                 "universidad": "Universidad Siglo XXI",
@@ -98,7 +98,7 @@
           }
         }
       ],
-      "actividades": [
+      "historial": [
         {
           "id": 26,
           "inicio": "2022-05-22",
@@ -125,6 +125,330 @@
           "puesto": {
             "id": 128,
             "puesto": "Docente Universitario"
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "email": "cuga@gmail.com",
+      "apellidos": "Cusumano",
+      "nombres": "César",
+      "nacionalidad": "Paraguay",
+      "fecha_nac": "1996-08-23",
+      "ciudad_natal": "Ciudad del Este, Paraguay",
+      "ciudad_actual": "San Miguel de Tucumán",
+      "last_login": null,
+      "egresos": [
+        {
+          "id": 3,
+          "ciclo_egreso": "2022-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 1,
+            "carrera": "Ingeniería en Computación",
+            "facultad": {
+              "id": 1,
+              "facultad": "Facultad de Ciencias Exactas y Tecnología",
+              "acronimo": "FACET",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        },
+        {
+          "id": 3,
+          "ciclo_egreso": "2018-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 4,
+            "carrera": "Profesor de Música",
+            "facultad": {
+              "id": 33,
+              "facultad": "Instituto Superior de Música",
+              "acronimo": "ISMUNT",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        }
+      ],
+      "historial": [
+        {
+          "id": 26,
+          "inicio": "2022-05-22",
+          "fin": "2023-06-07",
+          "organizacion": {
+            "id": 13,
+            "organizacion": "CUGA Band",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 133,
+            "puesto": "Baterista"
+          }
+        },
+        {
+          "id": 523,
+          "inicio": "2017-06-08",
+          "fin": "2020-05-30",
+          "organizacion": {
+            "id": 203,
+            "organizacion": "Enseñanza Privada de Música",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 128,
+            "puesto": "Profesor Particular"
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "email": "jp_monteros@gmail.com",
+      "apellidos": "Monteros",
+      "nombres": "Juan Pablo",
+      "nacionalidad": "Chile",
+      "fecha_nac": "1994-05-18",
+      "ciudad_natal": "Santiago, Chile",
+      "ciudad_actual": "San Miguel de Tucumán",
+      "last_login": null,
+      "egresos": [
+        {
+          "id": 3,
+          "ciclo_egreso": "2022-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 1,
+            "carrera": "Ingeniería en Computación",
+            "facultad": {
+              "id": 1,
+              "facultad": "Facultad de Ciencias Exactas y Tecnología",
+              "acronimo": "FACET",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        },
+        {
+          "id": 24,
+          "ciclo_egreso": "2018-10-14",
+          "matricula": 2451,
+          "carrera": {
+            "id": 44,
+            "carrera": "Medicina",
+            "facultad": {
+              "id": 44,
+              "facultad": "Facultad de Medicina",
+              "acronimo": "FAME",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        }
+      ],
+      "historial": [
+        {
+          "id": 264,
+          "inicio": "2022-01-07",
+          "fin": null,
+          "organizacion": {
+            "id": 14,
+            "organizacion": "Hospital Maternal del Niño Jesús",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 122,
+            "puesto": "Ginecólogo Residente R3"
+          }
+        },
+        {
+          "id": 524,
+          "inicio": "2017-06-08",
+          "fin": "2020-05-30",
+          "organizacion": {
+            "id": 2044,
+            "organizacion": "Inmobiliaría Monteros",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 128,
+            "puesto": "Vendedor"
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "email": "collm@gmail.com",
+      "apellidos": "Coll Aráoz",
+      "nombres": "Maximiliano",
+      "nacionalidad": "Brasil",
+      "fecha_nac": "1995-02-14",
+      "ciudad_natal": "Brasilia, Brasil",
+      "ciudad_actual": "San Miguel de Tucumán",
+      "last_login": null,
+      "egresos": [
+        {
+          "id": 3,
+          "ciclo_egreso": "2022-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 1,
+            "carrera": "Ingeniería en Computación",
+            "facultad": {
+              "id": 1,
+              "facultad": "Facultad de Ciencias Exactas y Tecnología",
+              "acronimo": "FACET",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        },
+        {
+          "id": 25,
+          "ciclo_egreso": "2018-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 45,
+            "carrera": "Escribanía",
+            "facultad": {
+              "id": 455,
+              "facultad": "Facultad de Derecho de la UNSTA",
+              "acronimo": "FDUNSTA",
+              "universidad": {
+                "id": 35,
+                "universidad": "Universidad del Norte Santo Tomás de Aquino",
+                "acronimo": "UNSTA"
+              }
+            }
+          }
+        }
+      ],
+      "historial": [
+        {
+          "id": 26,
+          "inicio": "2023-03-30",
+          "fin": null,
+          "organizacion": {
+            "id": 155,
+            "organizacion": "Escribanía Coll",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 122,
+            "puesto": "Escribano Junior"
+          }
+        },
+        {
+          "id": 525,
+          "inicio": "2017-06-08",
+          "fin": "2020-05-30",
+          "organizacion": {
+            "id": 205,
+            "organizacion": "Taller de Pulidos Maxi",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 1285,
+            "puesto": "Pulidor Maestro"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "email": "lealbornoz@gmail.com",
+      "apellidos": "Albornoz Barrera",
+      "nombres": "Lorenzo Eduardo",
+      "nacionalidad": "Colombia",
+      "fecha_nac": "1994-08-02",
+      "ciudad_natal": "Medellín, Colombia",
+      "ciudad_actual": "San Miguel de Tucumán",
+      "last_login": null,
+      "egresos": [
+        {
+          "id": 3,
+          "ciclo_egreso": "2022-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 1,
+            "carrera": "Ingeniería en Computación",
+            "facultad": {
+              "id": 1,
+              "facultad": "Facultad de Ciencias Exactas y Tecnología",
+              "acronimo": "FACET",
+              "universidad": {
+                "id": 1,
+                "universidad": "Universidad Nacional de Tucumán",
+                "acronimo": "UNT"
+              }
+            }
+          }
+        },
+        {
+          "id": 26,
+          "ciclo_egreso": "2018-09-10",
+          "matricula": null,
+          "carrera": {
+            "id": 46,
+            "carrera": "Licenciado en Nutrición",
+            "facultad": {
+              "id": 455,
+              "facultad": "Facultad de Nutrición de la UNSTA",
+              "acronimo": "FNUNSTA",
+              "universidad": {
+                "id": 35,
+                "universidad": "Universidad del Norte Santo Tomás de Aquino",
+                "acronimo": "UNSTA"
+              }
+            }
+          }
+        }
+      ],
+      "historial": [
+        {
+          "id": 26,
+          "inicio": "2022-05-22",
+          "fin": null,
+          "organizacion": {
+            "id": 16,
+            "organizacion": "Consultorio AB",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 1226,
+            "puesto": "Socio Fundador"
+          }
+        },
+        {
+          "id": 26,
+          "inicio": "2022-05-22",
+          "fin": null,
+          "organizacion": {
+            "id": 16,
+            "organizacion": "Consultorio AB",
+            "tipo": "p"
+          },
+          "puesto": {
+            "id": 1226,
+            "puesto": "Nutricionista"
           }
         }
       ]

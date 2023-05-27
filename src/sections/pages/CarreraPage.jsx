@@ -1,10 +1,12 @@
+import { EgresadoCard } from "../../egresados/components/EgresadoCard";
 import { getCantidadEgrePorAnio } from "../../egresados/helpers/getCantidadEgrPorAnio";
 import { useFetchCantidadEgrPorAnio } from "../../egresados/hooks/useFetchCantidadEgrPorAnio";
+import { SearchPage } from "../../egresados/pages";
 
 export const CarreraPage = () => {
-  const data2 = useFetchCantidadEgrPorAnio();
+  /* const data2 = useFetchCantidadEgrPorAnio();
   const data = getCantidadEgrePorAnio();
-  console.log(data)
+  console.log(data); */
   /* const labels = Utils.months({ count: 7 });
   const data = {
     labels: labels,
@@ -22,5 +24,9 @@ export const CarreraPage = () => {
     type: "line",
     data: data,
   }; */
-  return <>CarreraPage</>;
+  return (
+    <>
+      <SearchPage />
+    </>
+  );
 };
