@@ -20,7 +20,7 @@ export const EgresadoCard = ({ id,nombres,apellidos,ciudad_natal,historial }) =>
                 <p className="card-text">
                   De {ciudad_natal} <br /> 30 años
                   <br />
-                  Trabajó en: {historial.organizacion.organizacion}
+                  Trabajó en: {historial[0].organizacion.organizacion}
                 </p>
                 {/* <Link to={`/hero/${ id }`}>
                     Más...

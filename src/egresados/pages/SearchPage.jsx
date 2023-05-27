@@ -11,16 +11,13 @@ export const SearchPage = () => {
   const location = useLocation();
 
   const { q = "" } = queryString.parse(location.search);
-  const { data, loading } = useFetchEgresadosByName();
+  const { data, loading } = useFetchEgresadosByName(q);
   const [egresados, setEgresados] = useState(null);
   useEffect(() => {
     if (data) {
       setEgresados(data);
     }
-    console.log({...egresados})
   }, [data]);
-
-  console.log(egresados);
 
   const { searchText, onInputChange } = useForm({
     searchText: q,
@@ -41,16 +38,18 @@ export const SearchPage = () => {
   };
 
   const notFound = (egresados, q) => {
-    if (egresados.length === 0 && q !== "")
-      return (
-        <>
-          <div className="alert alert-danger">
-            <b> ¡Sin resultados!</b> <hr />
-            No encontramos resultados con '{q}'
-          </div>
-          ;
-        </>
-      );
+    if (egresados) {
+      if (egresados.length === 0 && q !== "")
+        return (
+          <>
+            <div className="alert alert-danger">
+              <b> ¡Sin resultados!</b> <hr />
+              No encontramos resultados con '{q}'
+            </div>
+            ;
+          </>
+        );
+    }
   };
 
   return (
@@ -78,7 +77,7 @@ export const SearchPage = () => {
           <hr />
           {isEmpty(q)}
 
-          {egresados ? <EgresadoList {...egresados} /> : ""}
+          {egresados ? <EgresadoList data={data} /> : notFound(egresados, q)}
         </div>
       </div>
     </>
