@@ -2,10 +2,42 @@ import React from "react";
 import { useForm } from "../hooks/useForm";
 
 export const IngresarUsuarioForm = () => {
-  const { formState, onInputChange } = useForm();
+  const initialForm = {
+    apellidos: "",
+    nombres: "",
+    dni: 0,
+    email: "",
+    ciclo_egreso: "",
+    nacionalidad: "",
+    ciudad_natal: "",
+    domicilio: "",
+    ciudad_actual: "",
+    certificado: "",
+    sexo: "",
+  };
+  const { formState, onInputChange } = useForm(initialForm);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formState);
+    const url = `https://ndeleo94.pythonanywhere.com/fw/api/egresados/`;
+    const postData = formState;
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    };
+
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Post created:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
   return (
     <>
@@ -47,7 +79,7 @@ export const IngresarUsuarioForm = () => {
                 <input
                   className="form-control"
                   placeholder="DNI"
-                  type="text"
+                  type="number"
                   id="dniEgresado"
                   name="dni"
                   onChange={onInputChange}
@@ -113,7 +145,7 @@ export const IngresarUsuarioForm = () => {
                   placeholder="Fecha de Nacimiento"
                   type="date"
                   id="fechaNacimientoEgresado"
-                  name="fechaNac"
+                  name="fecha_nac"
                   onChange={onInputChange}
                 />
               </div>
@@ -145,7 +177,7 @@ export const IngresarUsuarioForm = () => {
                   placeholder="Localidad de nacimiento"
                   type="text"
                   id="localidadNacEgresado"
-                  name="ciudadNatal"
+                  name="ciudad_natal"
                   onChange={onInputChange}
                 />
               </div>
@@ -177,7 +209,7 @@ export const IngresarUsuarioForm = () => {
                   placeholder="Localidad Actual"
                   type="text"
                   id="localidadActualEgresado"
-                  name="ciudadActual"
+                  name="ciudad_actual"
                   onChange={onInputChange}
                 />
               </div>
@@ -204,14 +236,19 @@ export const IngresarUsuarioForm = () => {
                     <i className="bi bi-person-circle"></i>
                   </span>
                 </div>
-                <input
+                <select
                   className="form-control"
-                  placeholder="Sexo"
-                  type="text"
-                  id="sexoEgresado"
                   name="sexo"
+                  id="sexoEgresado"
                   onChange={onInputChange}
-                />
+                  placeholder="Sexo"
+                >
+                  <option value="" defaultValue="">
+                    Seleccionar Sexo
+                  </option>
+                  <option value="F">Femenino</option>
+                  <option value="M">Masculino</option>
+                </select>
               </div>
 
               <div className="form-group">
