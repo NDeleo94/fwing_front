@@ -5,13 +5,14 @@ import queryString from "query-string";
 import { getEgresadosByName } from "../helpers/getEgresadosByName";
 import { useEffect, useState } from "react";
 import { useFetchEgresadosByName } from "../hooks/useFetchEgresadosByName";
+import { useFetchEgresados } from "../hooks/useFetchEgresados";
 
 export const SearchPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { q = "" } = queryString.parse(location.search);
-  const { data, loading } = useFetchEgresadosByName(q);
+  const { data, loading } = useFetchEgresados();
   const [egresados, setEgresados] = useState(null);
   useEffect(() => {
     if (data) {
@@ -52,7 +53,9 @@ export const SearchPage = () => {
     }
   };
 
-  return (
+  return loading ? (
+    "Cargando"
+  ) : (
     <>
       <div className="row my-5 ">
         <div className="col-3">

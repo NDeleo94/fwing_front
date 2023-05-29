@@ -1,6 +1,12 @@
 import React from "react";
 
-export const EgresadoCard = ({ id,nombres,apellidos,ciudad_natal,historial }) => {
+export const EgresadoCard = ({
+  id,
+  nombres,
+  apellidos,
+  ciudad_natal,
+  historial,
+}) => {
   return (
     <>
       <div className="col animate__animated animate__fadeIn">
@@ -16,11 +22,14 @@ export const EgresadoCard = ({ id,nombres,apellidos,ciudad_natal,historial }) =>
 
             <div className="col-8">
               <div className="card-body">
-                <h5 className="card-title">{apellidos} {nombres}</h5>
+                <h5 className="card-title">{`${apellidos}, ${nombres}`}</h5>
                 <p className="card-text">
                   De {ciudad_natal} <br /> 30 años
                   <br />
-                  Trabajó en: {historial[0].organizacion.organizacion}
+                  Trabajó en:{" "}
+                  {historial.lenght > 0
+                    ? historial[0].organizacion.organizacion
+                    : ""}
                 </p>
                 {/* <Link to={`/hero/${ id }`}>
                     Más...
