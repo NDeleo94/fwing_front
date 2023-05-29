@@ -1,6 +1,12 @@
 import React from "react";
+import { useForm } from "../hooks/useForm";
 
 export const IngresarUsuarioForm = () => {
+  const { formState, onInputChange } = useForm();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formState);
+  };
   return (
     <>
       <div className="container my-5">
@@ -12,20 +18,22 @@ export const IngresarUsuarioForm = () => {
               <div className="row">
                 <div className="form-group input-group col">
                   <input
-                    name=""
                     className="form-control"
                     placeholder="Apellidos"
                     type="text"
                     id="apellidoEgresado"
+                    name="apellidos"
+                    onChange={onInputChange}
                   />
                 </div>
                 <div className="form-group input-group col">
                   <input
-                    name=""
                     className="form-control"
                     placeholder="Nombres"
                     type="text"
                     id="nombreEgresado"
+                    name="nombres"
+                    onChange={onInputChange}
                   />
                 </div>
               </div>
@@ -37,11 +45,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="DNI"
                   type="text"
                   id="dniEgresado"
+                  name="dni"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -52,11 +61,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Email address"
                   type="email"
                   id="emailEgresado"
+                  name="email"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -67,11 +77,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Carrera"
                   type="text"
                   id="carreraEgresado"
+                  name="carrera"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -82,11 +93,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Fecha Egreso"
-                  type="text"
+                  type="date"
                   id="fechaEgresoEgresado"
+                  name="cicloEgreso"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -97,11 +109,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Fecha de Nacimiento"
-                  type="text"
+                  type="date"
                   id="fechaNacimientoEgresado"
+                  name="fechaNac"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -112,11 +125,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Nacionalidad"
                   type="text"
                   id="nacionalidadEgresado"
+                  name="nacionalidad"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -127,11 +141,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Localidad de nacimiento"
                   type="text"
                   id="localidadNacEgresado"
+                  name="ciudadNatal"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -142,11 +157,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Domicilio"
                   type="text"
                   id="domicilioActualEgresado"
+                  name="domicilio"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -157,11 +173,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Localidad Actual"
                   type="text"
                   id="localidadActualEgresado"
+                  name="ciudadActual"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -172,11 +189,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Certificado"
                   type="text"
                   id="certificadoEgresado"
+                  name="certificado"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -187,11 +205,12 @@ export const IngresarUsuarioForm = () => {
                   </span>
                 </div>
                 <input
-                  name=""
                   className="form-control"
                   placeholder="Sexo"
                   type="text"
                   id="sexoEgresado"
+                  name="sexo"
+                  onChange={onInputChange}
                 />
               </div>
 
@@ -200,6 +219,7 @@ export const IngresarUsuarioForm = () => {
                   type="submit"
                   className="btn btn-primary my-2 d-grid mx-auto"
                   id="submitButton"
+                  onClick={(e) => handleSubmit(e)}
                 >
                   Crear Egresado
                 </button>
