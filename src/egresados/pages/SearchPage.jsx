@@ -30,7 +30,6 @@ export const SearchPage = () => {
     event.preventDefault();
     const value = searchText;
     let updatedData = [];
-    let result = [];
     let aux = [];
     console.log(value.length);
     if (value.length) {
@@ -48,11 +47,15 @@ export const SearchPage = () => {
         egresados &&
         egresados.filter((item) => {
           const filter = item.apellidos
-            .toString()
+            .toLowerCase()
             .includes(value.toLowerCase());
+
           return filter ? filter : null;
         });
-      result = filterFirstName ? filterFirstName.concat(filterLastName) : aux;
+
+      const result = filterFirstName
+        ? filterFirstName.concat(filterLastName)
+        : aux;
       updatedData = result.reduce((acc, item) => {
         if (!acc.includes(item)) {
           acc.push(item);
