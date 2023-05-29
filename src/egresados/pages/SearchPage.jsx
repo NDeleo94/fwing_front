@@ -13,10 +13,12 @@ export const SearchPage = () => {
 
   const { q = "" } = queryString.parse(location.search);
   const { data, loading } = useFetchEgresados();
-  const [egresados, setEgresados] = useState(null);
+  const [egresados, setEgresados] = useState([]);
+  const [filteredEgresados, setFilteredEgresados] = useState([]);
   useEffect(() => {
     if (data) {
       setEgresados(data);
+      setFilteredEgresados(data);
     }
   }, [data]);
 
@@ -26,7 +28,41 @@ export const SearchPage = () => {
 
   const onSearchSubmit = (event) => {
     event.preventDefault();
-    navigate(`?q=${searchText}`);
+    const value = searchText;
+    let updatedData = [];
+    let result = [];
+    let aux = [];
+    console.log(value.length);
+    if (value.length) {
+      const filterFirstName =
+        egresados &&
+        egresados.filter((item) => {
+          const filter = item.nombres
+            .toLowerCase()
+            .includes(value.toLowerCase());
+
+          return filter ? filter : null;
+        });
+
+      const filterLastName =
+        egresados &&
+        egresados.filter((item) => {
+          const filter = item.apellidos
+            .toString()
+            .includes(value.toLowerCase());
+          return filter ? filter : null;
+        });
+      result = filterFirstName ? filterFirstName.concat(filterLastName) : aux;
+      updatedData = result.reduce((acc, item) => {
+        if (!acc.includes(item)) {
+          acc.push(item);
+        }
+        return acc;
+      }, []);
+      setFilteredEgresados(updatedData);
+    } else {
+      setFilteredEgresados(egresados);
+    }
   };
 
   const isEmpty = (q) => {
@@ -61,7 +97,7 @@ export const SearchPage = () => {
         <div className="col-3">
           <h4>Buscar Egresado</h4>
           <hr />
-          <form onSubmit={onSearchSubmit}>
+          <form>
             <input
               type="text"
               placeholder="Busca un egresado"
@@ -72,7 +108,12 @@ export const SearchPage = () => {
               onChange={onInputChange}
             />
 
-            <button className="btn btn-outline-primary mt-3">Buscar</button>
+            <button
+              className="btn btn-outline-primary mt-3"
+              onClick={(event) => onSearchSubmit(event)}
+            >
+              Buscar
+            </button>
           </form>
         </div>
         <div className="col-9">
@@ -80,7 +121,11 @@ export const SearchPage = () => {
           <hr />
           {isEmpty(q)}
 
-          {egresados ? <EgresadoList data={data} /> : notFound(egresados, q)}
+          {filteredEgresados ? (
+            <EgresadoList data={filteredEgresados} />
+          ) : (
+            notFound(egresados, q)
+          )}
         </div>
       </div>
     </>
