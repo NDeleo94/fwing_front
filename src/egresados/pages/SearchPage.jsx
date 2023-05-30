@@ -6,6 +6,7 @@ import { getEgresadosByName } from "../helpers/getEgresadosByName";
 import { useEffect, useState } from "react";
 import { useFetchEgresadosByName } from "../hooks/useFetchEgresadosByName";
 import { useFetchEgresados } from "../hooks/useFetchEgresados";
+import { Loading } from "../../ui/components/Loading";
 
 export const SearchPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const SearchPage = () => {
   const { data, loading } = useFetchEgresados();
   const [egresados, setEgresados] = useState([]);
   const [filteredEgresados, setFilteredEgresados] = useState([]);
+  const [textSearched, setTextSearched] = useState("");
   useEffect(() => {
     if (data) {
       setEgresados(data);
@@ -32,6 +34,8 @@ export const SearchPage = () => {
     let updatedData = [];
     let aux = [];
     console.log(value.length);
+    console.log(filteredEgresados);
+    setTextSearched(searchText);
     if (value.length) {
       const filterFirstName =
         egresados &&
@@ -77,23 +81,21 @@ export const SearchPage = () => {
       );
   };
 
-  const notFound = (egresados, q) => {
-    if (egresados) {
-      if (egresados.length === 0 && q !== "")
-        return (
-          <>
-            <div className="alert alert-danger">
-              <b> ¡Sin resultados!</b> <hr />
-              No encontramos resultados con '{q}'
-            </div>
-            ;
-          </>
-        );
+  const notFound = (filteredEgresados, textSearched) => {
+    if (filteredEgresados.length == 0 && textSearched !== "") {
+      return (
+        <>
+          <div className="alert alert-danger">
+            <b> ¡Sin resultados!</b> <hr />
+            No encontramos resultados con "{textSearched}"
+          </div>
+        </>
+      );
     }
   };
 
   return loading ? (
-    "Cargando"
+    <Loading />
   ) : (
     <>
       <div className="row my-5 ">
@@ -122,13 +124,9 @@ export const SearchPage = () => {
         <div className="col-9">
           <h4>Resultados</h4>
           <hr />
-          {isEmpty(q)}
-
-          {filteredEgresados ? (
-            <EgresadoList data={filteredEgresados} />
-          ) : (
-            notFound(egresados, q)
-          )}
+          {isEmpty(searchText)}
+          {notFound(filteredEgresados, textSearched)}
+          {<EgresadoList data={filteredEgresados} />}
         </div>
       </div>
     </>

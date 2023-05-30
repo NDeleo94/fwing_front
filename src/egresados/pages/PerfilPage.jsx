@@ -4,18 +4,24 @@ import {
   DatosPersonalesEgresadoCard,
   PerfilEgresadoCard,
 } from "../components";
-import { useFetchEgresados } from "../hooks/useFetchEgresados";
+import { Loading } from "../../ui/components/Loading";
+import { useParams } from "react-router-dom";
+import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 
 export const PerfilPage = () => {
-  const { data, loading } = useFetchEgresados("2");
+  const { id } = useParams();
+  console.log(id)
   const [last_loggin, setLast_loggin] = useState(null);
+  const { data, loading } = useFetchEgresadosById(id);
   useEffect(() => {
     if (data) {
       setLast_loggin(data.last_login);
     }
   }, [data]);
-
-  return (
+console.log(data)
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <div className="container-fluid mt-4">
         <div className="row">

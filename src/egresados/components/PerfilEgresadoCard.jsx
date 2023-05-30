@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Logo from "../../assets/imgs/Logo.png";
 
 export const PerfilEgresadoCard = ({ nombres, egresos, ciudad_natal }) => {
   const [primeraCarrera, setPrimeraCarrera] = useState(null);
@@ -14,7 +15,7 @@ export const PerfilEgresadoCard = ({ nombres, egresos, ciudad_natal }) => {
       <div className="card border-primary mb-3">
         <div className="card-header">
           <img
-            src="https://marketplace.canva.com/EAEj17Y_k_k/2/0/1600w/canva-amarillo-y-negro-gamer-desgastado-imagen-de-perfil-de-twitch-41B81rUGLAg.jpg"
+            src={Logo}
             className="img-thumbnail"
             alt="..."
           />
