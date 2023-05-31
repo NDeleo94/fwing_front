@@ -7,10 +7,11 @@ import {
 import { Loading } from "../../ui/components/Loading";
 import { useParams } from "react-router-dom";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
+import { Page404NotFound } from "../../ui/components/Page404NotFound";
 
 export const PerfilPage = () => {
   const { id } = useParams();
-  console.log(id)
+  console.log(id);
   const [last_loggin, setLast_loggin] = useState(null);
   const { data, loading } = useFetchEgresadosById(id);
   useEffect(() => {
@@ -18,9 +19,11 @@ export const PerfilPage = () => {
       setLast_loggin(data.last_login);
     }
   }, [data]);
-console.log(data)
+  console.log(data.detail);
   return loading ? (
     <Loading />
+  ) : data.detail == `Not found.` ? (
+    <Page404NotFound />
   ) : (
     <>
       <div className="container-fluid mt-4">
