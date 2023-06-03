@@ -28,7 +28,7 @@ export const ConfiguracionDatosPersonales = () => {
             Apellidos
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Apellidos"
             aria-label="Disabled input example"
@@ -41,7 +41,7 @@ export const ConfiguracionDatosPersonales = () => {
             Nombres
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Nombres"
             aria-label="Disabled input example"
@@ -54,7 +54,7 @@ export const ConfiguracionDatosPersonales = () => {
             Tipo de Documento
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Documento Nacional de Identidad"
             aria-label="Disabled input example"
@@ -67,7 +67,7 @@ export const ConfiguracionDatosPersonales = () => {
             Número de Documento
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="DNI"
             aria-label="Disabled input example"
@@ -80,7 +80,7 @@ export const ConfiguracionDatosPersonales = () => {
             E-mail
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="e-mail"
             aria-label="Disabled input example"
@@ -91,7 +91,7 @@ export const ConfiguracionDatosPersonales = () => {
             Nacionalidad
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Nacionalidad"
             aria-label="Disabled input example"
@@ -102,7 +102,7 @@ export const ConfiguracionDatosPersonales = () => {
             Fecha de Nacimiento
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="date"
             value="01-01-1900"
             aria-label="Disabled input example"
@@ -113,7 +113,7 @@ export const ConfiguracionDatosPersonales = () => {
             Ciudad Natal
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Ciudad Natal"
             aria-label="Disabled input example"
@@ -124,11 +124,66 @@ export const ConfiguracionDatosPersonales = () => {
             Ciudad Actual
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             value="Ciudad Actual"
             aria-label="Disabled input example"
           />
+        </div>
+        <div className="col-12">
+          <label for="domicilioActual" className="form-label mt-2">
+            Domicilio
+          </label>
+          <input
+            className="form-control"
+            type="text"
+            value="Domicilio Actual"
+            aria-label="Disabled input example"
+          />
+        </div>
+        <div className="col-12">
+          <div className="row my-3">
+            <div className="col-2">
+              <label for="sexo" className="form-label mt-2">
+                Sexo
+              </label>
+            </div>
+            <div className="col-8">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="masculino"
+                />
+                <label className="form-check-label" for="masculino">
+                  Masculino
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="femenino"
+                />
+                <label className="form-check-label" for="femenino">
+                  Femenino
+                </label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                  id="oculto"
+                />
+                <label className="form-check-label" for="oculto">
+                  Prefiero no decirlo...
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="col-12 my-4 d-grid">
           <button type="button" className="btn btn-primary">
