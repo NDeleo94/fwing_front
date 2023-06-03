@@ -1,196 +1,107 @@
-import React from "react";
 import Logo from "../../assets/imgs/Logo.png";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { useState } from "react";
 
 export const ConfiguracionDatosPersonales = () => {
+  const [validated, setValidated] = useState(false);
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
   return (
     <div className="container-fluid mt-2 text-secondary">
       <h3>Datos Personales</h3>
       <hr />
-      <div className="row">
-        <div className="col-3">
-          <div className="card-header">
-            <img src={Logo} className="img-thumbnail" alt="..." />
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-3">
+            <div className="card-header">
+              <img src={Logo} className="img-thumbnail" alt="Following" />
+            </div>
+          </div>
+          <div className="col-9">
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>¿Desea cambiar su foto de perfil?</Form.Label>
+              <Form.Control type="file" />
+            </Form.Group>
           </div>
         </div>
-        <div className="col-9">
-          <div className="mb-3">
-            <label for="formFile" className="form-label">
-              ¿Desea cambiar su foto de perfil?
-            </label>
-            <input className="form-control" type="file" id="formFile" />
+        <hr />
+        {/* react-bootstrap */}
+        <div className="row mx-0">
+          <div className="col-6">
+            <Form.Group className="mb-3" controlId="formApellidos">
+              <Form.Label>Apellidos</Form.Label>
+              <Form.Control type="text" disabled value="Apellidos" />
+            </Form.Group>
           </div>
-        </div>
-      </div>
-      <hr />
-      <div className="row mx-0">
-        <div className="col-6">
-          <label for="apellidos" className="form-label">
-            Apellidos
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Apellidos"
-            aria-label="Disabled input example"
-            disabled
-            readonly
-          />
-        </div>
-        <div className="col-6">
-          <label for="nombres" className="form-label">
-            Nombres
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Nombres"
-            aria-label="Disabled input example"
-            disabled
-            readonly
-          />
-        </div>
-        <div className="col-6">
-          <label for="tipodni" className="form-label mt-2">
-            Tipo de Documento
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Documento Nacional de Identidad"
-            aria-label="Disabled input example"
-            disabled
-            readonly
-          />
-        </div>
-        <div className="col-6">
-          <label for="dni" className="form-label mt-2">
-            Número de Documento
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="DNI"
-            aria-label="Disabled input example"
-            disabled
-            readonly
-          />
-        </div>
-        <div className="col-12">
-          <label for="email" className="form-label mt-2">
-            E-mail
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="e-mail"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <label for="nacionalidad" className="form-label mt-2">
-            Nacionalidad
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Nacionalidad"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <label for="fecha_nac" className="form-label mt-2">
-            Fecha de Nacimiento
-          </label>
-          <input
-            className="form-control"
-            type="date"
-            value="01-01-1900"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <label for="ciudadNatal" className="form-label mt-2">
-            Ciudad Natal
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Ciudad Natal"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <label for="ciudadActual" className="form-label mt-2">
-            Ciudad Actual
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Ciudad Actual"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <label for="domicilioActual" className="form-label mt-2">
-            Domicilio
-          </label>
-          <input
-            className="form-control"
-            type="text"
-            value="Domicilio Actual"
-            aria-label="Disabled input example"
-          />
-        </div>
-        <div className="col-12">
-          <div className="row my-3">
-            <div className="col-2">
-              <label for="sexo" className="form-label mt-2">
-                Sexo
-              </label>
-            </div>
-            <div className="col-8">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="masculino"
-                />
-                <label className="form-check-label" for="masculino">
-                  Masculino
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="femenino"
-                />
-                <label className="form-check-label" for="femenino">
-                  Femenino
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="oculto"
-                />
-                <label className="form-check-label" for="oculto">
-                  Prefiero no decirlo...
-                </label>
-              </div>
-            </div>
+          <div className="col-6">
+            <Form.Group className="mb-3" controlId="formNombres">
+              <Form.Label>Nombres</Form.Label>
+              <Form.Control type="text" disabled value="Nombres" />
+            </Form.Group>
+          </div>
+          <div className="col-6">
+            <Form.Group className="mb-3" controlId="formTipoDNI">
+              <Form.Label>Tipo de Documento</Form.Label>
+              <Form.Control
+                type="text"
+                disabled
+                value="Documento Nacional de Identidad"
+              />
+            </Form.Group>
+          </div>
+          <div className="col-6">
+            <Form.Group className="mb-3" controlId="formDNI">
+              <Form.Label>Número de Documento</Form.Label>
+              <Form.Control type="text" disabled value="DNI" />
+            </Form.Group>
+          </div>
+          <Form.Group className="mb-3" controlId="formEmail">
+            <Form.Label>Correo Electrónico</Form.Label>
+            <Form.Control type="email" value="e-mail" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formNacionalidad">
+            <Form.Label>Nacionalidad</Form.Label>
+            <Form.Control type="text" value="Nacionalidad" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formFechaNacimiento">
+            <Form.Label>Fecha de Nacimiento</Form.Label>
+            <Form.Control type="date" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formCiudadNatal">
+            <Form.Label>Ciudad Natal</Form.Label>
+            <Form.Control type="text" value="CiudadNatal" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formCiudadActual">
+            <Form.Label>Ciudad Actual</Form.Label>
+            <Form.Control type="text" value="CiudadActual" />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formDomicilio">
+            <Form.Label>Domicilio</Form.Label>
+            <Form.Control type="text" value="Domicilio" />
+          </Form.Group>
+          <div className="col-12">
+            <Form.Label>Sexo</Form.Label>
+            <Form.Select aria-label="Default select example">
+              <option>Elija una opción...</option>
+              <option value="1">Femenino</option>
+              <option value="2">Masculino</option>
+              <option value="3">Prefiero no decirlo...</option>
+            </Form.Select>
           </div>
         </div>
         <div className="col-12 my-4 d-grid">
-          <button type="button" className="btn btn-primary">
-            Guardar Cambios
-          </button>
+          <Button type="submit">Guardar cambios</Button>
         </div>
-      </div>
+      </Form>
     </div>
   );
 };

@@ -1,16 +1,25 @@
-import React from "react";
+import { useState } from "react";
+import { Form, Table } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 export const ConfiguracionEgresos = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <>
       <div className="container-fluid mt-2 text-secondary">
         <h3>Egresos</h3>
         <hr />
-        <button type="button" className="btn btn-secondary">
-          Agregar Egreso
-        </button>
 
-        <table className="table">
+        <Button variant="secondary" onClick={handleShow}>
+          Agregar Egreso
+        </Button>
+
+        <Table responsive>
           <thead>
             <tr>
               <th scope="col">Matrícula</th>
@@ -31,7 +40,51 @@ export const ConfiguracionEgresos = () => {
               <td></td>
             </tr>
           </tbody>
-        </table>
+        </Table>
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Agregar Egreso</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <div className="row">
+                <div className="col-6">
+                  <Form.Group className="mb-3" controlId="formMatricula">
+                    <Form.Label>Matrícula</Form.Label>
+                    <Form.Control type="number" value="" />
+                  </Form.Group>
+                </div>
+                <div className="col-6">
+                  <Form.Group className="mb-3" controlId="formAnioEgreso">
+                    <Form.Label>Año de Egreso</Form.Label>
+                    <Form.Control type="number" value="" />
+                  </Form.Group>
+                </div>
+              </div>
+              <Form.Group className="mb-3" controlId="formCarrera">
+                <Form.Label>Carrera</Form.Label>
+                <Form.Control type="text" value="" />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formFacultad">
+                <Form.Label>Facultad</Form.Label>
+                <Form.Control type="text" value="" />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formUniversidad">
+                <Form.Label>Universidad</Form.Label>
+                <Form.Control type="text" value="" />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cerrar
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Guardar Cambios
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );
