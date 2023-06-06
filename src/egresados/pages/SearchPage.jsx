@@ -33,8 +33,6 @@ export const SearchPage = () => {
     const value = searchText;
     let updatedData = [];
     let aux = [];
-    console.log(value.length);
-    console.log(filteredEgresados);
     setTextSearched(searchText);
     if (value.length) {
       const filterFirstName =
