@@ -8,50 +8,54 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 
-export const ConfiguracionPage = () => {
+export const ConfiguracionPage = ({ egresado, loading}) => {
+  
   return (
     <>
-      <div className="my-3">
+      <Row className="my-3">
         <h1>Configuración</h1>
-      </div>
+      </Row>
       <hr />
-      <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+      <Tab.Container
+        id="list-group-tabs-example"
+        defaultActiveKey="#datosPersonales"
+      >
         <Container fluid>
           <Row>
-            <Col sm={3} className="bg-light pt-2">
+            <Col sm={3} className="bg-light py-2">
               <ListGroup>
-                <ListGroup.Item action href="#link1">
+                <ListGroup.Item action href="#datosPersonales">
                   Datos Personales
                 </ListGroup.Item>
-                <ListGroup.Item action href="#link2">
+                <ListGroup.Item action href="#titulos">
                   Títulos
                 </ListGroup.Item>
-                <ListGroup.Item action href="#link3">
+                <ListGroup.Item action href="#historialLaboral">
                   Historial Laboral
                 </ListGroup.Item>
-                <ListGroup.Item action href="#link4">
+                <ListGroup.Item action href="#privacidad">
                   Privacidad
                 </ListGroup.Item>
-                <ListGroup.Item action href="#link5">
+                <ListGroup.Item action href="#administracion">
                   Administración
                 </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col sm={9}>
               <Tab.Content>
-                <Tab.Pane eventKey="#link1">
-                  <ConfiguracionDatosPersonales />
+                <Tab.Pane eventKey="#datosPersonales">
+                  <ConfiguracionDatosPersonales egresado={egresado} loading={loading}/>
                 </Tab.Pane>
-                <Tab.Pane eventKey="#link2">
+                <Tab.Pane eventKey="#titulos">
                   <ConfiguracionEgresos />
                 </Tab.Pane>
-                <Tab.Pane eventKey="#link3">
+                <Tab.Pane eventKey="#historialLaboral">
                   <ConfiguracionHistorialLaboral />
                 </Tab.Pane>
-                <Tab.Pane eventKey="#link4">
+                <Tab.Pane eventKey="#privacidad">
                   ConfiguracionPrivacidad
                 </Tab.Pane>
-                <Tab.Pane eventKey="#link5">
+                <Tab.Pane eventKey="#administracion">
                   ConfiguracionAdministración
                 </Tab.Pane>
               </Tab.Content>
