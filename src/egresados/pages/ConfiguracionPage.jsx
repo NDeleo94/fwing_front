@@ -8,8 +8,7 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 
-export const ConfiguracionPage = ({ egresado, loading}) => {
-  
+export const ConfiguracionPage = ({ egresado }) => {
   return (
     <>
       <Row className="my-3">
@@ -44,10 +43,10 @@ export const ConfiguracionPage = ({ egresado, loading}) => {
             <Col sm={9}>
               <Tab.Content>
                 <Tab.Pane eventKey="#datosPersonales">
-                  <ConfiguracionDatosPersonales egresado={egresado} loading={loading}/>
+                  <ConfiguracionDatosPersonales egresado={egresado} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#titulos">
-                  <ConfiguracionEgresos />
+                  <ConfiguracionEgresos egresado={egresado} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#historialLaboral">
                   <ConfiguracionHistorialLaboral />

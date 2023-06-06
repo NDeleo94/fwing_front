@@ -23,7 +23,7 @@ export const EgresadosRoutes = () => {
           <Route path="perfil/:id" element={<PerfilPage />} />
           <Route
             path="configuracion"
-            element={<ConfiguracionPage egresado={data} loading={loading} />}
+            element={<ConfiguracionPage egresado={data} />}
           />
           <Route path="agregar" element={<IngresarUsuarioForm />} />
 
