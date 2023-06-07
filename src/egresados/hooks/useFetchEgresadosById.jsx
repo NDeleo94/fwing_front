@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { getEgresados } from "../helpers/getEgresados";
+import { getEgresadosById } from "../helpers/getEgresadosById";
 
-export const useFetchEgresados = () => {
+export const useFetchEgresadosById = (id) => {
   const [state, setState] = useState({
     data: [],
     loading: true,
   });
 
   useEffect(() => {
-    getEgresados().then((egresado) => {
+    getEgresadosById(id).then((egresado) => {
       setState({
         data: egresado,
         loading: false,
       });
     });
-  }, []);
+  }, [id]);
   return state;
 };

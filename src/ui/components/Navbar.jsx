@@ -1,17 +1,23 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { NavDropdown, Button } from "react-bootstrap";
 import Logo from "../../assets/imgs/Logo.png";
+import { useContext } from "react";
+import { LoginContext } from "../../context/LoginContext";
 
 export const Navbar = () => {
+  const { isLogged, setIsLogged } = useContext(LoginContext);
+
   const navigate = useNavigate();
 
   const onLogout = () => {
+    setIsLogged(false);
     navigate("/login", {
       replace: true,
     });
   };
 
   const onLogin = () => {
+    setIsLogged(true);
     navigate("/home", {
       replace: true,
     });
@@ -35,6 +41,10 @@ export const Navbar = () => {
 
   const toConfiguracion = () => {
     navigate("/configuracion");
+  };
+
+  const toAgregarEgresado = () => {
+    navigate("/agregar");
   };
 
   return (
@@ -102,24 +112,35 @@ export const Navbar = () => {
           <div className="row justify-content-between">
             <div className="d-flex">
               {/* Sin loguear */}
-              {/* <Button variant="success" onClick={ onLogin }>Ingresar</Button> */}
+              {!isLogged ? (
+                <Button variant="success" onClick={onLogin}>
+                  Ingresar
+                </Button>
+              ) : (
+                <div className="navbar-nav">
+                  <NavDropdown title="Deleo, Nicolás" id="basic-nav-dropdown">
+                    <NavDropdown.Item onClick={toPerfil}>
+                      Perfil
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={toConfiguracion}>
+                      Configuración
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={toAgregarEgresado}>
+                      Agregar Egresado
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href="">
+                      <Button variant="danger" onClick={onLogout}>
+                        Cerrar Sesión
+                      </Button>
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </div>
+              )}
               {/* /Sin loguear */}
 
               {/* Logueado */}
-              <div className="navbar-nav">
-                <NavDropdown title="Deleo, Nicolás" id="basic-nav-dropdown">
-                  <NavDropdown.Item onClick={toPerfil}>Perfil</NavDropdown.Item>
-                  <NavDropdown.Item onClick={toConfiguracion}>
-                    Configuración
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="">
-                    <Button variant="danger" onClick={onLogout}>
-                      Cerrar Sesión
-                    </Button>
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </div>
+
               {/* /Logueado */}
 
               <div className="input-group ms-3">

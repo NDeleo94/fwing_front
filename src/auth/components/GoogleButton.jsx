@@ -1,9 +1,28 @@
 import { useEffect } from "react";
 
+const urlBase = import.meta.env.VITE_URL_LOCAL;
+
 export const GoogleButton = () => {
   const handleCredentialResponse = (response) => {
-    const userObject = jwtDecode(response.credential);
-    console.log(userObject);
+    const userObject = response.credential;
+    const url = `${urlBase}/google/`;
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userObject),
+    };
+
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Login successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   useEffect(() => {

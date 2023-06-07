@@ -5,17 +5,17 @@ export const EmpresasDestacadas = () => {
     <>
       <div className="card border-primary mb-3">
         <div className="card-header">
-          <h1 className="lead text-center">
+          <h1 className="lead text-center my-2">
             <b>Organizaciones Destacadas</b>
           </h1>
-          <div className="row">
-            <div className="col-4">
+          <div className="row px-5 mt-3">
+            <div className="col-4 px-5">
               <EmpresasDestacadasCard />
             </div>
-            <div className="col-4">
+            <div className="col-4 px-5">
               <EmpresasDestacadasCard />
             </div>
-            <div className="col-4">
+            <div className="col-4 px-5">
               <EmpresasDestacadasCard />
             </div>
           </div>
