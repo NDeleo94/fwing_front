@@ -51,11 +51,8 @@ export const LoginPage = () => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Cerrar
-            </Button>
-            <Button variant="primary" onClick={onLogin}>
-              Guardar Cambios
+            <Button variant="success" onClick={onLogin}>
+              Ingresar
             </Button>
           </Modal.Footer>
         </Modal>
