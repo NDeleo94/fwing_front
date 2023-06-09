@@ -26,6 +26,7 @@ export const AppRouter = () => {
 
         <div className="container">
           <Routes>
+            <Route path="/" element={<InicioPage />} />
             <Route path="home" element={<InicioPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="carrera" element={<CarreraPage />} />

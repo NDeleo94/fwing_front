@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 export const ConfiguracionEgresos = ({ egresado }) => {
-  console.log(egresado)
+  console.log(egresado.egresos);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -33,12 +33,16 @@ export const ConfiguracionEgresos = ({ egresado }) => {
           </thead>
           <tbody>
             <tr>
-              <th scope="row">--</th>
-              <td>2023</td>
-              <td>Ingeniería en Computación</td>
-              <td>Facultad de Ciencias Exactas y Tecnología</td>
-              <td>Universidad Nacional de Tucumán</td>
-              <td></td>
+              {egresado.egresos.map((egre) => (
+                <>
+                  <th scope="row">{egre.matricula ? egre.matricula : "--"}</th>
+                  <td>{egre.ciclo_egreso.split("-")[0]}</td>
+                  <td>{egre.carrera.carrera}</td>
+                  <td>{egre.carrera.facultad.facultad}</td>
+                  <td>{egre.carrera.facultad.universidad.acronimo}</td>
+                  <td></td>
+                </>
+              ))}
             </tr>
           </tbody>
         </Table>

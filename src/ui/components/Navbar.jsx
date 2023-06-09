@@ -17,8 +17,7 @@ export const Navbar = () => {
   };
 
   const onLogin = () => {
-    setIsLogged(true);
-    navigate("/home", {
+    navigate("/login", {
       replace: true,
     });
   };
