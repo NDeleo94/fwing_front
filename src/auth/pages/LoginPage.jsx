@@ -32,7 +32,7 @@ export const LoginPage = () => {
   return (
     <>
       <div className="container mt-5">
-        <h1>LoginPage</h1>
+        <h1>Iniciar Sesión</h1>
         <hr />
         <Button variant="success" onClick={handleShow}>
           Ingresar con e-mail

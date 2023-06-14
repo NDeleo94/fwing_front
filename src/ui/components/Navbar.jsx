@@ -42,10 +42,6 @@ export const Navbar = () => {
     navigate("/configuracion");
   };
 
-  const toAgregarEgresado = () => {
-    navigate("/agregar");
-  };
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -123,9 +119,6 @@ export const Navbar = () => {
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={toConfiguracion}>
                       Configuración
-                    </NavDropdown.Item>
-                    <NavDropdown.Item onClick={toAgregarEgresado}>
-                      Agregar Egresado
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item href="">

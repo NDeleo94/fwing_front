@@ -25,7 +25,6 @@ export const EgresadosRoutes = () => {
             path="configuracion"
             element={<ConfiguracionPage egresado={data} />}
           />
-          <Route path="agregar" element={<IngresarUsuarioForm />} />
 
           {/* ¿Faltaría cerrar Sesión? */}
         </Routes>

@@ -1,12 +1,13 @@
 import { ConfiguracionEgresos } from "../components/ConfiguracionEgresos";
 import { ConfiguracionDatosPersonales } from "../components/ConfiguracionDatosPersonales";
 import { ConfiguracionHistorialLaboral } from "../components/ConfiguracionHistorialLaboral";
-import { Link, Route, Routes } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
+import { ConfiguracionPrivacidad } from "../components/ConfiguracionPrivacidad";
+import { IngresarUsuarioForm } from "./IngresarUsuarioForm";
 
 export const ConfiguracionPage = ({ egresado }) => {
   return (
@@ -35,8 +36,18 @@ export const ConfiguracionPage = ({ egresado }) => {
                 <ListGroup.Item action href="#privacidad">
                   Privacidad
                 </ListGroup.Item>
-                <ListGroup.Item action href="#administracion">
-                  Administración
+              </ListGroup>
+              <hr />
+              Administración
+              <ListGroup>
+                <ListGroup.Item action href="#agregarEgresado">
+                  Agregar Egresado
+                </ListGroup.Item>
+                <ListGroup.Item action href="#administrarEgresados">
+                  Administrar Egresados
+                </ListGroup.Item>
+                <ListGroup.Item action href="#administrarEmpresas">
+                  Administrar Empresas
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -49,13 +60,19 @@ export const ConfiguracionPage = ({ egresado }) => {
                   <ConfiguracionEgresos egresado={egresado} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#historialLaboral">
-                  <ConfiguracionHistorialLaboral />
+                  <ConfiguracionHistorialLaboral egresado={egresado} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#privacidad">
-                  ConfiguracionPrivacidad
+                  <ConfiguracionPrivacidad />
                 </Tab.Pane>
-                <Tab.Pane eventKey="#administracion">
-                  ConfiguracionAdministración
+                <Tab.Pane eventKey="#agregarEgresado">
+                  <IngresarUsuarioForm />
+                </Tab.Pane>
+                <Tab.Pane eventKey="#administrarEgresados">
+                  administrar Egresados
+                </Tab.Pane>
+                <Tab.Pane eventKey="#administrarEmpresas">
+                  Administrar Empresas
                 </Tab.Pane>
               </Tab.Content>
             </Col>
