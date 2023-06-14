@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-const urlBase = import.meta.env.VITE_URL_LOCAL;
-
 export const GoogleButton = () => {
+  const urlBase = import.meta.env.VITE_URL_LOCAL;
+
   const handleCredentialResponse = (response) => {
     const userObject = response.credential;
     const url = `${urlBase}/google/`;
@@ -16,9 +16,19 @@ export const GoogleButton = () => {
     };
 
     fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Login successfully:", data);
+      .then((response) => {
+        if (response.ok) {
+          response.json().then(() => {
+            setIsLogged(true);
+            navigate("/home", {
+              replace: true,
+            });
+          });
+        } else {
+          response.json().then((data) => {
+            console.error("Error:", data.error);
+          });
+        }
       })
       .catch((error) => {
         console.error("Error:", error);

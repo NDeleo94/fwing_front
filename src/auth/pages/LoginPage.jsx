@@ -9,7 +9,9 @@ import { useForm } from "../../egresados/hooks/useForm";
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const { isLogged, setIsLogged } = useContext(LoginContext);
+  const { setIsLogged } = useContext(LoginContext);
+
+  const urlBase = import.meta.env.VITE_URL_LOCAL;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -17,7 +19,7 @@ export const LoginPage = () => {
   const onLogin = (e) => {
     e.preventDefault();
     console.log(formState);
-    const url = `https://ndeleo94.pythonanywhere.com/fw/api/login/`;
+    const url = `${urlBase}/login/`;
     const postData = formState;
 
     const requestOptions = {
@@ -29,12 +31,19 @@ export const LoginPage = () => {
     };
 
     fetch(url, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        setIsLogged(true);
-        navigate("/home", {
-          replace: true,
-        });
+      .then((response) => {
+        if (response.ok) {
+          response.json().then(() => {
+            setIsLogged(true);
+            navigate("/home", {
+              replace: true,
+            });
+          });
+        } else {
+          response.json().then((data) => {
+            console.error("Error:", data.error);
+          });
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
