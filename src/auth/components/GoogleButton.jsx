@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "../../context/LoginContext";
 
 export const GoogleButton = () => {
+  const { setIsLogged, setUser, setToken } = useContext(LoginContext);
   const urlBase = import.meta.env.VITE_URL_LOCAL;
 
   const handleCredentialResponse = (response) => {
@@ -18,7 +20,9 @@ export const GoogleButton = () => {
     fetch(url, requestOptions)
       .then((response) => {
         if (response.ok) {
-          response.json().then(() => {
+          response.json().then((data) => {
+            setToken(data.token);
+            setUser(data.user);
             setIsLogged(true);
             navigate("/home", {
               replace: true,

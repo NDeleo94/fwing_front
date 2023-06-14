@@ -17,7 +17,9 @@ import { LoginContext } from "../context/LoginContext";
 
 export const AppRouter = () => {
   const [isLogged, setIsLogged] = useState(false);
-  const state = { isLogged, setIsLogged };
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const state = { isLogged, setIsLogged, user, setUser, token, setToken };
 
   return (
     <>

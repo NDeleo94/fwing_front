@@ -9,7 +9,7 @@ import { useForm } from "../../egresados/hooks/useForm";
 export const LoginPage = () => {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
-  const { setIsLogged } = useContext(LoginContext);
+  const { setIsLogged, setUser, setToken } = useContext(LoginContext);
 
   const urlBase = import.meta.env.VITE_URL_LOCAL;
 
@@ -33,7 +33,9 @@ export const LoginPage = () => {
     fetch(url, requestOptions)
       .then((response) => {
         if (response.ok) {
-          response.json().then(() => {
+          response.json().then((data) => {
+            setToken(data.token);
+            setUser(data.user);
             setIsLogged(true);
             navigate("/home", {
               replace: true,
