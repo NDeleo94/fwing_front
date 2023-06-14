@@ -5,12 +5,13 @@ import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
 
 export const Navbar = () => {
-  const { isLogged, setIsLogged } = useContext(LoginContext);
+  const { user, setUser, setToken } = useContext(LoginContext);
 
   const navigate = useNavigate();
 
   const onLogout = () => {
-    setIsLogged(false);
+    setUser(null);
+    setToken(null);
     navigate("/login", {
       replace: true,
     });
@@ -35,7 +36,7 @@ export const Navbar = () => {
   };
 
   const toPerfil = () => {
-    navigate("/perfil");
+    navigate(`/perfil/${user.id}`);
   };
 
   const toConfiguracion = () => {
@@ -107,13 +108,16 @@ export const Navbar = () => {
           <div className="row justify-content-between">
             <div className="d-flex">
               {/* Sin loguear */}
-              {!isLogged ? (
+              {!user ? (
                 <Button variant="success" onClick={onLogin}>
                   Ingresar
                 </Button>
               ) : (
                 <div className="navbar-nav">
-                  <NavDropdown title="Deleo, Nicolás" id="basic-nav-dropdown">
+                  <NavDropdown
+                    title={`${user.nombres}`}
+                    id="basic-nav-dropdown"
+                  >
                     <NavDropdown.Item onClick={toPerfil}>
                       Perfil
                     </NavDropdown.Item>
