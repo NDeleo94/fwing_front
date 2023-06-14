@@ -14,16 +14,35 @@ export const LoginPage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const onLogin = () => {
-    setIsLogged(true);
-    handleClose;
-    navigate("/home", {
-      replace: true,
-    });
+  const onLogin = (e) => {
+    e.preventDefault();
+    console.log(formState);
+    const url = `https://ndeleo94.pythonanywhere.com/fw/api/login/`;
+    const postData = formState;
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    };
+
+    fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        setIsLogged(true);
+        navigate("/home", {
+          replace: true,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const initialForm = {
-    email: "",
+    username: "",
     password: "",
   };
 
@@ -51,9 +70,9 @@ export const LoginPage = () => {
             <Form.Group className="mb-3" controlId="formFacultad">
               <Form.Label>E-mail</Form.Label>
               <Form.Control
-                type="email"
-                value={formState.email}
-                name="email"
+                type="username"
+                value={formState.username}
+                name="username"
                 onChange={onInputChange}
               />
             </Form.Group>
