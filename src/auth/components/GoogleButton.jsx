@@ -1,7 +1,9 @@
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../context/LoginContext";
 
 export const GoogleButton = () => {
+  const navigate = useNavigate();
   const { setIsLogged, setUser, setToken } = useContext(LoginContext);
   const urlBase = import.meta.env.VITE_URL_LOCAL;
 
