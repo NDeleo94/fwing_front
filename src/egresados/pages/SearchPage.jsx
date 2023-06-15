@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useFetchEgresadosByName } from "../hooks/useFetchEgresadosByName";
 import { useFetchEgresados } from "../hooks/useFetchEgresados";
 import { Loading } from "../../ui/components/Loading";
+import { Analitics } from "../components/Analitics";
 
 export const SearchPage = () => {
   const navigate = useNavigate();
@@ -96,6 +97,8 @@ export const SearchPage = () => {
     <Loading />
   ) : (
     <>
+      <Analitics data={data}/>
+      <hr />
       <div className="row my-5 ">
         <div className="col-3">
           <h4>Buscar Egresado</h4>
