@@ -47,16 +47,14 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
           </thead>
           <tbody>
             {egresado.historial.map((egre, index) => (
-              <>
-                <tr>
-                  <th scope="row">{index + 1}</th>
-                  <td>{egre.puesto.puesto}</td>
-                  <td>{egre.organizacion.organizacion}</td>
-                  <td>{egre.inicio}</td>
-                  <td>{egre.fin ? egre.fin : "Actual"}</td>
-                  <td></td>
-                </tr>
-              </>
+              <tr key={egre.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{egre.puesto.puesto}</td>
+                <td>{egre.organizacion.organizacion}</td>
+                <td>{egre.inicio}</td>
+                <td>{egre.fin ? egre.fin : "Actual"}</td>
+                <td></td>
+              </tr>
             ))}
           </tbody>
         </Table>

@@ -42,16 +42,14 @@ export const ConfiguracionEgresos = ({ egresado }) => {
           </thead>
           <tbody>
             {egresado.egresos.map((egre) => (
-              <>
-                <tr>
-                  <th scope="row">{egre.matricula ? egre.matricula : "--"}</th>
-                  <td>{egre.ciclo_egreso.split("-")[0]}</td>
-                  <td>{egre.carrera.carrera}</td>
-                  <td>{egre.carrera.facultad.facultad}</td>
-                  <td>{egre.carrera.facultad.universidad.acronimo}</td>
-                  <td></td>
-                </tr>
-              </>
+              <tr key={egre.id}>
+                <th scope="row">{egre.matricula ? egre.matricula : "--"}</th>
+                <td>{egre.ciclo_egreso.split("-")[0]}</td>
+                <td>{egre.carrera.carrera}</td>
+                <td>{egre.carrera.facultad.facultad}</td>
+                <td>{egre.carrera.facultad.universidad.acronimo}</td>
+                <td></td>
+              </tr>
             ))}
           </tbody>
         </Table>

@@ -8,15 +8,17 @@ import { Loading } from "../../ui/components/Loading";
 import { useParams } from "react-router-dom";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { Page404NotFound } from "../../ui/components/Page404NotFound";
+import { separarFecha } from "../helpers/manejoFecha";
 
 export const PerfilPage = () => {
   const { id } = useParams();
-  const [last_loggin, setLast_loggin] = useState(null);
+  const [lastLoggin, setLastLoggin] = useState(null);
   const { data, loading } = useFetchEgresadosById(id);
-  
+
   useEffect(() => {
-    if (data) {
-      setLast_loggin(data.last_login);
+    if (data.last_login) {
+      const { mes, anio } = separarFecha(data.last_login.slice(0, 10));
+      setLastLoggin(`${mes}/${anio}`);
     }
   }, [data]);
 
@@ -31,8 +33,8 @@ export const PerfilPage = () => {
           <div className="col-4">
             <PerfilEgresadoCard {...data} />
             <p className="text-body-secondary">
-              {last_loggin
-                ? `Última actualización: ${last_loggin}`
+              {lastLoggin
+                ? `Última actualización: ${lastLoggin}`
                 : `Usuario sin loguearse a la fecha.`}
             </p>
           </div>
