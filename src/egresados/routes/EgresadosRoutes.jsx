@@ -5,14 +5,7 @@ import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { Loading } from "../../ui/components/Loading";
 
 export const EgresadosRoutes = () => {
-  const [last_loggin, setLast_loggin] = useState(null);
   const { data, loading } = useFetchEgresadosById(903);
-
-  useEffect(() => {
-    if (data) {
-      setLast_loggin(data.last_login);
-    }
-  }, [data]);
 
   return (
     <>
