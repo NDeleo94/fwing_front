@@ -1,8 +1,9 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { NavDropdown, Button } from "react-bootstrap";
+import { NavDropdown, Button, Form, InputGroup } from "react-bootstrap";
 import Logo from "../../assets/imgs/Logo.png";
 import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
+import { useForm } from "../../egresados/hooks/useForm";
 
 export const Navbar = () => {
     const { user, setUser, setToken } = useContext(LoginContext);
@@ -41,6 +42,23 @@ export const Navbar = () => {
 
     const toConfiguracion = () => {
         navigate("/configuracion");
+    };
+
+    /* Búsqueda de Navbar */
+    const initialForm = {
+        q: "",
+    };
+
+    const { formState, onInputChange } = useForm(initialForm);
+
+    const toBusqueda = () => {
+        navigate(`/search?q=${formState.q}`);
+    };
+
+    const enterPulsed = (event) => {
+        if (event.key === "Enter") {
+            navigate(`/search`);
+        }
     };
 
     return (
@@ -167,23 +185,32 @@ export const Navbar = () => {
                                     </div>
                                 )}
                                 <div>
-                                  <br />
+                                    <br />
                                 </div>
                                 <div className="input-group ms-3 col">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Buscar"
-                                        aria-label="Buscar"
-                                        aria-describedby="button-addon2"
-                                    />
-                                    <Button
-                                        variant="btn btn-outline-secondary"
-                                        type="button"
-                                        id="button-addon2"
-                                    >
-                                        <i className="bi bi-search"></i>
-                                    </Button>
+                                    <Form>
+                                        <InputGroup>
+                                            <Form.Control
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Buscar"
+                                                aria-label="Buscar"
+                                                aria-describedby="button-addon2"
+                                                value={formState.q}
+                                                name="q"
+                                                onChange={onInputChange}
+                                                onKeyDown={enterPulsed}
+                                            />
+                                            <Button
+                                                variant="btn btn-outline-secondary"
+                                                type="button"
+                                                id="button-addon2"
+                                                onClick={toBusqueda}
+                                            >
+                                                <i className="bi bi-search"></i>
+                                            </Button>
+                                        </InputGroup>
+                                    </Form>
                                 </div>
                             </div>
                         </div>

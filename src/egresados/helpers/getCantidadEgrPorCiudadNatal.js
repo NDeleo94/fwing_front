@@ -11,6 +11,6 @@ export const getCantidadEgrPorCiudadNatal = (data) => {
             arreglo.push([egre.ciudad_natal, 1]);
         }
     })
-    console.log(arreglo);
+    
     return arreglo;
 };
