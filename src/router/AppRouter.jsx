@@ -14,7 +14,7 @@ import {
 import { Footer, Navbar } from "../ui/components";
 import { useState } from "react";
 import { LoginContext } from "../context/LoginContext";
-import { SearchPage } from "../egresados/pages";
+import { PerfilPage, SearchPage } from "../egresados/pages";
 
 export const AppRouter = () => {
   const [isLogged, setIsLogged] = useState(false);
@@ -40,6 +40,7 @@ export const AppRouter = () => {
             <Route path="mlocal" element={<MLocalPage />} />
             <Route path="honores" element={<HonoresPage />} />
             <Route path="search" element={<SearchPage />} />
+            <Route path="perfil/:id" element={<PerfilPage />} />
             <Route path="/*" element={<EgresadosRoutes />} />
           </Routes>
         </div>

@@ -20,7 +20,6 @@ export const EgresadosRoutes = () => {
         <Loading />
       ) : (
         <Routes>
-          <Route path="perfil/:id" element={<PerfilPage />} />
           <Route
             path="configuracion"
             element={<ConfiguracionPage egresado={data} />}
