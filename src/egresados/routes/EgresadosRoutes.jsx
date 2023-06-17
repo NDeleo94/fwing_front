@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { ConfiguracionPage, IngresarUsuarioForm, PerfilPage } from "../pages";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { Loading } from "../../ui/components/Loading";
+import { LoginContext } from "../../context/LoginContext";
 
 export const EgresadosRoutes = () => {
-  const { data, loading } = useFetchEgresadosById(903);
+  const { user } = useContext(LoginContext);
+  const { data, loading } = useFetchEgresadosById(user.id);
 
   return (
     <>
