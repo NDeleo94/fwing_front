@@ -1,6 +1,7 @@
 export const getEgresados = async () => {
   // saco la url con mi id http://localhost:3000/egresado/
-  const url = `https://ndeleo94.pythonanywhere.com/fw/api/egresados`;
+  const urlBase = import.meta.env.VITE_URL_LOCAL;
+  const url = `${urlBase}/egresados/`;
   // espero la respuesta de la url https://ndeleo94.pythonanywhere.com/fw/api/egresados/
   const resp = await fetch(url);
   // guardo lo que recibo

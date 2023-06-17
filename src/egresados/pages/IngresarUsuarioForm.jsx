@@ -16,10 +16,13 @@ export const IngresarUsuarioForm = () => {
     sexo: "",
   };
   const { formState, onInputChange } = useForm(initialForm);
+
+  const urlBase = import.meta.env.VITE_URL_LOCAL;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formState);
-    const url = `https://ndeleo94.pythonanywhere.com/fw/api/egresados/`;
+    const url = `${urlBase}/egresados/`;
     const postData = formState;
 
     const requestOptions = {
