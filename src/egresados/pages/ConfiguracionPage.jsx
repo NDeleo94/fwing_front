@@ -8,9 +8,18 @@ import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 import { ConfiguracionPrivacidad } from "../components/ConfiguracionPrivacidad";
 import { IngresarUsuarioForm } from "./IngresarUsuarioForm";
+import { Loading } from "../../ui/components/Loading";
+import { useContext } from "react";
+import { LoginContext } from "../../context/LoginContext";
+import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 
-export const ConfiguracionPage = ({ egresado }) => {
-  return (
+export const ConfiguracionPage = () => {
+  const { user } = useContext(LoginContext);
+  const { data, loading } = useFetchEgresadosById(user.id);
+
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <Row className="my-3">
         <h1>Configuración</h1>
@@ -54,13 +63,13 @@ export const ConfiguracionPage = ({ egresado }) => {
             <Col sm={9}>
               <Tab.Content>
                 <Tab.Pane eventKey="#datosPersonales">
-                  <ConfiguracionDatosPersonales egresado={egresado} />
+                  <ConfiguracionDatosPersonales egresado={data} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#titulos">
-                  <ConfiguracionEgresos egresado={egresado} />
+                  <ConfiguracionEgresos egresado={data} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#historialLaboral">
-                  <ConfiguracionHistorialLaboral egresado={egresado} />
+                  <ConfiguracionHistorialLaboral egresado={data} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#privacidad">
                   <ConfiguracionPrivacidad />

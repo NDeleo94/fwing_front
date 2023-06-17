@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ConfiguracionPage, IngresarUsuarioForm, PerfilPage } from "../pages";
 import { useContext, useEffect, useState } from "react";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
@@ -7,21 +7,17 @@ import { LoginContext } from "../../context/LoginContext";
 
 export const EgresadosRoutes = () => {
   const { user } = useContext(LoginContext);
-  const { data, loading } = useFetchEgresadosById(user.id);
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
+      {user ? (
         <Routes>
-          <Route
-            path="configuracion"
-            element={<ConfiguracionPage egresado={data} />}
-          />
+          <Route path="configuracion" element={<ConfiguracionPage />} />
 
           {/* ¿Faltaría cerrar Sesión? */}
         </Routes>
+      ) : (
+        <Navigate to="/home" replace />
       )}
     </>
   );
