@@ -9,6 +9,9 @@ import { useConfig } from "../../auth/hooks/useConfig";
 
 export const ConfiguracionDatosPersonales = ({ egresado }) => {
   const initialForm = {
+    nombres: egresado.nombres || "",
+    apellidos: egresado.apellidos || "",
+    dni: egresado.dni || "",
     email: egresado.email || "",
     nacionalidad: egresado.nacionalidad || "",
     fecha_nac: egresado.fecha_nac || "",

@@ -98,19 +98,19 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                 <div className="col-6">
                   <Form.Group className="mb-3" controlId="formFechaFin">
                     <Form.Label>Fin</Form.Label>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                      label="¿Es actual?"
-                      name="fin"
-                      onChange={handleChangeActual}
-                    />
                     <Form.Control
                       type={esActual ? "text" : "date"}
                       value={esActual ? "Actual" : formState.fin}
                       onChange={onInputChange}
                       name="fin"
                       disabled={esActual}
+                    />
+                    <Form.Check
+                      type="switch"
+                      id="custom-switch"
+                      label="¿Es actual?"
+                      name="fin"
+                      onChange={handleChangeActual}
                     />
                   </Form.Group>
                 </div>
