@@ -208,7 +208,7 @@ export const IngresarUsuarioForm = () => {
                                     onChange={onInputChange}
                                     placeholder="Carrera"
                                 >
-                                    <option value="Ingeniería en Computación">
+                                    <option value={1}>
                                         Ingeniería en Computación
                                     </option>
                                 </select>
