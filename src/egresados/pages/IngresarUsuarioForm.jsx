@@ -209,7 +209,10 @@ export const IngresarUsuarioForm = () => {
                                     onChange={onInputChange}
                                     placeholder="Carrera"
                                 >
-                                    <option value={1}>
+                                    <option value={"0"}>
+                                        Seleccione una carrera...
+                                    </option>
+                                    <option value={"1"}>
                                         Ingeniería en Computación
                                     </option>
                                 </select>
@@ -226,7 +229,7 @@ export const IngresarUsuarioForm = () => {
                                     placeholder="Fecha Egreso"
                                     type="date"
                                     id="fechaEgresoEgresado"
-                                    name="ciclo_Egreso"
+                                    name="ciclo_egreso"
                                     onChange={onInputChange}
                                 />
                             </div>
