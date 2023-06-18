@@ -12,6 +12,7 @@ export const IngresarUsuarioForm = () => {
         ciudad_natal: "",
         ciudad_actual: "",
         sexo: "",
+        carrera: 0
     };
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
@@ -225,7 +226,7 @@ export const IngresarUsuarioForm = () => {
                                     placeholder="Fecha Egreso"
                                     type="date"
                                     id="fechaEgresoEgresado"
-                                    name="cicloEgreso"
+                                    name="ciclo_Egreso"
                                     onChange={onInputChange}
                                 />
                             </div>
