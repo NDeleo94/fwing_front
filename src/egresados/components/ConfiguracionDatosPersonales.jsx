@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import { useForm } from "../hooks/useForm";
 import { Loading } from "../../ui/components/Loading";
+import axios from "axios";
+import { useConfig } from "../../auth/hooks/useConfig";
 
 export const ConfiguracionDatosPersonales = ({ egresado }) => {
   const initialForm = {
@@ -18,16 +20,26 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
   const { formState, onInputChange } = useForm(initialForm);
 
+  const urlBase = import.meta.env.VITE_URL_LOCAL;
+  const { config } = useConfig();
+
   /* Validación Bootstrap */
   const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
+    event.preventDefault();
+    const url = `${urlBase}/egresados/${egresado.id}/`;
+    axios
+      .put(url, formState, config)
+      .then(({ data }) => console.log(data))
+      .catch(({ response }) => console.log(response.data));
+
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }
+    // setValidated(true);
   };
   /* FinValidación Bootstrap */
 
