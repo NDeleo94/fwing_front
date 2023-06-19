@@ -26,14 +26,18 @@ export const SearchPage = () => {
             if (q != "") {
                 onPreSearch();
                 setTimeout(function () {
-                  setBandera(true)
+                    setBandera(true);
                 }, 15000);
             } else {
                 setFilteredEgresados(data);
-                setBandera(true)
+                setBandera(true);
             }
         }
     }, [data]);
+
+    useEffect(() => {
+        onPreSearch();
+    }, [q]);
 
     const { searchText, onInputChange } = useForm({
         searchText: q,
@@ -82,10 +86,10 @@ export const SearchPage = () => {
     };
 
     function onPreSearch() {
-        const value = searchText;
+        const value = q;
         let updatedData = [];
         let aux = [];
-        setTextSearched(searchText);
+        setTextSearched(q);
         if (value.length) {
             const filterFirstName =
                 egresados &&
