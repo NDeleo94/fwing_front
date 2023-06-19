@@ -14,80 +14,105 @@ import { LoginContext } from "../../context/LoginContext";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 
 export const ConfiguracionPage = () => {
-  const { user } = useContext(LoginContext);
-  const { data, loading } = useFetchEgresadosById(user.id);
+    const { user } = useContext(LoginContext);
+    const { data, loading } = useFetchEgresadosById(user.id);
 
-  return loading ? (
-    <Loading />
-  ) : (
-    <>
-      <Row className="my-3">
-        <h1>Configuración</h1>
-      </Row>
-      <hr />
-      <Tab.Container
-        id="list-group-tabs-example"
-        defaultActiveKey="#datosPersonales"
-      >
-        <Container fluid>
-          <Row>
-            <Col sm={3} className="bg-light py-2">
-              <ListGroup>
-                <ListGroup.Item action href="#datosPersonales">
-                  Datos Personales
-                </ListGroup.Item>
-                <ListGroup.Item action href="#titulos">
-                  Títulos
-                </ListGroup.Item>
-                <ListGroup.Item action href="#historialLaboral">
-                  Historial Laboral
-                </ListGroup.Item>
-                <ListGroup.Item action href="#privacidad">
-                  Privacidad
-                </ListGroup.Item>
-              </ListGroup>
-              <hr />
-              Administración
-              <ListGroup>
-                <ListGroup.Item action href="#agregarEgresado">
-                  Agregar Egresado
-                </ListGroup.Item>
-                <ListGroup.Item action href="#administrarEgresados">
-                  Administrar Egresados
-                </ListGroup.Item>
-                <ListGroup.Item action href="#administrarEmpresas">
-                  Administrar Empresas
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-            <Col sm={9}>
-              <Tab.Content>
-                <Tab.Pane eventKey="#datosPersonales">
-                  <ConfiguracionDatosPersonales egresado={data} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#titulos">
-                  <ConfiguracionEgresos egresado={data} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#historialLaboral">
-                  <ConfiguracionHistorialLaboral egresado={data} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#privacidad">
-                  <ConfiguracionPrivacidad />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#agregarEgresado">
-                  <IngresarUsuarioForm />
-                </Tab.Pane>
-                <Tab.Pane eventKey="#administrarEgresados">
-                  administrar Egresados
-                </Tab.Pane>
-                <Tab.Pane eventKey="#administrarEmpresas">
-                  Administrar Empresas
-                </Tab.Pane>
-              </Tab.Content>
-            </Col>
-          </Row>
-        </Container>
-      </Tab.Container>
-    </>
-  );
+    return loading ? (
+        <Loading />
+    ) : (
+        <>
+            <Row className="my-3">
+                <h1>Configuración</h1>
+            </Row>
+            <hr />
+            <Tab.Container
+                id="list-group-tabs-example"
+                defaultActiveKey="#datosPersonales"
+            >
+                <Container fluid>
+                    <Row>
+                        <Col sm={3} className="bg-light py-2">
+                            <ListGroup>
+                                <ListGroup.Item action href="#datosPersonales">
+                                    Datos Personales
+                                </ListGroup.Item>
+                                <ListGroup.Item action href="#titulos">
+                                    Títulos
+                                </ListGroup.Item>
+                                <ListGroup.Item action href="#historialLaboral">
+                                    Historial Laboral
+                                </ListGroup.Item>
+                                <ListGroup.Item action href="#privacidad">
+                                    Privacidad
+                                </ListGroup.Item>
+                            </ListGroup>
+                            <hr />
+                            {user.is_admin ? (
+                                <>
+                                    Administración
+                                    <ListGroup>
+                                        <ListGroup.Item
+                                            action
+                                            href="#agregarEgresado"
+                                        >
+                                            Agregar Egresado
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#administrarEgresados"
+                                        >
+                                            Administrar Egresados
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#administrarEmpresas"
+                                        >
+                                            Administrar Empresas
+                                        </ListGroup.Item>
+                                    </ListGroup>
+                                </>
+                            ) : (
+                                ""
+                            )}
+                        </Col>
+                        <Col sm={9}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="#datosPersonales">
+                                    <ConfiguracionDatosPersonales
+                                        egresado={data}
+                                    />
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="#titulos">
+                                    <ConfiguracionEgresos egresado={data} />
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="#historialLaboral">
+                                    <ConfiguracionHistorialLaboral
+                                        egresado={data}
+                                    />
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="#privacidad">
+                                    <ConfiguracionPrivacidad />
+                                </Tab.Pane>
+                                {user.is_admin ? (
+                                    <>
+                                        <Tab.Pane eventKey="#agregarEgresado">
+                                            <IngresarUsuarioForm />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administrarEgresados">
+                                            administrar Egresados
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administrarEmpresas">
+                                            Administrar Empresas
+                                        </Tab.Pane>
+                                    </>
+                                ) : (
+                                    ""
+                                )}
+                            </Tab.Content>
+                        </Col>
+                    </Row>
+                </Container>
+            </Tab.Container>
+        </>
+    );
 };

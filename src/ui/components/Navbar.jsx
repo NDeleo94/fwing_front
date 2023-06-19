@@ -57,7 +57,8 @@ export const Navbar = () => {
 
     const enterPulsed = (event) => {
         if (event.key === "Enter") {
-            navigate(`/search`);
+            event.preventDefault();
+            navigate(`/search?q=${formState.q}`);
         }
     };
 

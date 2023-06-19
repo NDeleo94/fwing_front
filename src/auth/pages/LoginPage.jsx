@@ -7,103 +7,121 @@ import { LoginContext } from "../../context/LoginContext";
 import { useForm } from "../../egresados/hooks/useForm";
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
-  const [show, setShow] = useState(false);
-  const { setIsLogged, setUser, setToken } = useContext(LoginContext);
+    const navigate = useNavigate();
+    const [show, setShow] = useState(false);
+    const { setIsLogged, setUser, setToken } = useContext(LoginContext);
 
-  const urlBase = import.meta.env.VITE_URL_LOCAL;
+    const urlBase = import.meta.env.VITE_URL_LOCAL;
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
-  const onLogin = (e) => {
-    e.preventDefault();
-    console.log(formState);
-    const url = `${urlBase}/login/`;
-    const postData = formState;
-
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
+    const onLogin = (e) => {
+        e.preventDefault();
+        Loguearse();
     };
 
-    fetch(url, requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setToken(data.token);
-            setUser(data.user);
-            setIsLogged(true);
-            navigate("/home", {
-              replace: true,
+    /* PRueba */
+
+    function Loguearse() {
+        console.log(formState);
+        const url = `${urlBase}/login/`;
+        const postData = formState;
+
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(postData),
+        };
+
+        fetch(url, requestOptions)
+            .then((response) => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        setToken(data.token);
+                        setUser(data.user);
+                        setIsLogged(true);
+                        navigate("/home", {
+                            replace: true,
+                        });
+                    });
+                } else {
+                    response.json().then((data) => {
+                        console.error("Error:", data.error);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
             });
-          });
-        } else {
-          response.json().then((data) => {
-            console.error("Error:", data.error);
-          });
+    }
+
+    const enterPulsed = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            Loguearse();
         }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+    };
+    /* PRueba */
 
-  const initialForm = {
-    username: "",
-    password: "",
-  };
+    const initialForm = {
+        username: "",
+        password: "",
+    };
 
-  const { formState, onInputChange } = useForm(initialForm);
+    const { formState, onInputChange } = useForm(initialForm);
 
-  return (
-    <>
-      <div className="container mt-5">
-        <h1>Iniciar Sesión</h1>
-        <hr />
-        <Button variant="success" onClick={handleShow}>
-          Ingresar con e-mail
-        </Button>
+    return (
+        <>
+            <div className="container mt-5">
+                <h1>Iniciar Sesión</h1>
+                <hr />
+                <Button variant="success" onClick={handleShow}>
+                    Ingresar con e-mail
+                </Button>
 
-        <hr />
-        <GoogleButton />
-      </div>
+                <hr />
+                <GoogleButton />
+            </div>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ingresar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formFacultad">
-              <Form.Label>E-mail</Form.Label>
-              <Form.Control
-                type="username"
-                value={formState.username}
-                name="username"
-                onChange={onInputChange}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formUniversidad">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                value={formState.password}
-                name="password"
-                onChange={onInputChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="success" onClick={onLogin}>
-            Ingresar
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Ingresar</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formFacultad">
+                            <Form.Label>E-mail</Form.Label>
+                            <Form.Control
+                                type="username"
+                                value={formState.username}
+                                name="username"
+                                onChange={onInputChange}
+                            />
+                        </Form.Group>
+                        <Form.Group
+                            className="mb-3"
+                            controlId="formUniversidad"
+                        >
+                            <Form.Label>Contraseña</Form.Label>
+                            <Form.Control
+                                type="password"
+                                value={formState.password}
+                                name="password"
+                                onChange={onInputChange}
+                                onKeyDown={enterPulsed}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="success" onClick={onLogin}>
+                        Ingresar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
 };
