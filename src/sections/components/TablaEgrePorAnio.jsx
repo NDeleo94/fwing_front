@@ -23,7 +23,6 @@ ChartJS.register(
 );
 
 export const TablaEgrePorAnio = ({datos}) => {
-    console.log(datos)
     const labels = [
         "1998",
         "1999",

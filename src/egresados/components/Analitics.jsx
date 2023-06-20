@@ -6,6 +6,7 @@ import { getCantidadEgrPorLapso } from "../helpers/getCantidadEgrPorLapso";
 import { getCantidadEgrPorCiudadNatal } from "../helpers/getCantidadEgrPorCiudadNatal";
 import { Container } from "react-bootstrap";
 import { TablaEgrePorAnio } from "../../sections/components/TablaEgrePorAnio";
+import { TortaDistribucionEgrePorSexo } from "../../sections/components/TortaDistribucionEgrePorSexo";
 
 export const Analitics = ({ data }) => {
     const [c, setC] = useState(0);
@@ -25,6 +26,7 @@ export const Analitics = ({ data }) => {
         <>
             <Container fluid className="my-2">
               <TablaEgrePorAnio datos={data} />
+              <TortaDistribucionEgrePorSexo datos={data} />
                 <div>Analitics</div>
                 egresados de 2017: {c},
                 <br />
