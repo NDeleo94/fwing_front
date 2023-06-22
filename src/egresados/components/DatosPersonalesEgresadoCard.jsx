@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { convertirFecha, separarFecha } from "../helpers/manejoFecha";
 
 export const DatosPersonalesEgresadoCard = ({
   nombres,
@@ -13,7 +14,8 @@ export const DatosPersonalesEgresadoCard = ({
 
   useEffect(() => {
     if (egresos) {
-      setAnioEgreso(egresos[0].ciclo_egreso);
+      const { anio } = separarFecha(egresos[0].ciclo_egreso);
+      setAnioEgreso(anio);
     }
   }, [egresos]);
   return (
@@ -39,7 +41,7 @@ export const DatosPersonalesEgresadoCard = ({
           <div className="col-4">
             <b>Fecha de Nacimiento:</b>
           </div>
-          <div className="col-8">{fecha_nac}</div>
+          <div className="col-8">{convertirFecha(fecha_nac)}</div>
         </div>
         <hr />
         <div className="row mx-2">

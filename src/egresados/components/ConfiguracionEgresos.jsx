@@ -2,13 +2,22 @@ import { useState } from "react";
 import { Form, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useForm } from "../hooks/useForm";
 
 export const ConfiguracionEgresos = ({ egresado }) => {
-  console.log(egresado)
+  console.log(egresado.egresos);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const initialForm = {
+    matricula: "",
+    ciclo_egreso: "",
+    facultad: "",
+    universidad: "",
+  };
+  const { formState, onInputChange } = useForm(initialForm);
 
   return (
     <>
@@ -32,14 +41,16 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">--</th>
-              <td>2023</td>
-              <td>Ingeniería en Computación</td>
-              <td>Facultad de Ciencias Exactas y Tecnología</td>
-              <td>Universidad Nacional de Tucumán</td>
-              <td></td>
-            </tr>
+            {egresado.egresos.map((egre) => (
+              <tr key={egre.id}>
+                <th scope="row">{egre.matricula ? egre.matricula : "--"}</th>
+                <td>{egre.ciclo_egreso.split("-")[0]}</td>
+                <td>{egre.carrera.carrera}</td>
+                <td>{egre.carrera.facultad.facultad}</td>
+                <td>{egre.carrera.facultad.universidad.acronimo}</td>
+                <td></td>
+              </tr>
+            ))}
           </tbody>
         </Table>
 

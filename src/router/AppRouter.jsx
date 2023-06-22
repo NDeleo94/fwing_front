@@ -14,10 +14,13 @@ import {
 import { Footer, Navbar } from "../ui/components";
 import { useState } from "react";
 import { LoginContext } from "../context/LoginContext";
+import { PerfilPage, SearchPage } from "../egresados/pages";
 
 export const AppRouter = () => {
   const [isLogged, setIsLogged] = useState(false);
-  const state = { isLogged, setIsLogged };
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const state = { isLogged, setIsLogged, user, setUser, token, setToken };
 
   return (
     <>
@@ -26,6 +29,7 @@ export const AppRouter = () => {
 
         <div className="container">
           <Routes>
+            <Route path="/" element={<InicioPage />} />
             <Route path="home" element={<InicioPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="carrera" element={<CarreraPage />} />
@@ -35,6 +39,8 @@ export const AppRouter = () => {
             <Route path="mpais" element={<MPaisPage />} />
             <Route path="mlocal" element={<MLocalPage />} />
             <Route path="honores" element={<HonoresPage />} />
+            <Route path="search" element={<SearchPage />} />
+            <Route path="perfil/:id" element={<PerfilPage />} />
             <Route path="/*" element={<EgresadosRoutes />} />
           </Routes>
         </div>

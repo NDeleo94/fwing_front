@@ -1,34 +1,23 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ConfiguracionPage, IngresarUsuarioForm, PerfilPage } from "../pages";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { Loading } from "../../ui/components/Loading";
+import { LoginContext } from "../../context/LoginContext";
 
 export const EgresadosRoutes = () => {
-  const [last_loggin, setLast_loggin] = useState(null);
-  const { data, loading } = useFetchEgresadosById(903);
-
-  useEffect(() => {
-    if (data) {
-      setLast_loggin(data.last_login);
-    }
-  }, [data]);
+  const { user } = useContext(LoginContext);
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
+      {user ? (
         <Routes>
-          <Route path="perfil/:id" element={<PerfilPage />} />
-          <Route
-            path="configuracion"
-            element={<ConfiguracionPage egresado={data} />}
-          />
-          <Route path="agregar" element={<IngresarUsuarioForm />} />
+          <Route path="configuracion" element={<ConfiguracionPage />} />
 
           {/* ¿Faltaría cerrar Sesión? */}
         </Routes>
+      ) : (
+        <Navigate to="/home" replace />
       )}
     </>
   );
