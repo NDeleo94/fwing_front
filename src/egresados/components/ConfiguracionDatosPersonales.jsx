@@ -6,9 +6,13 @@ import { useForm } from "../hooks/useForm";
 import { Loading } from "../../ui/components/Loading";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Toast, ToastContainer } from "react-bootstrap";
+import { ToastNotificacionPush } from "./ToastNotificacionPush";
+import { useNavigate } from "react-router";
 
 export const ConfiguracionDatosPersonales = ({ egresado }) => {
+    const navigate = useNavigate();
+
     const initialForm = {
         nombres: egresado.nombres || "",
         apellidos: egresado.apellidos || "",
@@ -32,11 +36,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const url = `${urlBase}/egresados/${egresado.id}/`;
-        axios
-            .put(url, formState, config)
-            .then(({ data }) => console.log(data))
-            .catch(({ response }) => console.log(response.data));
 
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
@@ -44,8 +43,43 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             event.stopPropagation();
         }
         setValidated(true);
+
+        if (EstaCompleto()) {
+            const url = `${urlBase}/egresados/${egresado.id}/`;
+            axios
+                .put(url, formState, config)
+                .then(({ data }) => console.log(data))
+                .catch(({ response }) => console.log(response.data));
+            setValidated(false);
+            /* falta poner un cartel que diga que se guardó y recargar página */
+            setShow(true);
+            setTimeout(function () {
+                navigate(`/perfil/${egresado.id}`);
+            }, 3000);
+        }
     };
+
+    function EstaCompleto() {
+        return (
+            formState.email &&
+            formState.nacionalidad &&
+            formState.fecha_nac &&
+            formState.ciudad_actual &&
+            formState.ciudad_natal &&
+            formState.domicilio &&
+            formState.sexo
+        );
+    }
     /* FinValidación Bootstrap */
+
+    const [show, setShow] = useState(false);
+
+    const mensaje = (
+        <>
+            <b>¡Cambios guardados!</b>
+            {` `}Actualizando perfil...
+        </>
+    );
 
     function NoHayCambios(initial, changed) {
         return (
@@ -64,46 +98,49 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             <div className="container-fluid mt-2 text-secondary">
                 <h3>Datos Personales</h3>
                 <hr />
-                <Form.Group controlId="formFile" className="mb-3">
-                    <div className="row">
-                        <div className="col-3">
-                            <div className="card-header">
-                                <img
-                                    src={Logo}
-                                    className="img-thumbnail"
-                                    alt="Following"
-                                />
+                <Form>
+                    <Form.Group className="mb-3">
+                        <div className="row">
+                            <div className="col-3">
+                                <div className="card-header">
+                                    <img
+                                        src={Logo}
+                                        className="img-thumbnail"
+                                        alt="Following"
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-9">
+                                <Row>
+                                    <Form.Label>
+                                        ¿Desea cambiar su foto de perfil?
+                                    </Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        accept="image/png, image/jpeg"
+                                        id="imagenPerfil"
+                                        name="imagenPerfil"
+                                    />
+                                </Row>
+                                <Row className="my-2 justify-content-end">
+                                    <Col className="justify-content-end">
+                                        <Button variant="danger" size="sm">
+                                            Eliminar Foto
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button variant="light" size="sm">
+                                            Usar Foto Google
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button size="sm">¡Subir foto!</Button>
+                                    </Col>
+                                </Row>
                             </div>
                         </div>
-                        <div className="col-9">
-                            <Row>
-                                <Form.Label>
-                                    ¿Desea cambiar su foto de perfil?
-                                </Form.Label>
-                                <Form.Control
-                                    type="file"
-                                    accept="image/png, image/jpeg"
-                                    id="imagenPerfil"
-                                    name="imagenPerfil"
-                                />
-                            </Row>
-                            <Row className="my-2 justify-content-end">
-                                
-                                <Col className="justify-content-end">
-                                    <Button variant="danger" size="sm">
-                                        Eliminar Foto
-                                    </Button>
-                                </Col>
-                                <Col>
-                                    <Button variant="light" size="sm">Usar Foto Google</Button>
-                                </Col>
-                                <Col>
-                                    <Button size="sm">¡Subir foto!</Button>
-                                </Col>
-                            </Row>
-                        </div>
-                    </div>
-                </Form.Group>
+                    </Form.Group>
+                </Form>
                 <hr />
                 {/* react-bootstrap */}
                 <Form noValidate validated={validated}>
@@ -257,6 +294,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         </Button>
                     </div>
                 </Form>
+                <ToastNotificacionPush mensaje={mensaje} mostrar={show} />
             </div>
         </>
     );
