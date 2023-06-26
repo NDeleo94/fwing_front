@@ -3,6 +3,7 @@ import { Form, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "../hooks/useForm";
+import { ToastNotificacionPush } from "./ToastNotificacionPush";
 
 export const ConfiguracionEgresos = ({ egresado }) => {
     const [show, setShow] = useState(false);
@@ -36,12 +37,14 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         }
         setValidated(true);
 
+        /* Validación React */
         if (
             formState.ciclo_egreso &&
             formState.carrera &&
             formState.facultad &&
             formState.universidad
         ) {
+            CallToast();
             setShow(false);
             /* post de agregar egreso a egresado */
         }
@@ -57,6 +60,23 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             initial.universidad == changed.universidad
         );
     }
+
+    /* Notificación Push */
+    const [mostrar, setMostrar] = useState(false);
+    
+    const message = (
+        <>
+            <b>¡Se agregó el nuevo título!</b>
+        </>
+    );
+    
+    function CallToast() {
+        setMostrar(true);
+        setTimeout(() => {
+            setMostrar(false);
+        }, 5100);
+    }
+    /* Fin Notificación Push */
 
     return (
         <>
@@ -96,6 +116,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                         ))}
                     </tbody>
                 </Table>
+
+                <ToastNotificacionPush mensaje={message} mostrar={mostrar}/>
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>

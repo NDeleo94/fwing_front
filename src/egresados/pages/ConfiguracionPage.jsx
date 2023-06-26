@@ -7,11 +7,12 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 import { ConfiguracionPrivacidad } from "../components/ConfiguracionPrivacidad";
-import { IngresarUsuarioForm } from "./IngresarUsuarioForm";
+import { IngresarUsuarioForm } from "../../admin/components/IngresarUsuarioForm";
 import { Loading } from "../../ui/components/Loading";
 import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
+import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -59,6 +60,12 @@ export const ConfiguracionPage = () => {
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
+                                            href="#filtrarEgresados"
+                                        >
+                                            Filtrar Egresados
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
                                             href="#administrarEgresados"
                                         >
                                             Administrar Egresados
@@ -97,6 +104,9 @@ export const ConfiguracionPage = () => {
                                     <>
                                         <Tab.Pane eventKey="#agregarEgresado">
                                             <IngresarUsuarioForm />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#filtrarEgresados">
+                                            <FiltrarEgresados />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#administrarEgresados">
                                             administrar Egresados

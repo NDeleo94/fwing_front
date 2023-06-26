@@ -1,12 +1,11 @@
 import Logo from "../../assets/imgs/Logo.png";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "../hooks/useForm";
-import { Loading } from "../../ui/components/Loading";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
-import { Col, Row, Toast, ToastContainer } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { useNavigate } from "react-router";
 
@@ -51,7 +50,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .then(({ data }) => console.log(data))
                 .catch(({ response }) => console.log(response.data));
             setValidated(false);
-            /* falta poner un cartel que diga que se guardó y recargar página */
             setShow(true);
             setTimeout(function () {
                 navigate(`/perfil/${egresado.id}`);

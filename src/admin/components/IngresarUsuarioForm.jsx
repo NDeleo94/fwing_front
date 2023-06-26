@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "../hooks/useForm";
+import { useForm } from "../../egresados/hooks/useForm";
 
 export const IngresarUsuarioForm = () => {
     const initialForm = {
@@ -44,8 +44,8 @@ export const IngresarUsuarioForm = () => {
     };
     return (
         <>
-            <div className="container my-5">
-                <div className="card bg-light">
+            <div className="container ">
+                
                     <article className="card-body mx-auto">
                         <h4 className="card-title mt-3 text-center">
                             Agregar Egresado
@@ -246,7 +246,7 @@ export const IngresarUsuarioForm = () => {
                             </div>
                         </form>
                     </article>
-                </div>
+                
             </div>
         </>
     );
