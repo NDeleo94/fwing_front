@@ -8,6 +8,7 @@ import { useConfig } from "../../auth/hooks/useConfig";
 import { Col, Row } from "react-bootstrap";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { useNavigate } from "react-router";
+import CreatableSelect from "react-select/creatable";
 
 export const ConfiguracionDatosPersonales = ({ egresado }) => {
     const navigate = useNavigate();
@@ -32,7 +33,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
     /* Validación Bootstrap */
     const [validated, setValidated] = useState(false);
-
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -44,6 +44,13 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         setValidated(true);
 
         if (EstaCompleto()) {
+            select_natal.value
+                ? (formState.ciudad_natal = select_natal.value)
+                : (formState.ciudad_natal = select_natal.label);
+            select_actual.value
+                ? (formState.ciudad_actual = select_actual.value)
+                : (formState.ciudad_actual = select_actual.label);
+            
             const url = `${urlBase}/egresados/${egresado.id}/`;
             axios
                 .put(url, formState, config)
@@ -56,41 +63,89 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             }, 3000);
         }
     };
-
     function EstaCompleto() {
         return (
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            formState.ciudad_actual &&
-            formState.ciudad_natal &&
+            select_actual.label &&
+            select_natal.label &&
             formState.domicilio &&
             formState.sexo
         );
     }
     /* FinValidación Bootstrap */
 
+    /* Notificación Push */
     const [show, setShow] = useState(false);
-
     const mensaje = (
         <>
             <b>¡Cambios guardados!</b>
             {` `}Actualizando perfil...
         </>
     );
+    /* Fin Notificación Push */
 
     function NoHayCambios(initial, changed) {
         return (
             initial.email == changed.email &&
             initial.nacionalidad == changed.nacionalidad &&
             initial.fecha_nac == changed.fecha_nac &&
-            initial.ciudad_actual == changed.ciudad_actual &&
-            initial.ciudad_natal == changed.ciudad_natal &&
+            initial.ciudad_actual == select_actual?.label &&
+            initial.ciudad_natal == select_natal?.label && // signo de pregunta porque No está en el defaultOptionsSelect_natal
             initial.domicilio == changed.domicilio &&
             initial.sexo == changed.sexo
         );
     }
 
+    /* Inicio Input-Select */
+    const createOption = (label, id) => ({
+        label,
+        value: id,
+    });
+    // Aquí hay que traer la info del back
+    const defaultOptionsSelect_ciudades = [
+        // opciones por defecto
+        createOption("Yerba Buena, Tucumán", 11),
+        createOption("Trancas, Tucumán", 12),
+        createOption("Salta, Salta", 13),
+        createOption("San Miguel de Tucuman", 15),
+        createOption(`${initialForm.ciudad_natal}`, 25),
+        createOption(`${initialForm.ciudad_actual}`, 35),
+    ];
+    const [isLoadingSelect_natal, setIsLoadingSelect_natal] = useState(false);
+    const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
+    const [options, setOptions] = useState(defaultOptionsSelect_ciudades); // setea las opciones por defecto
+    const [select_natal, setSelect_natal] = useState(
+        defaultOptionsSelect_ciudades.find(
+            (element) => element.label == initialForm.ciudad_natal
+        )
+    );
+    const [select_actual, setSelect_actual] = useState(
+        defaultOptionsSelect_ciudades.find(
+            (element) => element.label == initialForm.ciudad_actual
+        )
+    );
+    const handleCreateSelect_natal = (inputValue) => {
+        setIsLoadingSelect_natal(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelect_natal(false); // saca el loading
+            setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setSelect_natal(newOption); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    const handleCreateSelect_actual = (inputValue) => {
+        setIsLoadingSelect_actual(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelect_actual(false); // saca el loading
+            setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setSelect_actual(newOption); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    /* Fin Input-Select */
+    
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -228,30 +283,37 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="formCiudadNatal"
-                        >
+
+                        <Form.Group className="mb-3" controlId="formPrueba">
                             <Form.Label>Ciudad Natal</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={formState.ciudad_natal}
-                                onChange={onInputChange}
-                                name="ciudad_natal"
-                                required
+                            <CreatableSelect
+                                isClearable
+                                isDisabled={isLoadingSelect_natal}
+                                isLoading={isLoadingSelect_natal}
+                                onChange={(newValue) =>
+                                    setSelect_natal(newValue)
+                                }
+                                onCreateOption={handleCreateSelect_natal}
+                                options={options}
+                                value={select_natal}
                             />
                         </Form.Group>
+
                         <Form.Group
                             className="mb-3"
                             controlId="formCiudadActual"
                         >
                             <Form.Label>Ciudad Actual</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={formState.ciudad_actual}
-                                onChange={onInputChange}
-                                name="ciudad_actual"
-                                required
+                            <CreatableSelect
+                                isClearable
+                                isDisabled={isLoadingSelect_actual}
+                                isLoading={isLoadingSelect_actual}
+                                onChange={(newValue) =>
+                                    setSelect_actual(newValue)
+                                }
+                                onCreateOption={handleCreateSelect_actual}
+                                options={options}
+                                value={select_actual}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formDomicilio">
