@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
-import { Col, Row } from "react-bootstrap";
+import { Alert, Col, Container, Row } from "react-bootstrap";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { useNavigate } from "react-router";
 import CreatableSelect from "react-select/creatable";
@@ -31,17 +31,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     const urlBase = import.meta.env.VITE_URL_LOCAL;
     const { config } = useConfig();
 
-    /* Validación Bootstrap */
-    const [validated, setValidated] = useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
 
         if (EstaCompleto()) {
             select_natal.value
@@ -50,7 +41,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             select_actual.value
                 ? (formState.ciudad_actual = select_actual.value)
                 : (formState.ciudad_actual = select_actual.label);
-            
+
             const url = `${urlBase}/egresados/${egresado.id}/`;
             axios
                 .put(url, formState, config)
@@ -61,6 +52,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             setTimeout(function () {
                 navigate(`/perfil/${egresado.id}`);
             }, 3000);
+        } else {
+            setShowAlert(true);
         }
     };
     function EstaCompleto() {
@@ -68,13 +61,12 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            select_actual.label &&
-            select_natal.label &&
+            select_actual &&
+            select_natal &&
             formState.domicilio &&
             formState.sexo
         );
     }
-    /* FinValidación Bootstrap */
 
     /* Notificación Push */
     const [show, setShow] = useState(false);
@@ -91,8 +83,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             initial.email == changed.email &&
             initial.nacionalidad == changed.nacionalidad &&
             initial.fecha_nac == changed.fecha_nac &&
-            initial.ciudad_actual == select_actual?.label &&
-            initial.ciudad_natal == select_natal?.label && // signo de pregunta porque No está en el defaultOptionsSelect_natal
+            !!select_actual &&
+            !!select_natal && // signo de pregunta porque No está en el defaultOptionsSelect_natal
             initial.domicilio == changed.domicilio &&
             initial.sexo == changed.sexo
         );
@@ -145,7 +137,9 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         }, 1000);
     };
     /* Fin Input-Select */
-    
+
+    const [showAlert, setShowAlert] = useState(false);
+
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -196,7 +190,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 </Form>
                 <hr />
                 {/* react-bootstrap */}
-                <Form noValidate validated={validated}>
+                <Form>
                     <div className="row mx-0">
                         <div className="col-6">
                             <Form.Group
@@ -338,12 +332,51 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 <option>Elija una opción...</option>
                                 <option value="F">Femenino</option>
                                 <option value="M">Masculino</option>
-                                <option value={null}>
+                                <option value="O">
                                     Prefiero no decirlo...
                                 </option>
                             </Form.Select>
                         </div>
                     </div>
+                    {showAlert 
+                    /* &&
+                    !(
+                        formState.email &&
+                        formState.nacionalidad &&
+                        formState.fecha_nac &&
+                        formState.domicilio &&
+                        formState.sexo &&
+                        select_actual &&
+                        select_natal
+                    ) */ 
+                    ? (
+                        <>
+                            <Container fluid className="my-3">
+                                <Alert
+                                    variant="danger"
+                                    onClose={() => setShowAlert(false)}
+                                    dismissible
+                                >
+                                    <b>
+                                        Formulario incompleto, falta: <br />
+                                    </b>
+                                    {!formState.email ? "E-mail," : ""}
+                                    {!formState.nacionalidad
+                                        ? " Nacionalidad,"
+                                        : ""}
+                                    {!formState.fecha_nac
+                                        ? " Fecha de Nacimiento,"
+                                        : ""}
+                                    {!formState.domicilio ? " Domicilio," : ""}
+                                    {!formState.sexo ? " Sexo," : ""}
+                                    {!select_natal ? " Ciudad Natal," : ""}
+                                    {!select_actual ? " Ciudad Actual." : "."}
+                                </Alert>
+                            </Container>
+                        </>
+                    ) : (
+                        ""
+                    )}
                     <div className="col-12 my-4 d-grid">
                         <Button
                             type="submit"
