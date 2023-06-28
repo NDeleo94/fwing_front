@@ -47,7 +47,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .put(url, formState, config)
                 .then(({ data }) => console.log(data))
                 .catch(({ response }) => console.log(response.data));
-            setValidated(false);
             setShow(true);
             setTimeout(function () {
                 navigate(`/perfil/${egresado.id}`);

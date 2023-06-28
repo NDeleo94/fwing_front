@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { Button, Form, Modal, Table } from "react-bootstrap";
+import { Alert, Button, Form, Modal, Table } from "react-bootstrap";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
+import CreatableSelect from "react-select/creatable";
 
 export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
+        setShowAlert(false);
         setEsActual(false);
+        setValueOrganizacion();
+        setValuePuesto();
         onResetForm();
-        setValidated(false);
         setShow(true);
     };
 
@@ -31,24 +34,31 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setEsActual((current) => !current);
     };
 
-    /* Validación Bootstrap */
-    const [validated, setValidated] = useState(false);
     const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
+        event.preventDefault();
 
         /* Validación React */
-        if (formState.puesto && formState.organizacion && formState.inicio) {
+        if (
+            !!valueOrganizacion &&
+            !!valuePuesto &&
+            formState.inicio &&
+            (esActual || formState.fin) &&
+            EsInicioAntesQueFin()
+        ) {
+            valuePuesto.value
+                ? (formState.puesto = valuePuesto.value)
+                : (formState.puesto = valuePuesto.label);
+            valueOrganizacion.value
+                ? (formState.organizacion = valueOrganizacion.value)
+                : (formState.organizacion = valueOrganizacion.label);
             CallToast();
             setShow(false);
             /* post de agregar trabajo a egresado */
+        } else {
+            setShowAlert(true);
         }
+        console.log(formState);
     };
-    /* FinValidación Bootstrap */
 
     /* Notificación Push */
     const [mostrar, setMostrar] = useState(false);
@@ -64,6 +74,72 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         }, 5100);
     }
     /* Fin Notificación Push */
+
+    /* Inicio Select-input de carrera-facultad-universidad */
+    const createOption = (label, id) => ({
+        label,
+        value: id,
+    });
+    // Aquí hay que traer la info del back
+    const defaultOptionsPuestos = [
+        createOption("Full Stack Developer", 11),
+        createOption("DevOps", 12),
+        createOption("Profesor Adjunto", 13),
+        createOption("Gerente IT", 15),
+    ];
+    const defaultOptionsOrganizaciones = [
+        createOption("Globant", 21),
+        createOption("Sovos", 22),
+        createOption("Legislatura de Tucumán", 23),
+        createOption("Sistenso", 25),
+        createOption("Universidad Nacional de Tucumán", 125),
+    ];
+    const [isLoadingSelectPuesto, setIsLoadingSelectPuesto] = useState(false);
+    const [isLoadingSelectOrganizacion, setIsLoadingSelectOrganizacion] =
+        useState(false);
+    const [optionsPuestos, setOptionsPuestos] = useState(defaultOptionsPuestos);
+    const [optionsOrganizaciones, setOptionsOrganizaciones] = useState(
+        defaultOptionsOrganizaciones
+    );
+    const [valuePuesto, setValuePuesto] = useState();
+    const [valueOrganizacion, setValueOrganizacion] = useState();
+    const handleCreateSelectPuesto = (inputValue) => {
+        setIsLoadingSelectPuesto(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelectPuesto(false); // saca el loading
+            setOptionsPuestos((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setValuePuesto(newOption); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    const handleCreateSelectOrganizacion = (inputValue) => {
+        setIsLoadingSelectOrganizacion(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelectOrganizacion(false); // saca el loading
+            setOptionsOrganizaciones((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setValueOrganizacion(newOption); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    /* Fin Select-input de carrera-facultad-universidad */
+
+    /* Alert de validación */
+    const [showAlert, setShowAlert] = useState(false);
+    /* FIN Alert de validación */
+
+    function EsInicioAntesQueFin() {
+        let fechaInicio = new Date(formState.inicio);
+        let fechaFin;
+        if (esActual) {
+            fechaFin = new Date();
+        } else {
+            fechaFin = new Date(formState.fin);
+        }
+
+        if (fechaInicio <= fechaFin) {
+            return true;
+        } else return false;
+    }
 
     return (
         <>
@@ -99,22 +175,26 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                     </tbody>
                 </Table>
 
-                <ToastNotificacionPush mensaje={message} mostrar={mostrar}/>
+                <ToastNotificacionPush mensaje={message} mostrar={mostrar} />
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Agregar Trabajo</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form noValidate validated={validated}>
+                        <Form>
                             <Form.Group className="mb-3" controlId="formPuesto">
                                 <Form.Label>Puesto</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={formState.puesto}
-                                    onChange={onInputChange}
-                                    name="puesto"
-                                    required
+                                <CreatableSelect
+                                    isClearable
+                                    isDisabled={isLoadingSelectPuesto}
+                                    isLoading={isLoadingSelectPuesto}
+                                    onChange={(newValue) =>
+                                        setValuePuesto(newValue)
+                                    }
+                                    onCreateOption={handleCreateSelectPuesto}
+                                    options={optionsPuestos}
+                                    value={valuePuesto}
                                 />
                             </Form.Group>
                             <Form.Group
@@ -122,12 +202,18 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                 controlId="formOrganizacion"
                             >
                                 <Form.Label>Organizacion</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={formState.organizacion}
-                                    onChange={onInputChange}
-                                    name="organizacion"
-                                    required
+                                <CreatableSelect
+                                    isClearable
+                                    isDisabled={isLoadingSelectOrganizacion}
+                                    isLoading={isLoadingSelectOrganizacion}
+                                    onChange={(newValue) =>
+                                        setValueOrganizacion(newValue)
+                                    }
+                                    onCreateOption={
+                                        handleCreateSelectOrganizacion
+                                    }
+                                    options={optionsOrganizaciones}
+                                    value={valueOrganizacion}
                                 />
                             </Form.Group>
                             <div className="row">
@@ -175,6 +261,63 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                 </div>
                             </div>
                         </Form>
+                        {showAlert &&
+                        !(
+                            formState.inicio &&
+                            valuePuesto &&
+                            valueOrganizacion &&
+                            (esActual || formState.fin) &&
+                            EsInicioAntesQueFin()
+                        ) ? (
+                            <>
+                                <Alert
+                                    variant="danger"
+                                    onClose={() => setShowAlert(false)}
+                                    dismissible
+                                >
+                                    {!(
+                                        formState.inicio &&
+                                        valuePuesto &&
+                                        valueOrganizacion &&
+                                        (esActual || formState.fin)
+                                    ) ? (
+                                        <b>
+                                            - Formulario incompleto, falta:{" "}
+                                            <br />
+                                        </b>
+                                    ) : (
+                                        ""
+                                    )}
+                                    {!formState.inicio
+                                        ? "Inicio de trabajo,"
+                                        : ""}
+                                    {!valuePuesto ? " Puesto laboral," : ""}
+                                    {!valueOrganizacion ? " Organizacion," : ""}
+                                    {!(formState.fin || esActual)
+                                        ? " Fin de Trabajo."
+                                        : ""}
+                                    {!(
+                                        formState.inicio &&
+                                        valuePuesto &&
+                                        valueOrganizacion &&
+                                        (esActual || formState.fin)
+                                    ) ? (
+                                        <br />
+                                    ) : (
+                                        ""
+                                    )}
+                                    {!EsInicioAntesQueFin() ? (
+                                        <>
+                                            <b>- ¡Fechas incorrectas/nulas!</b>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
+                                </Alert>
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
