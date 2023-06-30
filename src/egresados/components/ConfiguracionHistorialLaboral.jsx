@@ -211,18 +211,18 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                     <Row>
                                         <Col>
                                             <Button
-                                                variant="outline-success"
-                                                className="m-1"
+                                                variant="outline-secondary"
+                                                className="my-1"
                                             >
-                                                <i class="bi bi-pencil-square"></i>
+                                                <i className="bi bi-pencil-square"></i>
                                             </Button>
                                         </Col>
                                         <Col>
                                             <Button
                                                 variant="outline-danger"
-                                                className=" m-1"
+                                                className=" my-1"
                                             >
-                                                <i class="bi bi-trash"></i>
+                                                <i className="bi bi-trash"></i>
                                             </Button>
                                         </Col>
                                     </Row>

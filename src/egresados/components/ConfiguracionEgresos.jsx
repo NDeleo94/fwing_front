@@ -233,15 +233,13 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     };
     /* Fin Función eliminar */
 
-    console.log(egresado.egresos[0].id);
-    console.log(egresado.egresos[egresado.egresos.length - 1].id);
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3>Egresos</h3>
+                <h3>Títulos</h3>
                 <hr />
                 <Button variant="secondary" onClick={handleShow}>
-                    Agregar Egreso
+                    Agregar Título
                 </Button>
                 <Table responsive>
                     <thead>
@@ -279,7 +277,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                             <Row>
                                                 <Col>
                                                     <Button
-                                                        variant="outline-success"
+                                                        variant="outline-secondary"
                                                         className="m-1"
                                                         onClick={(event) => {
                                                             handleEdit(
@@ -288,7 +286,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                                             );
                                                         }}
                                                     >
-                                                        <i class="bi bi-pencil-square"></i>
+                                                        <i className="bi bi-pencil-square"></i>
                                                     </Button>
                                                 </Col>
                                                 <Col>
@@ -297,7 +295,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                                         className="m-1"
                                                         onClick={handleDelete}
                                                     >
-                                                        <i class="bi bi-trash"></i>
+                                                        <i className="bi bi-trash"></i>
                                                     </Button>
                                                 </Col>
                                             </Row>
