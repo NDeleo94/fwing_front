@@ -2,15 +2,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { EgresadoList } from "../components/EgresadoList";
 import { useForm } from "../hooks/useForm";
 import queryString from "query-string";
-import { getEgresadosByName } from "../helpers/getEgresadosByName";
 import { useEffect, useState } from "react";
-import { useFetchEgresadosByName } from "../hooks/useFetchEgresadosByName";
 import { useFetchEgresados } from "../hooks/useFetchEgresados";
 import { Loading } from "../../ui/components/Loading";
 import { Analitics } from "../components/Analitics";
 
 export const SearchPage = () => {
-    const navigate = useNavigate();
     const location = useLocation();
 
     const { q = "" } = queryString.parse(location.search);

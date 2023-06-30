@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "../../egresados/hooks/useForm";
 
-export const IngresarUsuarioForm = () => {
+export const IngresarEgresadoForm = () => {
     const initialForm = {
         apellidos: "",
         nombres: "",

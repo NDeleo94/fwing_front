@@ -1,9 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { NavDropdown, Button, Form, InputGroup } from "react-bootstrap";
 import Logo from "../../assets/imgs/Logo.png";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import { useForm } from "../../egresados/hooks/useForm";
+import { DataContext } from "../../context/DataContext";
+import { useFetchEgresados } from "../../egresados/hooks/useFetchEgresados";
 
 export const Navbar = () => {
     const { user, setUser, setToken } = useContext(LoginContext);
@@ -62,6 +64,19 @@ export const Navbar = () => {
         }
     };
 
+    /* DataContext */
+    const { setData, lastUpload, setLastUpload } = useContext(DataContext);
+    const { data, loading } = useFetchEgresados();
+    /* setData(data); */
+    /*  useEffect(() => {
+        // va el control de lastUpload antes
+    }, [toggle]); */
+    useEffect(() => {
+        if (data) {
+            setData(data);
+        }
+    }, [data]);
+    /* Fin DataContext */
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">

@@ -82,8 +82,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             initial.email == changed.email &&
             initial.nacionalidad == changed.nacionalidad &&
             initial.fecha_nac == changed.fecha_nac &&
-            !!select_actual &&
-            !!select_natal && // signo de pregunta porque No está en el defaultOptionsSelect_natal
+            initial.ciudad_actual == select_actual?.label &&
+            initial.ciudad_natal == select_natal?.label &&
             initial.domicilio == changed.domicilio &&
             initial.sexo == changed.sexo
         );
@@ -338,7 +338,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         </div>
                     </div>
                     {showAlert 
-                    /* &&
+                    &&
                     !(
                         formState.email &&
                         formState.nacionalidad &&
@@ -347,7 +347,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         formState.sexo &&
                         select_actual &&
                         select_natal
-                    ) */ 
+                    ) 
                     ? (
                         <>
                             <Container fluid className="my-3">

@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 import { ConfiguracionPrivacidad } from "../components/ConfiguracionPrivacidad";
-import { IngresarUsuarioForm } from "../../admin/components/IngresarUsuarioForm";
+import { IngresarEgresadoForm } from "../../admin/components/IngresarEgresadoForm";
 import { Loading } from "../../ui/components/Loading";
 import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
@@ -103,7 +103,7 @@ export const ConfiguracionPage = () => {
                                 {user.is_admin ? (
                                     <>
                                         <Tab.Pane eventKey="#agregarEgresado">
-                                            <IngresarUsuarioForm />
+                                            <IngresarEgresadoForm />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#filtrarEgresados">
                                             <FiltrarEgresados />
