@@ -6,7 +6,7 @@ export const PerfilEgresadoCard = ({ nombres, egresos, ciudad_natal }) => {
 
   useEffect(() => {
     if(egresos){
-      setPrimeraCarrera(egresos[0].carrera.carrera)
+      setPrimeraCarrera(egresos[egresos.length-1].carrera.carrera)
     }
   }, [egresos])
 

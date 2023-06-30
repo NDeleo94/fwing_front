@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Form, Modal, Table } from "react-bootstrap";
+import { Alert, Button, Col, Form, Modal, Row, Table } from "react-bootstrap";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
@@ -196,6 +196,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                             <th scope="col">Organización</th>
                             <th scope="col">Inicio</th>
                             <th scope="col">Fin</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -206,7 +207,26 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                 <td>{egre.organizacion.organizacion}</td>
                                 <td>{egre.inicio}</td>
                                 <td>{egre.fin ? egre.fin : "Actual"}</td>
-                                <td></td>
+                                <td>
+                                    <Row>
+                                        <Col>
+                                            <Button
+                                                variant="outline-success"
+                                                className="m-1"
+                                            >
+                                                <i class="bi bi-pencil-square"></i>
+                                            </Button>
+                                        </Col>
+                                        <Col>
+                                            <Button
+                                                variant="outline-danger"
+                                                className=" m-1"
+                                            >
+                                                <i class="bi bi-trash"></i>
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

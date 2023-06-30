@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Table } from "react-bootstrap";
+import { Col, Form, Row, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "../hooks/useForm";
@@ -11,7 +11,7 @@ import axios from "axios";
 
 export const ConfiguracionEgresos = ({ egresado }) => {
     const [show, setShow] = useState(false);
-
+    const [addMode, setAddMode] = useState(true);
     const [defaultOptionsCarreras, setDefaultOptionsCarreras] = useState([]);
     const [defaultOptionsFacultades, setDefaultOptionsFacultades] = useState(
         []
@@ -55,14 +55,12 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             )
             .catch((error) => console.log(error));
     }, []);
-    console.log(defaultOptionsCarreras);
-    console.log(defaultOptionsFacultades);
-    console.log(defaultOptionsUniversidades);
     const handleClose = () => {
         setShow(false);
     };
     const handleShow = () => {
         onResetForm();
+        setAddMode(true);
         setValueCarrera();
         setValueFacultad();
         setValueUniversidad();
@@ -195,18 +193,56 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     };
     /* Fin Select-input de carrera-facultad-universidad */
 
+    /* Validación Alert */
     const [showAlert, setShowAlert] = useState(false);
+    /* Fin Validación Alert */
 
+    /* Función editar */
+    function handleEdit(event, egreso) {
+        event.preventDefault();
+        setAddMode(false);
+        formState.usuario = egreso.id;
+        formState.matricula = egreso.matricula;
+        formState.ciclo_egreso = egreso.ciclo_egreso.split("-")[0];
+        formState.universidad = egreso.carrera.facultad.universidad;
+        formState.facultad = egreso.carrera.facultad;
+        formState.carrera = egreso.carrera;
+        setValueUniversidad({
+            label: egreso.carrera.facultad.universidad.universidad,
+            value: egreso.carrera.facultad.universidad.id,
+        });
+        setValueFacultad({
+            label: egreso.carrera.facultad.facultad,
+            value: egreso.carrera.facultad.id,
+        });
+        setValueCarrera({
+            label: egreso.carrera.carrera,
+            value: egreso.carrera.id,
+        });
+        setShow(true);
+        console.log(egreso.carrera);
+        console.log(egreso.carrera.facultad);
+        console.log(egreso.carrera.facultad.universidad);
+    }
+    /* Fin Función editar */
+
+    /* Función eliminar */
+    const handleDelete = (event) => {
+        event.preventDefault();
+        console.log("eliminar");
+    };
+    /* Fin Función eliminar */
+
+    console.log(egresado.egresos[0].id);
+    console.log(egresado.egresos[egresado.egresos.length - 1].id);
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
                 <h3>Egresos</h3>
                 <hr />
-
                 <Button variant="secondary" onClick={handleShow}>
                     Agregar Egreso
                 </Button>
-
                 <Table responsive>
                     <thead>
                         <tr>
@@ -232,23 +268,65 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                         ? egre.carrera.facultad.universidad
                                               .acronimo
                                         : egre.carrera.facultad.universidad
-                                              .universidad}
+                                              .universidad}{" "}
                                 </td>
-                                <td></td>
+                                <td>
+                                    {egre.id !==
+                                    egresado.egresos[
+                                        egresado.egresos.length - 1
+                                    ].id ? (
+                                        <>
+                                            <Row>
+                                                <Col>
+                                                    <Button
+                                                        variant="outline-success"
+                                                        className="m-1"
+                                                        onClick={(event) => {
+                                                            handleEdit(
+                                                                event,
+                                                                egre
+                                                            );
+                                                        }}
+                                                    >
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </Button>
+                                                </Col>
+                                                <Col>
+                                                    <Button
+                                                        variant="outline-danger"
+                                                        className="m-1"
+                                                        onClick={handleDelete}
+                                                    >
+                                                        <i class="bi bi-trash"></i>
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <b className="mx-auto">*</b>
+                                        </>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-
+                <div className="my-2" style={{fontSize: '10pt'}}>
+                    * : Es el título a cuál se le realiza seguimiento. Si desea
+                    modificarlo, contáctese con
+                    egresados.computacion@herrera.unt.edu.ar
+                </div>
                 <ToastNotificacionPush
                     mensaje={mensaje}
                     mostrar={mostrar}
                     tipo={tipo}
                 />
-
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Agregar Egreso</Modal.Title>
+                        <Modal.Title>
+                            {addMode ? "Agregar" : "Editar"} Egreso
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>

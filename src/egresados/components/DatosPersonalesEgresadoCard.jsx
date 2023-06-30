@@ -14,7 +14,7 @@ export const DatosPersonalesEgresadoCard = ({
 
   useEffect(() => {
     if (egresos) {
-      const { anio } = separarFecha(egresos[0].ciclo_egreso);
+      const { anio } = separarFecha(egresos[egresos.length-1].ciclo_egreso);
       setAnioEgreso(anio);
     }
   }, [egresos]);
