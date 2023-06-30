@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
 import Logo from "../../assets/imgs/Logo.png";
 
-export const ToastNotificacionPush = ({ mensaje, mostrar }) => {
+export const ToastNotificacionPush = ({ mensaje, mostrar, tipo = "primary" }) => {
     const [show, setShow] = useState(false);
     useEffect(() => {
         setShow(mostrar);
@@ -16,7 +16,7 @@ export const ToastNotificacionPush = ({ mensaje, mostrar }) => {
                     show={show}
                     delay={5000}
                     autohide
-                    bg="primary"
+                    bg={tipo}
                 >
                     <Toast.Header>
                         <img

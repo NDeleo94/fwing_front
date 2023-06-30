@@ -108,9 +108,9 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                 .post(url, formState, config)
                 .then(({ data }) => {
                     console.log(data);
-                    CallToast();
+                    CallToast(messagePositivo, "primary");
                 })
-                .catch(({ response }) => console.log(response.data));
+                .catch(({ response }) => CallToast(messageNegativo, "danger"));
         } else {
             setShowAlert(true);
         }
@@ -129,12 +129,21 @@ export const ConfiguracionEgresos = ({ egresado }) => {
 
     /* Notificación Push */
     const [mostrar, setMostrar] = useState(false);
-    const message = (
+    const [mensaje, setMensaje] = useState("");
+    const [tipo, setTipo] = useState("");
+    const messagePositivo = (
         <>
             <b>¡Se agregó el nuevo título!</b>
         </>
     );
-    function CallToast() {
+    const messageNegativo = (
+        <>
+            <b>Problema con el servidor, intente nuevamente.</b>
+        </>
+    );
+    function CallToast(mensaje, tipo) {
+        setTipo(tipo);
+        setMensaje(mensaje);
         setMostrar(true);
         setTimeout(() => {
             setMostrar(false);
@@ -231,7 +240,11 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                     </tbody>
                 </Table>
 
-                <ToastNotificacionPush mensaje={message} mostrar={mostrar} />
+                <ToastNotificacionPush
+                    mensaje={mensaje}
+                    mostrar={mostrar}
+                    tipo={tipo}
+                />
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
