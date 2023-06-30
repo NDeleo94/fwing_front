@@ -1,11 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Form, Modal, Table } from "react-bootstrap";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
+import { useConfig } from "../../auth/hooks/useConfig";
+import axios from "axios";
 
 export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [show, setShow] = useState(false);
+
+    const [defaultOptionsPuestos, setDefaultOptionsPuestos] = useState([]);
+    const [defaultOptionsOrganizaciones, setDefaultOptionsOrganizaciones] =
+        useState([]);
+    const baseUrl = import.meta.env.VITE_URL_LOCAL;
+    const config = useConfig();
+    useEffect(() => {
+        axios
+            .get(`${baseUrl}/puestos/`)
+            .then(({ data }) =>
+                setDefaultOptionsPuestos(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.puesto,
+                    }))
+                )
+            )
+            .catch((error) => console.log(error));
+        axios
+            .get(`${baseUrl}/organizaciones/`)
+            .then(({ data }) =>
+                setDefaultOptionsOrganizaciones(
+                    data.map((f) => ({
+                        value: f.id,
+                        label: f.organizacion,
+                    }))
+                )
+            )
+            .catch((error) => console.log(error));
+    }, []);
+
+    console.log(defaultOptionsOrganizaciones);
+    console.log(defaultOptionsPuestos);
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -20,6 +55,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [esActual, setEsActual] = useState(false);
 
     const initialForm = {
+        usuario: egresado.id,
         puesto: "",
         organizacion: "",
         inicio: "",
@@ -29,14 +65,14 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
 
     const handleChangeActual = (event) => {
         if (event.target.checked) {
-            formState.fin = "";
+            formState.fin = null;
         }
         setEsActual((current) => !current);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
+        console.log(formState);
         /* Validación React */
         if (
             !!valueOrganizacion &&
@@ -51,9 +87,17 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             valueOrganizacion.value
                 ? (formState.organizacion = valueOrganizacion.value)
                 : (formState.organizacion = valueOrganizacion.label);
-            CallToast();
+
             setShow(false);
             /* post de agregar trabajo a egresado */
+            const url = `${baseUrl}/crear/actividades/`;
+            axios
+                .post(url, formState, config)
+                .then(({ data }) => {
+                    console.log(data);
+                    CallToast();
+                })
+                .catch(({ response }) => console.log(response.data));
         } else {
             setShowAlert(true);
         }
@@ -80,27 +124,11 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         label,
         value: id,
     });
-    // Aquí hay que traer la info del back
-    const defaultOptionsPuestos = [
-        createOption("Full Stack Developer", 11),
-        createOption("DevOps", 12),
-        createOption("Profesor Adjunto", 13),
-        createOption("Gerente IT", 15),
-    ];
-    const defaultOptionsOrganizaciones = [
-        createOption("Globant", 21),
-        createOption("Sovos", 22),
-        createOption("Legislatura de Tucumán", 23),
-        createOption("Sistenso", 25),
-        createOption("Universidad Nacional de Tucumán", 125),
-    ];
+
     const [isLoadingSelectPuesto, setIsLoadingSelectPuesto] = useState(false);
     const [isLoadingSelectOrganizacion, setIsLoadingSelectOrganizacion] =
         useState(false);
-    const [optionsPuestos, setOptionsPuestos] = useState(defaultOptionsPuestos);
-    const [optionsOrganizaciones, setOptionsOrganizaciones] = useState(
-        defaultOptionsOrganizaciones
-    );
+
     const [valuePuesto, setValuePuesto] = useState();
     const [valueOrganizacion, setValueOrganizacion] = useState();
     const handleCreateSelectPuesto = (inputValue) => {
@@ -108,7 +136,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setTimeout(() => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelectPuesto(false); // saca el loading
-            setOptionsPuestos((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setDefaultOptionsPuestos((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValuePuesto(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
@@ -117,7 +145,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setTimeout(() => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelectOrganizacion(false); // saca el loading
-            setOptionsOrganizaciones((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setDefaultOptionsOrganizaciones((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValueOrganizacion(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
@@ -193,7 +221,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                         setValuePuesto(newValue)
                                     }
                                     onCreateOption={handleCreateSelectPuesto}
-                                    options={optionsPuestos}
+                                    options={defaultOptionsPuestos}
                                     value={valuePuesto}
                                 />
                             </Form.Group>
@@ -212,7 +240,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                     onCreateOption={
                                         handleCreateSelectOrganizacion
                                     }
-                                    options={optionsOrganizaciones}
+                                    options={defaultOptionsOrganizaciones}
                                     value={valueOrganizacion}
                                 />
                             </Form.Group>

@@ -29,7 +29,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     const { formState, onInputChange } = useForm(initialForm);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
-    const { config } = useConfig();
+    const config = useConfig();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -337,8 +337,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                             </Form.Select>
                         </div>
                     </div>
-                    {showAlert 
-                    &&
+                    {showAlert &&
                     !(
                         formState.email &&
                         formState.nacionalidad &&
@@ -347,8 +346,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         formState.sexo &&
                         select_actual &&
                         select_natal
-                    ) 
-                    ? (
+                    ) ? (
                         <>
                             <Container fluid className="my-3">
                                 <Alert

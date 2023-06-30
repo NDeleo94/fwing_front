@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -6,10 +6,58 @@ import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
 import Alert from "react-bootstrap/Alert";
+import { useConfig } from "../../auth/hooks/useConfig";
+import axios from "axios";
 
 export const ConfiguracionEgresos = ({ egresado }) => {
     const [show, setShow] = useState(false);
 
+    const [defaultOptionsCarreras, setDefaultOptionsCarreras] = useState([]);
+    const [defaultOptionsFacultades, setDefaultOptionsFacultades] = useState(
+        []
+    );
+    const [defaultOptionsUniversidades, setDefaultOptionsUniversidades] =
+        useState([]);
+    const baseUrl = import.meta.env.VITE_URL_LOCAL;
+    const config = useConfig();
+    useEffect(() => {
+        axios
+            .get(`${baseUrl}/universidades/`)
+            .then(({ data }) =>
+                setDefaultOptionsUniversidades(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.universidad,
+                    }))
+                )
+            )
+            .catch((error) => console.log(error));
+        axios
+            .get(`${baseUrl}/facultades/`)
+            .then(({ data }) =>
+                setDefaultOptionsFacultades(
+                    data.map((f) => ({
+                        value: f.id,
+                        label: f.facultad,
+                    }))
+                )
+            )
+            .catch((error) => console.log(error));
+        axios
+            .get(`${baseUrl}/carreras/`)
+            .then(({ data }) =>
+                setDefaultOptionsCarreras(
+                    data.map((c) => ({
+                        value: c.id,
+                        label: c.carrera,
+                    }))
+                )
+            )
+            .catch((error) => console.log(error));
+    }, []);
+    console.log(defaultOptionsCarreras);
+    console.log(defaultOptionsFacultades);
+    console.log(defaultOptionsUniversidades);
     const handleClose = () => {
         setShow(false);
     };
@@ -23,6 +71,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     };
 
     const initialForm = {
+        usuario: egresado.id,
         matricula: "",
         ciclo_egreso: "",
         carrera: "",
@@ -51,15 +100,24 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             valueUniversidad.value
                 ? (formState.universidad = valueUniversidad.value)
                 : (formState.universidad = valueUniversidad.label);
-            CallToast();
+
             setShow(false);
             /* post de agregar egreso a egresado */
+            const url = `${baseUrl}/crear/egresos/`;
+            axios
+                .post(url, formState, config)
+                .then(({ data }) => {
+                    console.log(data);
+                    CallToast();
+                })
+                .catch(({ response }) => console.log(response.data));
         } else {
             setShowAlert(true);
         }
     };
 
-    function NoHayCambios(initial, changed) { // No está funcionando pero no interfiere en la destreza del componente
+    function NoHayCambios(initial, changed) {
+        // No está funcionando pero no interfiere en la destreza del componente
         return (
             initial.matricula == changed.matricula &&
             initial.ciclo_egreso == changed.ciclo_egreso &&
@@ -90,41 +148,12 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         value: id,
     });
 
-    // Aquí hay que traer la info del back
-    const defaultOptionsCarreras = [
-        createOption("Ingeniería en Computación", 11),
-        createOption("Ingeniería Química", 12),
-        createOption("Arquitectura", 13),
-        createOption("Licenciatura en Historia", 15),
-        createOption("Licenciatura en Nutrición", 115),
-    ];
-    const defaultOptionsFacultades = [
-        createOption("Facultad de Ciencias Exactas y Tecnología", 21),
-        createOption("Facultad de Arquitectura y Urbanismo", 22),
-        createOption("Facultad de Filosofía y Letras", 23),
-        createOption("Facultad de Santo Tomás de Aquino", 25),
-        createOption("Facultad Tecnológica Regional Tucumán", 125),
-    ];
-    const defaultOptionsUniversidades = [
-        createOption("Universidad Nacional de Tucumán", 31),
-        createOption("Universidad del Norte de Santo Tomás de Aquino", 32),
-        createOption("Universidad Regional Tucumán", 33),
-        createOption("Universidad del Siglo XXI", 35),
-    ];
     const [isLoadingSelectCarrera, setIsLoadingSelectCarrera] = useState(false);
     const [isLoadingSelectFacultad, setIsLoadingSelectFacultad] =
         useState(false);
     const [isLoadingSelectUniversidad, setIsLoadingSelectUniversidad] =
         useState(false);
-    const [optionsCarreras, setOptionsCarreras] = useState(
-        defaultOptionsCarreras
-    );
-    const [optionsFacultades, setOptionsFacultades] = useState(
-        defaultOptionsFacultades
-    );
-    const [optionsUniversidades, setOptionsUniversidades] = useState(
-        defaultOptionsUniversidades
-    );
+
     const [valueCarrera, setValueCarrera] = useState();
     const [valueFacultad, setValueFacultad] = useState();
     const [valueUniversidad, setValueUniversidad] = useState();
@@ -133,7 +162,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setTimeout(() => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelectCarrera(false); // saca el loading
-            setOptionsCarreras((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setDefaultOptionsCarreras((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValueCarrera(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
@@ -142,7 +171,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setTimeout(() => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelectFacultad(false); // saca el loading
-            setOptionsFacultades((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setDefaultOptionsFacultades((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValueFacultad(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
@@ -151,7 +180,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setTimeout(() => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelectUniversidad(false); // saca el loading
-            setOptionsUniversidades((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setDefaultOptionsUniversidades((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValueUniversidad(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
@@ -190,7 +219,11 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                 <td>{egre.carrera.carrera}</td>
                                 <td>{egre.carrera.facultad.facultad}</td>
                                 <td>
-                                    {egre.carrera.facultad.universidad.acronimo}
+                                    {egre.carrera.facultad.universidad.acronimo
+                                        ? egre.carrera.facultad.universidad
+                                              .acronimo
+                                        : egre.carrera.facultad.universidad
+                                              .universidad}
                                 </td>
                                 <td></td>
                             </tr>
@@ -252,7 +285,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     onCreateOption={
                                         handleCreateSelectUniversidad
                                     }
-                                    options={optionsUniversidades}
+                                    options={defaultOptionsUniversidades}
                                     value={valueUniversidad}
                                 />
                             </Form.Group>
@@ -272,7 +305,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                         setValueFacultad(newValue)
                                     }
                                     onCreateOption={handleCreateSelectFacultad}
-                                    options={optionsFacultades}
+                                    options={defaultOptionsFacultades}
                                     value={valueFacultad}
                                 />
                             </Form.Group>
@@ -293,7 +326,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                         setValueCarrera(newValue)
                                     }
                                     onCreateOption={handleCreateSelectCarrera}
-                                    options={optionsCarreras}
+                                    options={defaultOptionsCarreras}
                                     value={valueCarrera}
                                 />
                             </Form.Group>
