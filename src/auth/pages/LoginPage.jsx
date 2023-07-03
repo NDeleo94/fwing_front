@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../components/GoogleButton";
 import Modal from "react-bootstrap/Modal";
@@ -50,6 +50,7 @@ export const LoginPage = () => {
                 } else {
                     response.json().then((data) => {
                         console.error("Error:", data.error);
+                        setShowAlert(true);
                     });
                 }
             })
@@ -72,6 +73,8 @@ export const LoginPage = () => {
     };
 
     const { formState, onInputChange } = useForm(initialForm);
+
+    const [showAlert, setShowAlert] = useState(false);
 
     return (
         <>
@@ -115,6 +118,17 @@ export const LoginPage = () => {
                             />
                         </Form.Group>
                     </Form>
+                    {showAlert ? (
+                        <Alert
+                            variant="danger"
+                            onClose={() => setShowAlert(false)}
+                            dismissible
+                        >
+                            <b>¡Usuario o Contraseña incorrectas!</b>
+                        </Alert>
+                    ) : (
+                        ""
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" onClick={onLogin}>

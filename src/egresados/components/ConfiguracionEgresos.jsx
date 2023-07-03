@@ -227,9 +227,18 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     /* Fin Función editar */
 
     /* Función eliminar */
-    const handleDelete = (event) => {
+    const handleDelete = (event, egre) => {
         event.preventDefault();
-        console.log("eliminar");
+        console.log(egre.id)
+
+        const url = `${baseUrl}/eliminar/egresos/`;
+        axios
+            .put(url, egre.id, config)
+            .then(({ data }) => {
+                console.log(data);
+                CallToast(messagePositivo, "primary");
+            })
+            .catch(({ response }) => CallToast(messageNegativo, "danger"));
     };
     /* Fin Función eliminar */
 
@@ -293,7 +302,12 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                                     <Button
                                                         variant="outline-danger"
                                                         className="m-1"
-                                                        onClick={handleDelete}
+                                                        onClick={(event) => {
+                                                            handleDelete(
+                                                                event,
+                                                                egre
+                                                            );
+                                                        }}
                                                     >
                                                         <i className="bi bi-trash"></i>
                                                     </Button>
@@ -310,7 +324,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                         ))}
                     </tbody>
                 </Table>
-                <div className="my-2" style={{fontSize: '10pt'}}>
+                <div className="my-2" style={{ fontSize: "10pt" }}>
                     * : Es el título a cuál se le realiza seguimiento. Si desea
                     modificarlo, contáctese con
                     egresados.computacion@herrera.unt.edu.ar
