@@ -98,7 +98,7 @@ export const LoginPage = () => {
                 <h1>Iniciar Sesión</h1>
                 <hr />
                 <Button variant="success" onClick={handleShow}>
-                    Ingresar con contraseña
+                <i className="bi bi-key-fill"></i> Iniciar sesión con contraseña
                 </Button>
 
                 <hr />

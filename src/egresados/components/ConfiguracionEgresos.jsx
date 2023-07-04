@@ -261,16 +261,16 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setToDelete([]);
     };
     /* Fin Función eliminar */
-
+console.log(egresado)
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
                 <h3>
-                    <i class="bi bi-mortarboard-fill"></i> Títulos
+                    <i className="bi bi-mortarboard-fill"></i> Títulos
                 </h3>
                 <hr />
                 <Button variant="secondary" onClick={handleShow}>
-                    <i class="bi bi-plus-circle"></i> Agregar Título
+                    <i className="bi bi-plus-circle"></i> Agregar Título
                 </Button>
                 <Table responsive>
                     <thead>

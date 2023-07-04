@@ -182,7 +182,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                 <hr />
 
                 <Button variant="secondary" onClick={handleShow}>
-                <i class="bi bi-plus-circle"></i> Agregar Trabajo
+                <i className="bi bi-plus-circle"></i> Agregar Trabajo
                 </Button>
 
                 <Table responsive>
