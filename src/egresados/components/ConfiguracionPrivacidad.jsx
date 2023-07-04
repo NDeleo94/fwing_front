@@ -14,7 +14,7 @@ export const ConfiguracionPrivacidad = () => {
   return (
     <>
       <div className="container-fluid mt-2 text-secondary">
-        <h3>Privacidad</h3>
+        <h3><i className="bi bi-file-earmark-lock2"></i> Privacidad</h3>
         <hr />
         <Form>
           <Form.Check
@@ -25,13 +25,13 @@ export const ConfiguracionPrivacidad = () => {
           />
           <Form.Check
             type="switch"
-            id="custom-switch"
+            id="custom-switch2"
             label="Ocultar mi ciudad actual"
             name="fin"
           />
           <Form.Check
             type="switch"
-            id="custom-switch"
+            id="custom-switch3"
             label="Ocultar mi correo electrónico"
             name="fin"
           />

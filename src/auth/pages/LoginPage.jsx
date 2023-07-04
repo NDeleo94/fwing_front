@@ -14,14 +14,19 @@ export const LoginPage = () => {
     const urlBase = import.meta.env.VITE_URL_LOCAL;
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    const onLogin = (e) => {
-        e.preventDefault();
-        Loguearse();
+    const handleShow = () => {
+        onResetForm();
+        setShowAlert(false);
+        setValidated(false);
+        setShow(true);
     };
 
-    /* PRueba */
+    const onLogin = (e) => {
+        handleSubmit(e);
+        if (formState.username && formState.password) {
+            Loguearse();
+        }
+    };
 
     function Loguearse() {
         console.log(formState);
@@ -65,16 +70,27 @@ export const LoginPage = () => {
             Loguearse();
         }
     };
-    /* PRueba */
 
     const initialForm = {
         username: "",
         password: "",
     };
 
-    const { formState, onInputChange } = useForm(initialForm);
+    const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
     const [showAlert, setShowAlert] = useState(false);
+
+    const [validated, setValidated] = useState(false);
+
+    const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        setValidated(true);
+    };
 
     return (
         <>
@@ -82,7 +98,7 @@ export const LoginPage = () => {
                 <h1>Iniciar Sesión</h1>
                 <hr />
                 <Button variant="success" onClick={handleShow}>
-                    Ingresar con e-mail
+                    Ingresar con contraseña
                 </Button>
 
                 <hr />
@@ -91,17 +107,18 @@ export const LoginPage = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Ingresar</Modal.Title>
+                    <Modal.Title>Ingresar a Following</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
+                    <Form noValidate validated={validated}>
                         <Form.Group className="mb-3" controlId="formFacultad">
-                            <Form.Label>E-mail</Form.Label>
+                            <Form.Label>E-mail o DNI</Form.Label>
                             <Form.Control
                                 type="username"
                                 value={formState.username}
                                 name="username"
                                 onChange={onInputChange}
+                                required
                             />
                         </Form.Group>
                         <Form.Group
@@ -115,6 +132,7 @@ export const LoginPage = () => {
                                 name="password"
                                 onChange={onInputChange}
                                 onKeyDown={enterPulsed}
+                                required
                             />
                         </Form.Group>
                     </Form>

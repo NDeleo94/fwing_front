@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "../../egresados/hooks/useForm";
 import { ToastNotificacionPush } from "../../egresados/components/ToastNotificacionPush";
+import { useConfig } from "../../auth/hooks/useConfig";
+import axios from "axios";
 
 export const IngresarEgresadoForm = () => {
     const initialForm = {
@@ -18,32 +20,21 @@ export const IngresarEgresadoForm = () => {
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
+    const config = useConfig();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formState);
         const url = `${urlBase}/crear/egresados/`;
-        const postData = formState;
 
-        const requestOptions = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(postData),
-        };
-
-        fetch(url, requestOptions)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Post created:", data);
+        axios
+            .post(url, formState, config)
+            .then(({ data }) => {
+                console.log(data);
                 CallToast(mensajePositivo, "primary");
             })
-            .catch((error) => {
-                console.error("Error:", error);
-                CallToast(mensajeNegativo, "danger");
-            });
-        onResetForm;
+            .catch(({ response }) => CallToast(mensajeNegativo, "danger"));
+        onResetForm();
     };
 
     /* Notificacion push */

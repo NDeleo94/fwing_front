@@ -142,7 +142,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3>Datos Personales</h3>
+                <h3><i className="bi bi-file-earmark-person"></i> Datos Personales</h3>
                 <hr />
                 <Form>
                     <Form.Group className="mb-3">

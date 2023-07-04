@@ -227,28 +227,50 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     /* Fin Función editar */
 
     /* Función eliminar */
+    const [showModalDelete, setShowModalDelete] = useState(false);
+    const [toDelete, setToDelete] = useState([]);
+    const messageEliminado = (
+        <>
+            <b>El título ha sido eliminado correctamente.</b>
+        </>
+    );
+    const handleCloseModalDelete = () => {
+        setShowModalDelete(false);
+    };
     const handleDelete = (event, egre) => {
         event.preventDefault();
-        console.log(egre.id)
+        setToDelete(egre);
+        setShowModalDelete(true);
+    };
+    const handleSubmitModalDelete = (event) => {
+        event.preventDefault();
+        console.log(toDelete);
 
-        const url = `${baseUrl}/eliminar/egresos/`;
+        const url = `${baseUrl}/eliminar/egresos/${toDelete.id}/`;
         axios
-            .put(url, egre.id, config)
+            .delete(url, config)
             .then(({ data }) => {
                 console.log(data);
-                CallToast(messagePositivo, "primary");
+                CallToast(messageEliminado, "primary");
             })
-            .catch(({ response }) => CallToast(messageNegativo, "danger"));
+            .catch(({ response }) => {
+                console.log(response);
+                CallToast(messageNegativo, "danger");
+            });
+        setShowModalDelete(false);
+        setToDelete([]);
     };
     /* Fin Función eliminar */
 
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3>Títulos</h3>
+                <h3>
+                    <i class="bi bi-mortarboard-fill"></i> Títulos
+                </h3>
                 <hr />
                 <Button variant="secondary" onClick={handleShow}>
-                    Agregar Título
+                    <i class="bi bi-plus-circle"></i> Agregar Título
                 </Button>
                 <Table responsive>
                     <thead>
@@ -472,6 +494,30 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                             disabled={NoHayCambios(initialForm, formState)}
                         >
                             Guardar Cambios
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+                <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>¿Eliminar título?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        ¿Desea eliminar el siguiente título? <br />
+                        <b>"{toDelete?.carrera?.carrera}"</b>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={handleCloseModalDelete}
+                        >
+                            Cerrar
+                        </Button>
+                        <Button
+                            type="submit"
+                            onClick={handleSubmitModalDelete}
+                            variant="danger"
+                        >
+                            Eliminar
                         </Button>
                     </Modal.Footer>
                 </Modal>

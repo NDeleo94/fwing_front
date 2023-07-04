@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
+import { Administradores } from "../../admin/components/Administradores";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -76,6 +77,12 @@ export const ConfiguracionPage = () => {
                                         >
                                             Administrar Empresas
                                         </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#administradores"
+                                        >
+                                            Administradores
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 </>
                             ) : (
@@ -113,6 +120,9 @@ export const ConfiguracionPage = () => {
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#administrarEmpresas">
                                             Administrar Empresas
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administradores">
+                                            <Administradores />
                                         </Tab.Pane>
                                     </>
                                 ) : (

@@ -39,9 +39,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             .catch((error) => console.log(error));
     }, []);
 
-    console.log(defaultOptionsOrganizaciones);
-    console.log(defaultOptionsPuestos);
-
     const handleClose = () => setShow(false);
     const handleShow = () => {
         setShowAlert(false);
@@ -181,11 +178,11 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3>Historial Laboral</h3>
+                <h3><i className="bi bi-hourglass-split"></i> Historial Laboral</h3>
                 <hr />
 
                 <Button variant="secondary" onClick={handleShow}>
-                    Agregar Trabajo
+                <i class="bi bi-plus-circle"></i> Agregar Trabajo
                 </Button>
 
                 <Table responsive>
