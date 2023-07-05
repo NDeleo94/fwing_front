@@ -1,7 +1,7 @@
 import Logo from "../../assets/imgs/Logo.png";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
@@ -9,8 +9,11 @@ import { Alert, Col, Container, Row } from "react-bootstrap";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { useNavigate } from "react-router";
 import CreatableSelect from "react-select/creatable";
+import { LoginContext } from "../../context/LoginContext";
 
 export const ConfiguracionDatosPersonales = ({ egresado }) => {
+    const { tokenGoogle } = useContext(LoginContext);
+
     const navigate = useNavigate();
 
     const initialForm = {
@@ -147,9 +150,9 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         formData.append("url", null);
         formData.append("usuaro", egresado.id);
         formData.append("perfil", true);
-        console.log(formData.get());
-        console.log(event.target.form[0].files[0])
-        
+        console.log(formData.get("file"));
+        console.log(event.target.form[0].files[0]);
+
         /* axios
             .post(url, formData, config)
             .then(({ data }) => console.log(data))
@@ -166,7 +169,21 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         console.log("hola borrar");
     };
     const handleUploadPhotoGoogle = () => {
-        console.log("hola google");
+        if (!!tokenGoogle) {
+            const url = `${urlBase}/crear/imagenes/`;
+            const photo = {
+                url: tokenGoogle,
+                usuario: egresado.id,
+                file: null,
+                perfil: true,
+            };
+            axios
+                .post(url, photo, config)
+                .then(({ data }) => console.log(data))
+                .catch(({ response }) => console.log(response.data));
+        } else {
+            console.log("no se puede ya que no se inició sesión con google")
+        }
     };
 
     /* Fin Subir foto */

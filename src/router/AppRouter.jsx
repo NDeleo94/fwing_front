@@ -22,7 +22,17 @@ export const AppRouter = () => {
     const [isLogged, setIsLogged] = useState(false);
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
-    const state = { isLogged, setIsLogged, user, setUser, token, setToken };
+    const [tokenGoogle, setTokenGoogle] = useState(null);
+    const state = {
+        isLogged,
+        setIsLogged,
+        user,
+        setUser,
+        token,
+        setToken,
+        tokenGoogle,
+        setTokenGoogle,
+    };
 
     // DataContext
     const [data, setData] = useState(null);

@@ -153,29 +153,23 @@ export const Administradores = () => {
                     <tbody>
                         {egresados.map((egresado) =>
                             egresado.is_admin == true ? (
-                                <>
-                                    <tr key={egresado.id}>
-                                        <td>
-                                            {egresado.apellidos},{" "}
-                                            {egresado.nombres}
-                                        </td>
-                                        <td>{egresado.email}</td>
-                                        <td>
-                                            <Button
-                                                variant="outline-danger"
-                                                className=" my-1"
-                                                onClick={(event) => {
-                                                    handleDelete(
-                                                        event,
-                                                        egresado
-                                                    );
-                                                }}
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                </>
+                                <tr key={egresado.id}>
+                                    <td>
+                                        {egresado.apellidos}, {egresado.nombres}
+                                    </td>
+                                    <td>{egresado.email}</td>
+                                    <td>
+                                        <Button
+                                            variant="outline-danger"
+                                            className=" my-1"
+                                            onClick={(event) => {
+                                                handleDelete(event, egresado);
+                                            }}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </Button>
+                                    </td>
+                                </tr>
                             ) : (
                                 ""
                             )

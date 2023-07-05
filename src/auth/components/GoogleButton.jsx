@@ -4,11 +4,12 @@ import { LoginContext } from "../../context/LoginContext";
 
 export const GoogleButton = () => {
   const navigate = useNavigate();
-  const { setIsLogged, setUser, setToken } = useContext(LoginContext);
+  const { setIsLogged, setUser, setToken, setTokenGoogle } = useContext(LoginContext);
   const urlBase = import.meta.env.VITE_URL_LOCAL;
-
+  
   const handleCredentialResponse = (response) => {
     const userObject = response.credential;
+    setTokenGoogle(response.credential);
     const url = `${urlBase}/google/`;
 
     const requestOptions = {
