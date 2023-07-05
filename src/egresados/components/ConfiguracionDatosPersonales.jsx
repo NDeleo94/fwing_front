@@ -170,7 +170,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         // verificar borrado
         const url = `${urlBase}/eliminar/imagenes/${egresado.id}/`;
         axios
-            .post(url, config)
+            .delete(url, config)
             .then(({ data }) => console.log(data))
             .catch(({ response }) => console.log(response.data));
     };
