@@ -166,7 +166,13 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         photo.file = event.target.form[0].files[0] */
     };
     const handleDeletePhoto = () => {
-        console.log("hola borrar");
+        // si hay foto
+        // verificar borrado
+        const url = `${urlBase}/eliminar/imagenes/${egresado.id}/`;
+        axios
+            .post(url, config)
+            .then(({ data }) => console.log(data))
+            .catch(({ response }) => console.log(response.data));
     };
     const handleUploadPhotoGoogle = () => {
         if (!!tokenGoogle) {
@@ -182,10 +188,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .then(({ data }) => console.log(data))
                 .catch(({ response }) => console.log(response.data));
         } else {
-            console.log("no se puede ya que no se inició sesión con google")
+            console.log("no se puede ya que no se inició sesión con google");
         }
     };
-
+    console.log(egresado);
     /* Fin Subir foto */
     return (
         <>
