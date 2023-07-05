@@ -261,7 +261,6 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setToDelete([]);
     };
     /* Fin Función eliminar */
-console.log(egresado)
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">

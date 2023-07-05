@@ -138,11 +138,45 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     /* Fin Input-Select */
 
     const [showAlert, setShowAlert] = useState(false);
+    /* Subir foto */
+    const handleUploadPhoto = (event) => {
+        event.preventDefault();
+        const url = `${urlBase}/crear/imagenes/`;
+        const formData = new FormData();
+        formData.append("file", event.target.form[0].files[0]);
+        formData.append("url", null);
+        formData.append("usuaro", egresado.id);
+        formData.append("perfil", true);
+        console.log(formData.get());
+        console.log(event.target.form[0].files[0])
+        
+        /* axios
+            .post(url, formData, config)
+            .then(({ data }) => console.log(data))
+            .catch(({ response }) => console.log(response.data)); */
+        /* const photo = {
+            url: null,
+            usuario: egresado.id,
+            file: null,
+            perfil: true,
+        };
+        photo.file = event.target.form[0].files[0] */
+    };
+    const handleDeletePhoto = () => {
+        console.log("hola borrar");
+    };
+    const handleUploadPhotoGoogle = () => {
+        console.log("hola google");
+    };
 
+    /* Fin Subir foto */
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3><i className="bi bi-file-earmark-person"></i> Datos Personales</h3>
+                <h3>
+                    <i className="bi bi-file-earmark-person"></i> Datos
+                    Personales
+                </h3>
                 <hr />
                 <Form>
                     <Form.Group className="mb-3">
@@ -170,17 +204,32 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 </Row>
                                 <Row className="my-2 justify-content-end">
                                     <Col className="justify-content-end">
-                                        <Button variant="danger" size="sm">
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={handleDeletePhoto}
+                                        >
                                             Eliminar Foto
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button variant="light" size="sm">
+                                        <Button
+                                            variant="light"
+                                            size="sm"
+                                            onClick={handleUploadPhotoGoogle}
+                                        >
                                             Usar Foto Google
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm">¡Subir foto!</Button>
+                                        <Button
+                                            size="sm"
+                                            onClick={(event) => {
+                                                handleUploadPhoto(event);
+                                            }}
+                                        >
+                                            ¡Subir foto!
+                                        </Button>
                                     </Col>
                                 </Row>
                             </div>
