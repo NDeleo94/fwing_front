@@ -45,7 +45,7 @@ export const GoogleButton = () => {
     /* global google */
     google.accounts.id.initialize({
       client_id:
-        "88215929636-o3hln0vhbhn9pmojgem8bveb6079avj6.apps.googleusercontent.com",
+        "658905465457-tnvh0ag2bmbb6dm6tc9c3tocgpdapm3q.apps.googleusercontent.com",
       callback: handleCredentialResponse,
     });
 
