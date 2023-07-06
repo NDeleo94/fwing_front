@@ -51,7 +51,6 @@ export const Administradores = () => {
             console.log("elija un egresado");
         } else {
             AgregarEliminarAdmin("agregar", value.value);
-            Actualizar();
             handleClose();
         }
     };
@@ -65,7 +64,6 @@ export const Administradores = () => {
         event.preventDefault();
         AgregarEliminarAdmin("eliminar", toDelete.id);
         setShowDeleteConfirm(false);
-        Actualizar();
     };
 
     function AgregarEliminarAdmin(funcion, idEgresado) {
@@ -82,6 +80,9 @@ export const Administradores = () => {
                 .put(url, formState, config)
                 .then(({ data }) => {
                     CallToast(funcion);
+                    setTimeout(() => {
+                        Actualizar();
+                    }, 2000);
                 })
                 .catch(({ response }) => CallToast("problema"));
         } else {

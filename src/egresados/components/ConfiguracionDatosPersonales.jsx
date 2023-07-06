@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
-import { Alert, Col, Container, Row } from "react-bootstrap";
+import { Alert, Col, Container, Image, Modal, Row } from "react-bootstrap";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { useNavigate } from "react-router";
 import CreatableSelect from "react-select/creatable";
@@ -29,6 +29,19 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         sexo: egresado.sexo || "",
     };
 
+    const urlPerfilPhoto = () => {
+        if (egresado.imagen.length == 0) {
+            return Logo;
+        }
+        if (egresado.imagen[0]?.file) {
+            return `${import.meta.env.VITE_URL_PHOTO}${
+                egresado.imagen[0].file
+            }`;
+        } else {
+            return egresado.imagen[0]?.url;
+        }
+    };
+
     const { formState, onInputChange } = useForm(initialForm);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
@@ -50,6 +63,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .put(url, formState, config)
                 .then(({ data }) => console.log(data))
                 .catch(({ response }) => console.log(response.data));
+            setMessage(mensaje);
             setShow(true);
             setTimeout(function () {
                 navigate(`/perfil/${egresado.id}`);
@@ -72,6 +86,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
     /* Notificación Push */
     const [show, setShow] = useState(false);
+    const [message, setMessage] = useState();
     const mensaje = (
         <>
             <b>¡Cambios guardados!</b>
@@ -140,42 +155,63 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     };
     /* Fin Input-Select */
 
+    // Show Alert
     const [showAlert, setShowAlert] = useState(false);
+
     /* Subir foto */
+    // Subir foto de local:
+    const [photoFile, setPhotoFile] = useState();
     const handleUploadPhoto = (event) => {
         event.preventDefault();
-        const url = `${urlBase}/crear/imagenes/`;
-        const formData = new FormData();
-        formData.append("file", event.target.form[0].files[0]);
-        formData.append("url", null);
-        formData.append("usuaro", egresado.id);
-        formData.append("perfil", true);
-        console.log(formData.get("file"));
-        console.log(event.target.form[0].files[0]);
-
-        /* axios
-            .post(url, formData, config)
-            .then(({ data }) => console.log(data))
-            .catch(({ response }) => console.log(response.data)); */
-        /* const photo = {
-            url: null,
-            usuario: egresado.id,
-            file: null,
-            perfil: true,
-        };
-        photo.file = event.target.form[0].files[0] */
+        if (!event.target.form[0].files[0]) {
+            setMessage(<>¡Debe elegir una imagen!</>);
+            setShow(true);
+            setTimeout(function () {
+                setShow(false);
+            }, 5100);
+            return;
+        }
+        setPhotoFile(event.target.form[0].files[0]);
+        handleShowModal(
+            "¿Desea que la imagen elegida sea su nueva foto de perfil?",
+            "primary",
+            "Confirmar"
+        );
     };
+    // Eliminar Foto:
     const handleDeletePhoto = () => {
-        // si hay foto
-        // verificar borrado
-        const url = `${urlBase}/eliminar/imagenes/${egresado.id}/`;
-        axios
-            .delete(url, config)
-            .then(({ data }) => console.log(data))
-            .catch(({ response }) => console.log(response.data));
+        handleShowModal(
+            "¿Desea eliminar su foto de perfil? En su lugar se pondrá el logo de Following.",
+            "danger",
+            "Eliminar"
+        );
     };
+    // Subir la foto de Google:
     const handleUploadPhotoGoogle = () => {
-        if (!!tokenGoogle) {
+        handleShowModal(
+            "¿Desea que su foto de perfil sea la de su cuenta asociada a Google?",
+            "success",
+            "Confirmar"
+        );
+    };
+    /* Fin Subir foto */
+
+    /* Modales para confirmar eliminar o cambiar foto */
+    const [showModal, setShowModal] = useState(false);
+    const [mensajeModal, setMensajeModal] = useState();
+    const [tipoModal, setTipoModal] = useState();
+    const [confirmarModal, setConfirmarModal] = useState();
+
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = (mensaje, tipo, confirmar) => {
+        setMensajeModal(mensaje);
+        setTipoModal(tipo);
+        setConfirmarModal(confirmar);
+        setShowModal(true);
+    };
+
+    const handleSubmitModal = () => {
+        if (tipoModal == "success") {
             const url = `${urlBase}/crear/imagenes/`;
             const photo = {
                 url: tokenGoogle,
@@ -187,12 +223,30 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .post(url, photo, config)
                 .then(({ data }) => console.log(data))
                 .catch(({ response }) => console.log(response.data));
-        } else {
-            console.log("no se puede ya que no se inició sesión con google");
         }
+        if (tipoModal == "danger") {
+            const url = `${urlBase}/eliminar/imagenes/${egresado.id}/`;
+            axios
+                .delete(url, config)
+                .then(({ data }) => console.log(data))
+                .catch(({ response }) => console.log(response.data));
+        }
+        if (tipoModal == "primary") {
+            const url = `${urlBase}/crear/imagenes/`;
+            const formData = new FormData();
+            formData.append("file", photoFile);
+            formData.append("url", null);
+            formData.append("usuario", egresado.id);
+            formData.append("perfil", true);
+
+            axios
+                .post(url, formData, config)
+                .then(({ data }) => console.log(data))
+                .catch(({ response }) => console.log(response.data));
+        }
+        setShowModal(false);
     };
-    console.log(egresado);
-    /* Fin Subir foto */
+    /* Fin modales para confirmar eliminar o cambiar foto */
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -204,23 +258,20 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 <Form>
                     <Form.Group className="mb-3">
                         <div className="row">
-                            <div className="col-3">
+                            <Col className="text-center" xs={12} md={3}>
                                 <div className="card-header">
-                                    <img
-                                        src={Logo}
-                                        className="img-thumbnail"
-                                        alt="Following"
-                                    />
+                                    <Image src={urlPerfilPhoto()} thumbnail />
                                 </div>
-                            </div>
-                            <div className="col-9">
+                            </Col>
+
+                            <Col xs={12} md={9}>
                                 <Row>
                                     <Form.Label>
                                         ¿Desea cambiar su foto de perfil?
                                     </Form.Label>
                                     <Form.Control
                                         type="file"
-                                        accept="image/png, image/jpeg"
+                                        accept="image/*"
                                         id="imagenPerfil"
                                         name="imagenPerfil"
                                     />
@@ -231,6 +282,9 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                             variant="danger"
                                             size="sm"
                                             onClick={handleDeletePhoto}
+                                            disabled={
+                                                egresado.imagen.length == 0
+                                            }
                                         >
                                             Eliminar Foto
                                         </Button>
@@ -240,6 +294,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                             variant="light"
                                             size="sm"
                                             onClick={handleUploadPhotoGoogle}
+                                            disabled={!tokenGoogle}
                                         >
                                             Usar Foto Google
                                         </Button>
@@ -255,10 +310,18 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                         </Button>
                                     </Col>
                                 </Row>
-                            </div>
+                            </Col>
                         </div>
                     </Form.Group>
                 </Form>
+                {!tokenGoogle ? (
+                    <div style={{ fontSize: "8pt" }}>
+                        ** Para usar la foto de Google, necesita iniciar sesión
+                        con su cuenta vinculada a Gmail.
+                    </div>
+                ) : (
+                    ""
+                )}
                 <hr />
                 {/* react-bootstrap */}
                 <Form>
@@ -456,7 +519,23 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         </Button>
                     </div>
                 </Form>
-                <ToastNotificacionPush mensaje={mensaje} mostrar={show} />
+
+                <ToastNotificacionPush mensaje={message} mostrar={show} />
+
+                <Modal show={showModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmar cambio de Foto</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{mensajeModal}</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                            Cerrar
+                        </Button>
+                        <Button variant={tipoModal} onClick={handleSubmitModal}>
+                            {confirmarModal}
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );
