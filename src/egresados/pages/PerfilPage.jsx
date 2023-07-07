@@ -22,6 +22,7 @@ export const PerfilPage = () => {
             setLastLoggin(`${mes}/${anio}`);
         }
     }, [data]);
+    console.log(data)
 
     return loading ? (
         <Loading />

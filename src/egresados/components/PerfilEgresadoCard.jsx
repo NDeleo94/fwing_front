@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Logo from "../../assets/imgs/Logo.png";
 import { Image } from "react-bootstrap";
+import { LoginContext } from "../../context/LoginContext";
 
 export const PerfilEgresadoCard = ({
     nombres,
     egresos,
     ciudad_natal,
     imagen,
+    privacidad,
 }) => {
     const [primeraCarrera, setPrimeraCarrera] = useState(null);
+    const { user } = useContext(LoginContext);
+    console.log(user);
+    console.log(privacidad);
 
     useEffect(() => {
         if (egresos) {
@@ -21,9 +26,7 @@ export const PerfilEgresadoCard = ({
             return Logo;
         }
         if (imagen[0]?.file) {
-            return `${import.meta.env.VITE_URL_PHOTO}${
-                imagen[0].file
-            }`;
+            return `${import.meta.env.VITE_URL_PHOTO}${imagen[0].file}`;
         } else {
             return imagen[0]?.url;
         }
@@ -38,9 +41,34 @@ export const PerfilEgresadoCard = ({
                 <div className="card-body text-center">
                     <h3 className="card-title text-primary">{nombres}</h3>
                     <h4 className="card-title">{primeraCarrera}</h4>
-                    <h5 className="card-title">{ciudad_natal}</h5>
+                    {!privacidad?.ciudad_natal ||
+                        (user?.is_admin && (
+                            <h5
+                                className={
+                                    user?.is_admin
+                                        ? "card-title text-bg-danger"
+                                        : "card-title"
+                                }
+                            >
+                                {ciudad_natal}
+                            </h5>
+                        ))}
                 </div>
             </div>
         </>
     );
 };
+
+/* {privacidad?.ciudad_natal && user?.is_admin ? (
+                        <h5
+                            className={
+                                !privacidad?.ciudad_natal
+                                    ? "card-title"
+                                    : "card-title text-bg-danger"
+                            }
+                        >
+                            {ciudad_natal}
+                        </h5>
+                    ) : (
+                        ""
+                    )} */

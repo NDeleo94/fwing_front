@@ -7,18 +7,18 @@ import { ToastNotificacionPush } from "./ToastNotificacionPush";
 export const ConfiguracionPrivacidad = ({ egresado }) => {
     const { privacidad } = egresado;
     const initialForm = {
-        apellidos: privacidad.apellidos,
-        certificado: privacidad.certificado,
-        ciudad_actual: privacidad.ciudad_actual,
-        ciudad_natal: privacidad.ciudad_natal,
-        dni: privacidad.dni,
-        domicilio: privacidad.domicilio,
-        email: privacidad.email,
-        fecha_nac: privacidad.fecha_nac,
+        apellidos: privacidad?.apellidos,
+        certificado: privacidad?.certificado,
+        ciudad_actual: privacidad?.ciudad_actual,
+        ciudad_natal: privacidad?.ciudad_natal,
+        dni: privacidad?.dni,
+        domicilio: privacidad?.domicilio,
+        email: privacidad?.email,
+        fecha_nac: privacidad?.fecha_nac,
         usuario: egresado.id,
-        nacionalidad: privacidad.nacionalidad,
-        nombres: privacidad.nombres,
-        sexo: privacidad.sexo,
+        nacionalidad: privacidad?.nacionalidad,
+        nombres: privacidad?.nombres,
+        sexo: privacidad?.sexo,
     };
     console.log(initialForm);
     const [formState, setFormState] = useState(initialForm);
