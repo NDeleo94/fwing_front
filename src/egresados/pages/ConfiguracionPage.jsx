@@ -105,7 +105,7 @@ export const ConfiguracionPage = () => {
                                     />
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="#privacidad">
-                                    <ConfiguracionPrivacidad />
+                                    <ConfiguracionPrivacidad egresado={data} />
                                 </Tab.Pane>
                                 {user.is_admin ? (
                                     <>

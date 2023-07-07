@@ -33,8 +33,10 @@ export const IngresarEgresadoForm = () => {
                 console.log(data);
                 CallToast(mensajePositivo, "primary");
             })
-            .catch(({ response }) => CallToast(mensajeNegativo, "danger"));
-        onResetForm();
+            .catch(({ response }) => {
+                CallToast(mensajeNegativo, "danger");
+                console.log(response);
+            });
     };
 
     /* Notificacion push */

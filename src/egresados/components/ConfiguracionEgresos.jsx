@@ -220,9 +220,6 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             value: egreso.carrera.id,
         });
         setShow(true);
-        console.log(egreso.carrera);
-        console.log(egreso.carrera.facultad);
-        console.log(egreso.carrera.facultad.universidad);
     }
     /* Fin Función editar */
 
@@ -244,7 +241,6 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     };
     const handleSubmitModalDelete = (event) => {
         event.preventDefault();
-        console.log(toDelete);
 
         const url = `${baseUrl}/eliminar/egresos/${toDelete.id}/`;
         axios
