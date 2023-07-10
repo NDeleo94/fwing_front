@@ -12,7 +12,6 @@ export const PerfilEgresadoCard = ({
 }) => {
     const { user } = useContext(LoginContext);
     const [primeraCarrera, setPrimeraCarrera] = useState(null);
-    
 
     useEffect(() => {
         if (egresos) {
@@ -40,18 +39,17 @@ export const PerfilEgresadoCard = ({
                 <div className="card-body text-center">
                     <h3 className="card-title text-primary">{nombres}</h3>
                     <h4 className="card-title">{primeraCarrera}</h4>
-                    {!privacidad?.ciudad_natal ||
-                        (user?.is_admin && (
-                            <h5
-                                className={
-                                    user?.is_admin
-                                        ? "card-title text-bg-danger"
-                                        : "card-title"
-                                }
-                            >
-                                {ciudad_natal}
-                            </h5>
-                        ))}
+                    {(privacidad?.ciudad_natal || user?.is_admin) && (
+                        <h5
+                            className={
+                                !privacidad?.ciudad_natal
+                                    ? "card-title text-bg-danger"
+                                    : "card-title"
+                            }
+                        >
+                            {ciudad_natal}
+                        </h5>
+                    )}
                 </div>
             </div>
         </>
