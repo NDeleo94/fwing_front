@@ -33,9 +33,10 @@ export const ConfiguracionPrivacidad = ({ egresado }) => {
     /* Botón guardar */
     const urlBase = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
-
+    const [disabledButton, setDisabledButton] = useState(false);
     const handleSubmit = (e) => {
         e.preventDefault();
+        setDisabledButton(true);
         let formToSend = {
             ...formState,
             apellidos: true,
@@ -51,10 +52,12 @@ export const ConfiguracionPrivacidad = ({ egresado }) => {
             .post(url, formToSend, config)
             .then(({ data }) => {
                 console.log(data);
+                setDisabledButton(false);
                 CallToast(mensaje1, "primary");
             })
             .catch(({ response }) => {
                 console.log(response.data);
+                setDisabledButton(false);
                 CallToast(mensaje2, "danger");
             });
     };
@@ -221,7 +224,11 @@ export const ConfiguracionPrivacidad = ({ egresado }) => {
                         }
                     />
                     <div className="col-12 my-4 d-grid">
-                        <Button type="submit" onClick={handleSubmit}>
+                        <Button
+                            type="submit"
+                            onClick={handleSubmit}
+                            disabled={disabledButton}
+                        >
                             Guardar cambios
                         </Button>
                     </div>

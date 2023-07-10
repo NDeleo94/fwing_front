@@ -8,6 +8,7 @@ import { ToastNotificacionPush } from "../../egresados/components/ToastNotificac
 
 export const Administradores = () => {
     const { data } = useContext(DataContext);
+    const root = import.meta.env.VITE_OFFICIAL_EMAIL;
     const [actualizador, setActualizador] = useState(false);
     function Actualizar() {
         setActualizador(!actualizador);
@@ -160,15 +161,20 @@ export const Administradores = () => {
                                     </td>
                                     <td>{egresado.email}</td>
                                     <td>
-                                        <Button
-                                            variant="outline-danger"
-                                            className=" my-1"
-                                            onClick={(event) => {
-                                                handleDelete(event, egresado);
-                                            }}
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                        </Button>
+                                        {egresado.email != root && (
+                                            <Button
+                                                variant="outline-danger"
+                                                className=" my-1"
+                                                onClick={(event) => {
+                                                    handleDelete(
+                                                        event,
+                                                        egresado
+                                                    );
+                                                }}
+                                            >
+                                                <i className="bi bi-trash"></i>
+                                            </Button>
+                                        )}
                                     </td>
                                 </tr>
                             ) : (
