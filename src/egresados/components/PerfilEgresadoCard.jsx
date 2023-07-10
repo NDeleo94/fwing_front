@@ -34,7 +34,11 @@ export const PerfilEgresadoCard = ({
         <>
             <div className="card border-primary mb-3">
                 <div className="card-header">
-                    <Image src={urlPerfilPhoto()} thumbnail />
+                    <Image
+                        src={urlPerfilPhoto()}
+                        style={{ width: "100%", height: "auto" }}
+                        thumbnail
+                    />
                 </div>
                 <div className="card-body text-center">
                     <h3 className="card-title text-primary">{nombres}</h3>

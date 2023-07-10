@@ -260,7 +260,14 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         <div className="row">
                             <Col className="text-center" xs={12} md={3}>
                                 <div className="card-header">
-                                    <Image src={urlPerfilPhoto()} thumbnail />
+                                    <Image
+                                        src={urlPerfilPhoto()}
+                                        style={{
+                                            width: "100%",
+                                            height: "auto",
+                                        }}
+                                        thumbnail
+                                    />
                                 </div>
                             </Col>
 
