@@ -10,10 +10,9 @@ export const PerfilEgresadoCard = ({
     imagen,
     privacidad,
 }) => {
-    const [primeraCarrera, setPrimeraCarrera] = useState(null);
     const { user } = useContext(LoginContext);
-    console.log(user);
-    console.log(privacidad);
+    const [primeraCarrera, setPrimeraCarrera] = useState(null);
+    
 
     useEffect(() => {
         if (egresos) {
