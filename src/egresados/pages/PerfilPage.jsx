@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     DatosLaboralesEgresadosCard,
     DatosPersonalesEgresadoCard,
@@ -10,11 +10,13 @@ import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { Page404NotFound } from "../../ui/components/Page404NotFound";
 import { separarFecha } from "../helpers/manejoFecha";
 import { DatosTitulosEgresadosCard } from "../components/DatosTitulosEgresadosCard";
+import { LoginContext } from "../../context/LoginContext";
 
 export const PerfilPage = () => {
     const { id } = useParams();
     const [lastLoggin, setLastLoggin] = useState(null);
     const { data, loading } = useFetchEgresadosById(id);
+    const { user } = useContext(LoginContext);
 
     useEffect(() => {
         if (data.last_login) {
@@ -30,6 +32,7 @@ export const PerfilPage = () => {
     ) : (
         <>
             <div className="container-fluid mt-4">
+                {user.is_admin && (<h5 className="text-danger">**Celdas rojas indican información oculta al público.</h5>)}
                 <div className="row">
                     <div className="col-4">
                         <PerfilEgresadoCard {...data} />

@@ -83,8 +83,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         carrera: "",
         facultad: "",
         universidad: "",
-        nivel: "",
-        posgrado: false,
+        /* nivel: "",
+        posgrado: false, */
     };
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
@@ -96,8 +96,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             formState.ciclo_egreso &&
             !!valueUniversidad &&
             !!valueFacultad &&
-            !!valueCarrera &&
-            !!valueNivel
+            !!valueCarrera /* &&
+            !!valueNivel */
         ) {
             formState.ciclo_egreso = `${formState.ciclo_egreso}-01-01`;
             valueCarrera.value

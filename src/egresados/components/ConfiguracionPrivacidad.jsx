@@ -6,8 +6,6 @@ import { ToastNotificacionPush } from "./ToastNotificacionPush";
 
 export const ConfiguracionPrivacidad = ({ egresado }) => {
 
-    console.log("desde CONFIGURACION_PRIVACIDAD");
-
     const { privacidad } = egresado;
     const initialForm = {
         /* apellidos: privacidad?.apellidos, */

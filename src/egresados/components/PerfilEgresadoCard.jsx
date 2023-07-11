@@ -12,10 +12,16 @@ export const PerfilEgresadoCard = ({
 }) => {
     const { user } = useContext(LoginContext);
     const [primeraCarrera, setPrimeraCarrera] = useState(null);
+    const [privacity, setPrivacity] = useState(null);
 
     useEffect(() => {
         if (egresos) {
             setPrimeraCarrera(egresos[egresos.length - 1].carrera.carrera);
+        }
+        if (!privacidad) {
+            setPrivacity({ ciudad_natal: true });
+        } else {
+            setPrivacity(privacidad);
         }
     }, [egresos]);
 
@@ -29,7 +35,6 @@ export const PerfilEgresadoCard = ({
             return imagen[0]?.url;
         }
     };
-
     return (
         <>
             <div className="card border-primary mb-3">
@@ -43,10 +48,10 @@ export const PerfilEgresadoCard = ({
                 <div className="card-body text-center">
                     <h3 className="card-title text-primary">{nombres}</h3>
                     <h4 className="card-title">{primeraCarrera}</h4>
-                    {(privacidad?.ciudad_natal || user?.is_admin) && (
+                    {(privacity?.ciudad_natal || user?.is_admin) && (
                         <h5
                             className={
-                                !privacidad?.ciudad_natal
+                                !privacity?.ciudad_natal
                                     ? "card-title text-bg-danger"
                                     : "card-title"
                             }

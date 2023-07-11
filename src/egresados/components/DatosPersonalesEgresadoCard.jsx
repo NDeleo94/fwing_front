@@ -13,7 +13,7 @@ export const DatosPersonalesEgresadoCard = ({
     privacidad,
 }) => {
     const { user } = useContext(LoginContext);
-
+    const [privacity, setPrivacity] = useState(null);
     const [anioEgreso, setAnioEgreso] = useState(null);
 
     useEffect(() => {
@@ -22,6 +22,16 @@ export const DatosPersonalesEgresadoCard = ({
                 egresos[egresos.length - 1].ciclo_egreso
             );
             setAnioEgreso(anio);
+        }
+        if (!privacidad) {
+            setPrivacity({
+                email: true,
+                fecha_nac: true,
+                ciudad_actual: true,
+                ciudad_natal: true,
+            });
+        } else {
+            setPrivacity(privacidad);
         }
     }, [egresos]);
     return (
@@ -35,13 +45,13 @@ export const DatosPersonalesEgresadoCard = ({
                         {nombres} {apellidos}
                     </div>
                 </div>
-                {(privacidad?.email || user?.is_admin) && (
+                {(privacity?.email || user?.is_admin) && (
                     <>
                         <hr />
                         <div className="row mx-2">
                             <div
                                 className={
-                                    !privacidad?.email
+                                    !privacity?.email
                                         ? "col-4 text-bg-danger"
                                         : "col-4"
                                 }
@@ -50,7 +60,7 @@ export const DatosPersonalesEgresadoCard = ({
                             </div>
                             <div
                                 className={
-                                    !privacidad?.email
+                                    !privacity?.email
                                         ? "col-8 text-bg-danger"
                                         : "col-8"
                                 }
@@ -60,13 +70,13 @@ export const DatosPersonalesEgresadoCard = ({
                         </div>
                     </>
                 )}
-                {(privacidad?.fecha_nac || user?.is_admin) && (
+                {(privacity?.fecha_nac || user?.is_admin) && (
                     <>
                         <hr />
                         <div className="row mx-2">
                             <div
                                 className={
-                                    !privacidad?.fecha_nac
+                                    !privacity?.fecha_nac
                                         ? "col-4 text-bg-danger"
                                         : "col-4"
                                 }
@@ -75,7 +85,7 @@ export const DatosPersonalesEgresadoCard = ({
                             </div>
                             <div
                                 className={
-                                    !privacidad?.fecha_nac
+                                    !privacity?.fecha_nac
                                         ? "col-8 text-bg-danger"
                                         : "col-8"
                                 }
@@ -88,8 +98,8 @@ export const DatosPersonalesEgresadoCard = ({
                 <hr />
                 <div
                     className={
-                        !privacidad?.ciudad_actual &&
-                        !privacidad?.ciudad_natal &&
+                        !privacity?.ciudad_actual &&
+                        !privacity?.ciudad_natal &&
                         !user?.is_admin
                             ? "row mb-3 mx-2"
                             : "row mx-2"
@@ -100,19 +110,19 @@ export const DatosPersonalesEgresadoCard = ({
                     </div>
                     <div className="col-8">{anioEgreso}</div>
                 </div>
-                {(privacidad?.ciudad_natal || user?.is_admin) && (
+                {(privacity?.ciudad_natal || user?.is_admin) && (
                     <>
                         <hr />
                         <div
                             className={
-                                !privacidad?.ciudad_actual && !user?.is_admin
+                                !privacity?.ciudad_actual && !user?.is_admin
                                     ? "row mb-3 mx-2"
                                     : "row mx-2"
                             }
                         >
                             <div
                                 className={
-                                    !privacidad?.ciudad_natal
+                                    !privacity?.ciudad_natal
                                         ? "col-4 text-bg-danger"
                                         : "col-4"
                                 }
@@ -121,7 +131,7 @@ export const DatosPersonalesEgresadoCard = ({
                             </div>
                             <div
                                 className={
-                                    !privacidad?.ciudad_natal
+                                    !privacity?.ciudad_natal
                                         ? "col-8 text-bg-danger"
                                         : "col-8"
                                 }
@@ -131,13 +141,13 @@ export const DatosPersonalesEgresadoCard = ({
                         </div>
                     </>
                 )}
-                {(privacidad?.ciudad_actual || user?.is_admin) && (
+                {(privacity?.ciudad_actual || user?.is_admin) && (
                     <>
                         <hr />
                         <div className="row mb-3 mx-2">
                             <div
                                 className={
-                                    !privacidad?.ciudad_actual
+                                    !privacity?.ciudad_actual
                                         ? "col-4 text-bg-danger"
                                         : "col-4"
                                 }
@@ -146,7 +156,7 @@ export const DatosPersonalesEgresadoCard = ({
                             </div>
                             <div
                                 className={
-                                    !privacidad?.ciudad_actual
+                                    !privacity?.ciudad_actual
                                         ? "col-8 text-bg-danger"
                                         : "col-8"
                                 }
