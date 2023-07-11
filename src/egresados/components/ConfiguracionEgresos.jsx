@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
 import Alert from "react-bootstrap/Alert";
 import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
@@ -54,12 +55,19 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                 )
             )
             .catch((error) => console.log(error));
+        setOptions(
+            niveles.map((u) => ({
+                value: `${u}`,
+                label: `${u}`,
+            }))
+        );
     }, []);
     const handleClose = () => {
         setShow(false);
     };
     const handleShow = () => {
         onResetForm();
+        setValueNivel("");
         setAddMode(true);
         setValueCarrera();
         setValueFacultad();
@@ -75,6 +83,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         carrera: "",
         facultad: "",
         universidad: "",
+        nivel: "",
+        posgrado: false,
     };
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
@@ -86,7 +96,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             formState.ciclo_egreso &&
             !!valueUniversidad &&
             !!valueFacultad &&
-            !!valueCarrera
+            !!valueCarrera &&
+            !!valueNivel
         ) {
             formState.ciclo_egreso = `${formState.ciclo_egreso}-01-01`;
             valueCarrera.value
@@ -257,6 +268,19 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setToDelete([]);
     };
     /* Fin Función eliminar */
+
+    /* Select nivel de trabajo */
+    const niveles = [
+        "Training",
+        "Junior",
+        "Semi-Senior",
+        "Senior",
+        "Corporativo",
+    ];
+
+    const [options, setOptions] = useState([]);
+    const [valueNivel, setValueNivel] = useState();
+    /* Fin Select nivel de trabajo */
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -450,6 +474,24 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     value={valueCarrera}
                                 />
                             </Form.Group>
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formPosgrado"
+                            >
+                                <Form.Check
+                                    type="switch"
+                                    id="custom-switch"
+                                    label="¿Es posgrado?"
+                                    name="fin"
+                                    /* onChange={handleChangeActual} */
+                                />
+                            </Form.Group>
+                            <Form.Label>Nivel Laboral</Form.Label>
+                            <Select
+                                options={options}
+                                value={valueNivel}
+                                onChange={(newValue) => setValueNivel(newValue)}
+                            />
                         </Form>
                         {showAlert &&
                         !(
@@ -460,6 +502,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                         ) ? (
                             <>
                                 <Alert
+                                    className="my-3"
                                     variant="danger"
                                     onClose={() => setShowAlert(false)}
                                     dismissible

@@ -62,6 +62,12 @@ export const ConfiguracionPage = () => {
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
+                                            href="#modificarEgresado"
+                                        >
+                                            Modificar Egresado
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
                                             href="#filtrarEgresados"
                                         >
                                             Filtrar Egresados
@@ -70,13 +76,13 @@ export const ConfiguracionPage = () => {
                                             action
                                             href="#administrarEgresados"
                                         >
-                                            Administrar Egresados
+                                            Egresados
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
                                             href="#administrarEmpresas"
                                         >
-                                            Administrar Empresas
+                                            Empresas
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action

@@ -230,7 +230,7 @@ export const Administradores = () => {
                             variant="danger"
                             onClick={handleDeleteConfirm}
                         >
-                            Eliminar{" "}
+                            Eliminar
                         </Button>
                     </Modal.Footer>
                 </Modal>
