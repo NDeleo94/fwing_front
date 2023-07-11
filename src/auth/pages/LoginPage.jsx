@@ -110,7 +110,7 @@ export const LoginPage = () => {
                     <Modal.Title>Ingresar a Following</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form noValidate validated={validated}>
+                    <Form noValidate validated={validated} onSubmit={onLogin}>
                         <Form.Group className="mb-3" controlId="formFacultad">
                             <Form.Label>E-mail o DNI</Form.Label>
                             <Form.Control

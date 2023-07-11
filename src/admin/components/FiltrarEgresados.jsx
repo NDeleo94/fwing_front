@@ -4,6 +4,14 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { DataContext } from "../../context/DataContext";
 import { useForm } from "../../egresados/hooks/useForm";
 
+function tiene(obj, key, value) {
+    try {
+        return obj[key].toLowerCase().includes(value.toLowerCase());
+    } catch (e) {
+        return false;
+    }
+}
+
 export const FiltrarEgresados = () => {
     const { data } = useContext(DataContext);
     const initialForm = {
@@ -25,55 +33,44 @@ export const FiltrarEgresados = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         setLoading(true);
-        setFilteredEgresados(egresados);
-        console.log(egresados);
-        console.log(filteredEgresados);
-        setTimeout(() => {
-            console.log(filteredEgresados);
-            setToFilter(formState);
-            console.log(toFilter);
-            FiltrarNombre(toFilter.nombre);
-            FiltrarApellido(toFilter.apellido);
-            setLoading(false);
-        }, 10000);
+        const egresadosFiltrados = data.filter((egresado) => {
+            let deberiaEstar = true;
+
+            if (formState.nombre !== "") {
+                deberiaEstar =
+                    deberiaEstar &&
+                    tiene(egresado, "nombres", formState.nombre);
+            }
+
+            if (formState.apellido !== "") {
+                deberiaEstar =
+                    deberiaEstar &&
+                    tiene(egresado, "apellidos", formState.apellido);
+            }
+
+            if (formState.ciudad_natal !== "") {
+                deberiaEstar =
+                    deberiaEstar &&
+                    tiene(egresado, "ciudad_natal", formState.ciudad_natal);
+            }
+
+            if (formState.ciudad_actual !== "") {
+                deberiaEstar =
+                    deberiaEstar &&
+                    tiene(egresado, "ciudad_actual", formState.ciudad_actual);
+            }
+
+            if (formState.sexo !== "") {
+                deberiaEstar =
+                    deberiaEstar && tiene(egresado, "sexo", formState.sexo);
+            }
+
+            return deberiaEstar;
+        });
+
+        setEgresados(egresadosFiltrados);
+        setLoading(false);
     };
-
-    function FiltrarNombre(nombre) {
-        console.log("filtrarNombre");
-        console.log(nombre);
-        if (nombre == "") {
-            return;
-        }
-        console.log(filteredEgresados);
-        let aux = filteredEgresados.filter((item) => {
-            const filter = item.nombres
-                .toLowerCase()
-                .includes(nombre.toLowerCase());
-
-            return filter ? filter : null;
-        });
-
-        setFilteredEgresados(aux);
-        console.log(aux);
-    }
-
-    function FiltrarApellido(apellido) {
-        console.log("filtrarApellido");
-        if (apellido == "") {
-            return;
-        }
-        console.log(filteredEgresados);
-        let aux = filteredEgresados.filter((item) => {
-            const filter = item.apellidos
-                .toLowerCase()
-                .includes(apellido.toLowerCase());
-
-            return filter ? filter : null;
-        });
-
-        setFilteredEgresados(aux);
-        console.log(filteredEgresados);
-    }
 
     const handleClean = (event) => {
         event.preventDefault();
@@ -101,7 +98,7 @@ export const FiltrarEgresados = () => {
                         <Card.Title>Filtrar Egresados</Card.Title>
                         <hr />
                         <Container fluid>
-                            <Form>
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Nombre</Form.Label>
                                     <Form.Control
@@ -192,9 +189,29 @@ export const FiltrarEgresados = () => {
                     </Card.Body>
                 </Card>
 
-                {filteredEgresados?.lenght}
+                {egresados?.length}
                 <br />
-                {JSON.stringify(filteredEgresados)}
+
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>nombres</td>
+                            <td>apellidos</td>
+                            <td>ciudad_natal</td>
+                            <td>ciudad_actual</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {egresados.map((eg) => (
+                            <tr>
+                                <td>{eg.nombres}</td>
+                                <td>{eg.apellidos}</td>
+                                <td>{eg.ciudad_natal}</td>
+                                <td>{eg.ciudad_actual}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
 
                 <TablaEgresados />
             </Container>

@@ -5,6 +5,9 @@ import { useConfig } from "../../auth/hooks/useConfig";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 
 export const ConfiguracionPrivacidad = ({ egresado }) => {
+
+    console.log("desde CONFIGURACION_PRIVACIDAD");
+
     const { privacidad } = egresado;
     const initialForm = {
         /* apellidos: privacidad?.apellidos, */
@@ -93,47 +96,39 @@ export const ConfiguracionPrivacidad = ({ egresado }) => {
     /* Cargar mostrandoTodo y ocultandoTodo */
     const [mostrandoTodo, setMostrandoTodo] = useState(true);
     const [ocultandoTodo, setOcultandoTodo] = useState(true);
+
+    const formStateString = JSON.stringify(formState)
     useEffect(() => {
         let cantidad = 0;
-        atributos.map((elemento) => {
+        atributos.forEach((elemento) => {
             if (formState[elemento] == true) {
                 cantidad++;
             }
         });
         if (cantidad == 0) {
             setOcultandoTodo(true);
+            setMostrandoTodo(false);
         }
         if (cantidad == atributos.length) {
             setMostrandoTodo(true);
+            setOcultandoTodo(false);
         }
-        if (0 < cantidad < atributos.length) {
+        if (0 < cantidad && cantidad < atributos.length) {
             setOcultandoTodo(false);
             setMostrandoTodo(false);
         }
-    }, [formState]);
+    }, [formStateString]);
     /* FIN cargar mostrandoTodo y ocultandoTodo */
 
     function mostrarTodo() {
-        if (mostrandoTodo) {
-            setOcultandoTodo(false);
-            return;
-        }
-        atributos.map((elemento) => {
-            formState[elemento] = true;
+        atributos.forEach((elemento) => {
+            setFormState(prev=>({...prev,[elemento]:true}))
         });
-        setMostrandoTodo(true);
-        setOcultandoTodo(false);
     }
     function ocultarTodo() {
-        if (ocultandoTodo) {
-            setMostrandoTodo(false);
-            return;
-        }
-        atributos.map((elemento) => {
-            formState[elemento] = false;
+        atributos.forEach((elemento) => {
+            setFormState(prev=>({...prev,[elemento]:false}))
         });
-        setOcultandoTodo(true);
-        setMostrandoTodo(false);
     }
 
     return (

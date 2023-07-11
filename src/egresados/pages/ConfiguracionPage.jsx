@@ -14,6 +14,7 @@ import { LoginContext } from "../../context/LoginContext";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
 import { Administradores } from "../../admin/components/Administradores";
+import { EnviarEmails } from "../../admin/components/EnviarEmails";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -24,7 +25,7 @@ export const ConfiguracionPage = () => {
     ) : (
         <>
             <Row className="my-3">
-                <h1>Configuración</h1>
+                <h1><i className="bi bi-house-gear"></i> Configuración</h1>
             </Row>
             <hr />
             <Tab.Container
@@ -83,6 +84,12 @@ export const ConfiguracionPage = () => {
                                         >
                                             Administradores
                                         </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#enviarEmails"
+                                        >
+                                            Enviar e-mails
+                                        </ListGroup.Item>
                                     </ListGroup>
                                 </>
                             ) : (
@@ -91,38 +98,41 @@ export const ConfiguracionPage = () => {
                         </Col>
                         <Col sm={9}>
                             <Tab.Content>
-                                <Tab.Pane eventKey="#datosPersonales">
+                                <Tab.Pane eventKey="#datosPersonales" mountOnEnter unmountOnExit>
                                     <ConfiguracionDatosPersonales
                                         egresado={data}
                                     />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#titulos">
+                                <Tab.Pane eventKey="#titulos" mountOnEnter unmountOnExit>
                                     <ConfiguracionEgresos egresado={data} />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#historialLaboral">
+                                <Tab.Pane eventKey="#historialLaboral" mountOnEnter unmountOnExit>
                                     <ConfiguracionHistorialLaboral
                                         egresado={data}
                                     />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#privacidad">
+                                <Tab.Pane eventKey="#privacidad" mountOnEnter unmountOnExit>
                                     <ConfiguracionPrivacidad egresado={data} />
                                 </Tab.Pane>
                                 {user.is_admin ? (
                                     <>
-                                        <Tab.Pane eventKey="#agregarEgresado">
+                                        <Tab.Pane eventKey="#agregarEgresado" mountOnEnter unmountOnExit>
                                             <IngresarEgresadoForm />
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#filtrarEgresados">
+                                        <Tab.Pane eventKey="#filtrarEgresados" mountOnEnter unmountOnExit>
                                             <FiltrarEgresados />
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administrarEgresados">
+                                        <Tab.Pane eventKey="#administrarEgresados" mountOnEnter unmountOnExit>
                                             administrar Egresados
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administrarEmpresas">
+                                        <Tab.Pane eventKey="#administrarEmpresas" mountOnEnter unmountOnExit>
                                             Administrar Empresas
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administradores">
+                                        <Tab.Pane eventKey="#administradores" mountOnEnter unmountOnExit>
                                             <Administradores />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#enviarEmails" mountOnEnter unmountOnExit>
+                                            <EnviarEmails />
                                         </Tab.Pane>
                                     </>
                                 ) : (
