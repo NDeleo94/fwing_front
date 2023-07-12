@@ -32,7 +32,7 @@ export const PerfilPage = () => {
     ) : (
         <>
             <div className="container-fluid mt-4">
-                {user.is_admin && (<h5 className="text-danger">**Celdas rojas indican información oculta al público.</h5>)}
+                {user?.is_admin && (<h5 className="text-danger">**Celdas rojas indican información oculta al público.</h5>)}
                 <div className="row">
                     <div className="col-4">
                         <PerfilEgresadoCard {...data} />

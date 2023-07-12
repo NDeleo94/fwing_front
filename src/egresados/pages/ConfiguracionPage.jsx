@@ -15,6 +15,7 @@ import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
 import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
 import { Administradores } from "../../admin/components/Administradores";
 import { EnviarEmails } from "../../admin/components/EnviarEmails";
+import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -124,6 +125,9 @@ export const ConfiguracionPage = () => {
                                     <>
                                         <Tab.Pane eventKey="#agregarEgresado" mountOnEnter unmountOnExit>
                                             <IngresarEgresadoForm />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#modificarEgresado" mountOnEnter unmountOnExit>
+                                        <ModificarEgresado />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#filtrarEgresados" mountOnEnter unmountOnExit>
                                             <FiltrarEgresados />
