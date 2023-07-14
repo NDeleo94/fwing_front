@@ -3,10 +3,39 @@ import { TablaEgresados } from "./TablaEgresados";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { DataContext } from "../../context/DataContext";
 import { useForm } from "../../egresados/hooks/useForm";
+import { convertirFecha } from "../../egresados/helpers/manejoFecha";
 
 function tiene(obj, key, value) {
     try {
         return obj[key].toLowerCase().includes(value.toLowerCase());
+    } catch (e) {
+        return false;
+    }
+}
+
+function despuesDe(obj, value) {
+    try {
+        if (value.split("-")[0] > obj.egresos[0].ciclo_egreso.split("-")[0]) {
+            return false;
+        } else if (
+            value.split("-")[0] == obj.egresos[0].ciclo_egreso.split("-")[0]
+        ) {
+            if (
+                value.split("-")[1] > obj.egresos[0].ciclo_egreso.split("-")[1]
+            ) {
+                return false;
+            } else if (
+                value.split("-")[1] == obj.egresos[0].ciclo_egreso.split("-")[1]
+            ) {
+                if (
+                    value.split("-")[2] >
+                    obj.egresos[0].ciclo_egreso.split("-")[2]
+                ) {
+                    return false;
+                }
+            }
+        }
+        return true;
     } catch (e) {
         return false;
     }
@@ -19,15 +48,17 @@ export const FiltrarEgresados = () => {
         apellido: "",
         ciudad_natal: "",
         ciudad_actual: "",
+        nacionalidad: "",
         desde: "",
         hasta: "",
         sexo: "",
+        seLogueo: false,
+        tieneEmail: false,
     };
-    const { formState, onInputChange, onResetForm } = useForm(initialForm);
+    const { formState, onInputChange, onResetForm, setFormState } =
+        useForm(initialForm);
 
-    const [toFilter, setToFilter] = useState(); // formState al momento de clickear el filtro
     const [egresados, setEgresados] = useState(data); // copia exacta de data
-    const [filteredEgresados, setFilteredEgresados] = useState(); // resultado final
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = (event) => {
@@ -65,6 +96,24 @@ export const FiltrarEgresados = () => {
                     deberiaEstar && tiene(egresado, "sexo", formState.sexo);
             }
 
+            if (formState.desde !== "") {
+                deberiaEstar =
+                    deberiaEstar && despuesDe(egresado, formState.desde);
+            }
+
+            if (formState.hasta !== "") {
+                deberiaEstar =
+                    deberiaEstar && !despuesDe(egresado, formState.hasta);
+            }
+
+            if (formState.tieneEmail) {
+                deberiaEstar = deberiaEstar && egresado.email == "";
+            }
+
+            if (formState.seLogueo) {
+                deberiaEstar = deberiaEstar && !egresado.last_login;
+            }
+
             return deberiaEstar;
         });
 
@@ -89,7 +138,6 @@ export const FiltrarEgresados = () => {
             initial.sexo == changed.sexo
         );
     }
-
     return (
         <>
             <Container fluid>
@@ -100,15 +148,6 @@ export const FiltrarEgresados = () => {
                         <Container fluid>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Nombre</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={formState.nombre}
-                                        onChange={onInputChange}
-                                        name="nombre"
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
                                     <Form.Label>Apellido</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -118,16 +157,16 @@ export const FiltrarEgresados = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>ciudad_natal</Form.Label>
+                                    <Form.Label>Nombre</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={formState.ciudad_natal}
+                                        value={formState.nombre}
                                         onChange={onInputChange}
-                                        name="ciudad_natal"
+                                        name="nombre"
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>ciudad_actual</Form.Label>
+                                    <Form.Label>Ciudad Actual</Form.Label>
                                     <Form.Control
                                         type="text"
                                         value={formState.ciudad_actual}
@@ -136,12 +175,30 @@ export const FiltrarEgresados = () => {
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
+                                    <Form.Label>Ciudad Natal</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={formState.ciudad_natal}
+                                        onChange={onInputChange}
+                                        name="ciudad_natal"
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Nacionalidad</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={formState.nacionalidad}
+                                        onChange={onInputChange}
+                                        name="nacionalidad"
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
                                     <Row>
                                         <Col>
                                             <Form.Label>Desde</Form.Label>
                                             <Form.Control
                                                 type="date"
-                                                value={formState.inicio}
+                                                value={formState.desde}
                                                 onChange={onInputChange}
                                                 name="desde"
                                             />
@@ -157,17 +214,48 @@ export const FiltrarEgresados = () => {
                                         </Col>
                                     </Row>
                                 </Form.Group>
-                                <Form.Label>Sexo</Form.Label>
-                                <Form.Select
-                                    aria-label="Default select example"
-                                    name="sexo"
-                                    value={formState.sexo}
-                                    onChange={onInputChange}
-                                >
-                                    <option>Elija una opción...</option>
-                                    <option value="F">Femenino</option>
-                                    <option value="M">Masculino</option>
-                                </Form.Select>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Sexo</Form.Label>
+                                    <Form.Select
+                                        aria-label="Default select example"
+                                        name="sexo"
+                                        value={formState.sexo}
+                                        onChange={onInputChange}
+                                    >
+                                        <option disabled>
+                                            Elija una opción...
+                                        </option>
+                                        <option value="F">Femenino</option>
+                                        <option value="M">Masculino</option>
+                                    </Form.Select>
+                                </Form.Group>
+
+                                <Form.Check
+                                    type="switch"
+                                    id="custom-switch2"
+                                    label="Mostrar sólo egresados NO logueados"
+                                    name="seLogueo"
+                                    checked={formState.seLogueo}
+                                    onChange={() =>
+                                        setFormState({
+                                            ...formState,
+                                            seLogueo: !formState.seLogueo,
+                                        })
+                                    }
+                                />
+                                <Form.Check
+                                    type="switch"
+                                    id="custom-switch2"
+                                    label="Mostrar sólo egresados SIN e-mail"
+                                    name="tieneEmail"
+                                    checked={formState.tieneEmail}
+                                    onChange={() =>
+                                        setFormState({
+                                            ...formState,
+                                            tieneEmail: !formState.tieneEmail,
+                                        })
+                                    }
+                                />
                                 <Button
                                     type="submit"
                                     onClick={handleSubmit}
@@ -188,32 +276,37 @@ export const FiltrarEgresados = () => {
                         </Container>
                     </Card.Body>
                 </Card>
-
-                {egresados?.length}
+                Egresados encontrados: {egresados.length}
                 <br />
-
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <td>nombres</td>
-                            <td>apellidos</td>
-                            <td>ciudad_natal</td>
-                            <td>ciudad_actual</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {egresados.map((eg) => (
+                <Container fluid>
+                    <table className="table table-hover responsive">
+                        <thead>
                             <tr>
-                                <td>{eg.nombres}</td>
-                                <td>{eg.apellidos}</td>
-                                <td>{eg.ciudad_natal}</td>
-                                <td>{eg.ciudad_actual}</td>
+                                <td>Apellidos</td>
+                                <td>Nombres</td>
+                                <td>Ciudad Natal</td>
+                                <td>Ciudad Actual</td>
+                                <td>E-mail</td>
+                                <td>Último acceso</td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                <TablaEgresados />
+                        </thead>
+                        <tbody>
+                            {egresados.map((eg) => (
+                                <tr key={eg.id}>
+                                    <td>{eg.apellidos}</td>
+                                    <td>{eg.nombres}</td>
+                                    <td>{eg.ciudad_natal}</td>
+                                    <td>{eg.ciudad_actual}</td>
+                                    <td>{eg.email}</td>
+                                    <td>
+                                        {eg.last_login?.split("-")[0]}-
+                                        {eg.last_login?.split("-")[1]}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </Container>
             </Container>
         </>
     );

@@ -255,7 +255,6 @@ export const ModificarEgresado = () => {
     /* Botón para enviar cambios */
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formState)
 
         if (EstaCompleto()) {
             /* select_natal.value
@@ -265,7 +264,9 @@ export const ModificarEgresado = () => {
                 ? (formState.ciudad_actual = select_actual.value)
                 : (formState.ciudad_actual = select_actual.label); */
 
-            const url = `${baseUrl}/egresados/${formState.id}/`;
+            formState.ciudad_actual = `pruebaCiudadActual`;
+            formState.ciudad_natal = `pruebaCiudadNatal`;
+            const url = `${baseUrl}/editar/egresados/${formState.id}/`;
             axios
                 .put(url, formState, config)
                 .then(({ data }) => {
@@ -276,7 +277,8 @@ export const ModificarEgresado = () => {
                         setShow(false);
                     }, 5100);
                 })
-                .catch(({ response }) => {console.log(response.data)
+                .catch(({ response }) => {
+                    console.log(response.data);
                     setMessage(<>{response.data.detail}</>);
                     setShow(true);
                     setTimeout(function () {

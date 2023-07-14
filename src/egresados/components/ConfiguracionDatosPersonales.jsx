@@ -58,7 +58,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 ? (formState.ciudad_actual = select_actual.value)
                 : (formState.ciudad_actual = select_actual.label);
 
-            const url = `${urlBase}/egresados/${egresado.id}/`;
+            const url = `${urlBase}/editar/egresados/${egresado.id}/`;
             axios
                 .put(url, formState, config)
                 .then(({ data }) => console.log(data))
