@@ -157,8 +157,9 @@ export const Navbar = () => {
                                 </NavDropdown>
 
                                 <NavLink
+                                    disabled
                                     className="nav-item nav-link"
-                                    to="/honores"
+                                    /* to="/honores" */
                                 >
                                     Honores
                                 </NavLink>

@@ -71,7 +71,7 @@ export const ConfiguracionPage = () => {
                                             action
                                             href="#filtrarEgresados"
                                         >
-                                            Filtrar Egresados
+                                            Superfiltro
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
