@@ -52,7 +52,7 @@ export const AppRouter = () => {
                 <LoginContext.Provider value={state}>
                     <Navbar />
 
-                    <div className="container">
+                    <div className="container-lg">
                         <Routes>
                             <Route path="/" element={<InicioPage />} />
                             <Route path="home" element={<InicioPage />} />

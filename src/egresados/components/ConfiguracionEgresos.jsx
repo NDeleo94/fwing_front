@@ -21,6 +21,14 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         useState([]);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
+    /* Prueba actualizador */
+    const [datoEgresado, setDatoEgresado] = useState(egresado);
+
+    const [actualizador, setActualizador] = useState(false);
+    function Actualizar() {
+        setActualizador(!actualizador);
+    }
+    /* FIN Prueba actualizador */
     useEffect(() => {
         axios
             .get(`${baseUrl}/universidades/`)
@@ -61,7 +69,12 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                 label: `${u}`,
             }))
         );
-    }, []);
+        axios
+            .get(`${baseUrl}/egresados/${egresado.id}`)
+            .then(({ data }) => setDatoEgresado(data))
+            .catch((error) => console.log(error));
+        console.log(datoEgresado);
+    }, [actualizador]);
     const handleClose = () => {
         setShow(false);
     };
@@ -112,14 +125,34 @@ export const ConfiguracionEgresos = ({ egresado }) => {
 
             setShow(false);
             /* post de agregar egreso a egresado */
-            const url = `${baseUrl}/crear/egresos/`;
-            axios
-                .post(url, formState, config)
-                .then(({ data }) => {
-                    console.log(data);
-                    CallToast(messagePositivo, "primary");
-                })
-                .catch(({ response }) => CallToast(messageNegativo, "danger"));
+            if (addMode) {
+                const url = `${baseUrl}/crear/egresos/`;
+                axios
+                    .post(url, formState, config)
+                    .then(({ data }) => {
+                        console.log(data);
+                        CallToast(messagePositivo, "primary");
+                        Actualizar();
+                    })
+                    .catch(({ response }) =>
+                        CallToast(messageNegativo, "danger")
+                    );
+            } else {
+                const url = `${baseUrl}/editar/egresos/${formState.usuario}/`;
+                console.log(formState)
+                formState.usuario = egresado.id;
+                axios
+                    .put(url, formState, config)
+                    .then(({ data }) => {
+                        console.log(data);
+                        CallToast(messagePositivo, "primary");
+                        Actualizar();
+                    })
+                    .catch(({ response }) => {
+                        console.log(response);
+                        CallToast(messageNegativo, "danger");
+                    });
+            }
         } else {
             setShowAlert(true);
         }
@@ -231,6 +264,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             value: egreso.carrera.id,
         });
         setShow(true);
+        console.log(formState)
     }
     /* Fin Función editar */
 
@@ -259,6 +293,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             .then(({ data }) => {
                 console.log(data);
                 CallToast(messageEliminado, "primary");
+                Actualizar();
             })
             .catch(({ response }) => {
                 console.log(response);
@@ -303,7 +338,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {egresado.egresos.map((egre) => (
+                        {datoEgresado?.egresos.map((egre) => (
                             <tr key={egre.id}>
                                 <th scope="row">
                                     {egre.matricula ? egre.matricula : "--"}
@@ -320,8 +355,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                 </td>
                                 <td>
                                     {egre.id !==
-                                    egresado.egresos[
-                                        egresado.egresos.length - 1
+                                    datoEgresado.egresos[
+                                        datoEgresado.egresos.length - 1
                                     ].id ? (
                                         <>
                                             <Row>
