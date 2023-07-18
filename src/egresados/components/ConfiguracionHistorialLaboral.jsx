@@ -5,6 +5,7 @@ import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
 import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
+import Select from "react-select";
 
 export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [show, setShow] = useState(false);
@@ -14,6 +15,16 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         useState([]);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
+
+    /* Prueba actualizador */
+    const [datoEgresado, setDatoEgresado] = useState(egresado);
+
+    const [actualizador, setActualizador] = useState(false);
+    function Actualizar() {
+        setActualizador(!actualizador);
+    }
+    /* FIN Prueba actualizador */
+
     useEffect(() => {
         axios
             .get(`${baseUrl}/puestos/`)
@@ -37,7 +48,17 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                 )
             )
             .catch((error) => console.log(error));
-    }, []);
+        axios
+            .get(`${baseUrl}/egresados/${egresado.id}`)
+            .then(({ data }) => setDatoEgresado(data))
+            .catch((error) => console.log(error));
+        setOptions(
+            niveles.map((u) => ({
+                value: `${u}`,
+                label: `${u}`,
+            }))
+        );
+    }, [actualizador]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -92,6 +113,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                 .post(url, formState, config)
                 .then(({ data }) => {
                     console.log(data);
+                    Actualizar();
                     CallToast(messagePositivo, "primary");
                 })
                 .catch(({ response }) => CallToast(messageNegativo, "danger"));
@@ -175,14 +197,32 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         } else return false;
     }
 
+    /* Select nivel de trabajo */
+    const niveles = [
+        "NS/NC",
+        "Trainee",
+        "Junior",
+        "Semi-Senior",
+        "Senior",
+        "Corporativo",
+        "Socio",
+        "Socio Fundador",
+    ];
+
+    const [options, setOptions] = useState([]);
+    const [valueNivel, setValueNivel] = useState();
+    /* Fin Select nivel de trabajo */
+
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
-                <h3><i className="bi bi-hourglass-split"></i> Historial Laboral</h3>
+                <h3>
+                    <i className="bi bi-hourglass-split"></i> Historial Laboral
+                </h3>
                 <hr />
 
                 <Button variant="secondary" onClick={handleShow}>
-                <i className="bi bi-plus-circle"></i> Agregar Trabajo
+                    <i className="bi bi-plus-circle"></i> Agregar Trabajo
                 </Button>
 
                 <Table responsive>
@@ -197,7 +237,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {egresado.historial.map((egre, index) => (
+                        {datoEgresado?.historial.map((egre, index) => (
                             <tr key={egre.id}>
                                 <th scope="row">{index + 1}</th>
                                 <td>{egre.puesto.puesto}</td>
@@ -318,6 +358,12 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                     </Form.Group>
                                 </div>
                             </div>
+                            <Form.Label>Nivel Laboral</Form.Label>
+                            <Select
+                                options={options}
+                                value={valueNivel}
+                                onChange={(newValue) => setValueNivel(newValue)}
+                            />
                         </Form>
                         {showAlert &&
                         !(

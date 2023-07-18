@@ -15,10 +15,10 @@ function tiene(obj, key, value) {
 
 function despuesDe(obj, value) {
     try {
-        if (value.split("-")[0] > obj.egresos[0].ciclo_egreso.split("-")[0]) {
+        if (value.split("-")[0] > obj.egresos[obj.egresos.length-1].ciclo_egreso.split("-")[0]) {
             return false;
         } else if (
-            value.split("-")[0] == obj.egresos[0].ciclo_egreso.split("-")[0]
+            value.split("-")[0] == obj.egresos[obj.egresos.length-1].ciclo_egreso.split("-")[0]
         ) {
             if (
                 value.split("-")[1] > obj.egresos[0].ciclo_egreso.split("-")[1]
@@ -284,8 +284,7 @@ export const FiltrarEgresados = () => {
                             <tr>
                                 <td>Apellidos</td>
                                 <td>Nombres</td>
-                                <td>Ciudad Natal</td>
-                                <td>Ciudad Actual</td>
+                                <td>Fecha de egreso</td>
                                 <td>E-mail</td>
                                 <td>Último acceso</td>
                             </tr>
@@ -295,8 +294,7 @@ export const FiltrarEgresados = () => {
                                 <tr key={eg.id}>
                                     <td>{eg.apellidos}</td>
                                     <td>{eg.nombres}</td>
-                                    <td>{eg.ciudad_natal}</td>
-                                    <td>{eg.ciudad_actual}</td>
+                                    <td>{eg.egresos[eg.egresos.length-1]?.ciclo_egreso}</td>
                                     <td>{eg.email}</td>
                                     <td>
                                         {eg.last_login?.split("-")[0]}-

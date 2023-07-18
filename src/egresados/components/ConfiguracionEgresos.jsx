@@ -5,7 +5,6 @@ import Modal from "react-bootstrap/Modal";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import CreatableSelect from "react-select/creatable";
-import Select from "react-select";
 import Alert from "react-bootstrap/Alert";
 import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
@@ -63,24 +62,16 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                 )
             )
             .catch((error) => console.log(error));
-        setOptions(
-            niveles.map((u) => ({
-                value: `${u}`,
-                label: `${u}`,
-            }))
-        );
         axios
             .get(`${baseUrl}/egresados/${egresado.id}`)
             .then(({ data }) => setDatoEgresado(data))
             .catch((error) => console.log(error));
-        console.log(datoEgresado);
     }, [actualizador]);
     const handleClose = () => {
         setShow(false);
     };
     const handleShow = () => {
         onResetForm();
-        setValueNivel("");
         setAddMode(true);
         setValueCarrera();
         setValueFacultad();
@@ -139,7 +130,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                     );
             } else {
                 const url = `${baseUrl}/editar/egresos/${formState.usuario}/`;
-                console.log(formState)
+                console.log(formState);
                 formState.usuario = egresado.id;
                 axios
                     .put(url, formState, config)
@@ -264,7 +255,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
             value: egreso.carrera.id,
         });
         setShow(true);
-        console.log(formState)
+        console.log(formState);
     }
     /* Fin Función editar */
 
@@ -304,18 +295,6 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     };
     /* Fin Función eliminar */
 
-    /* Select nivel de trabajo */
-    const niveles = [
-        "Training",
-        "Junior",
-        "Semi-Senior",
-        "Senior",
-        "Corporativo",
-    ];
-
-    const [options, setOptions] = useState([]);
-    const [valueNivel, setValueNivel] = useState();
-    /* Fin Select nivel de trabajo */
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -521,12 +500,6 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     /* onChange={handleChangeActual} */
                                 />
                             </Form.Group>
-                            <Form.Label>Nivel Laboral</Form.Label>
-                            <Select
-                                options={options}
-                                value={valueNivel}
-                                onChange={(newValue) => setValueNivel(newValue)}
-                            />
                         </Form>
                         {showAlert &&
                         !(
