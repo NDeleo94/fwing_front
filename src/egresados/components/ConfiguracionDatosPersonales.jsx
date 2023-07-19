@@ -1,7 +1,7 @@
 import Logo from "../../assets/imgs/Logo.png";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "../hooks/useForm";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
@@ -15,7 +15,20 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     const { tokenGoogle } = useContext(LoginContext);
 
     const navigate = useNavigate();
+    /* Prueba actualizador */
+    const [datoEgresado, setDatoEgresado] = useState(egresado);
 
+    const [actualizador, setActualizador] = useState(false);
+    function Actualizar() {
+        setActualizador(!actualizador);
+    }
+    useEffect(() => {
+        axios
+            .get(`${urlBase}/egresados/${egresado.id}`)
+            .then(({ data }) => setDatoEgresado(data))
+            .catch((error) => console.log(error));
+    }, [actualizador]);
+    /* FIN Prueba actualizador */
     const initialForm = {
         nombres: egresado.nombres || "",
         apellidos: egresado.apellidos || "",
@@ -30,15 +43,15 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     };
 
     const urlPerfilPhoto = () => {
-        if (egresado.imagen.length == 0) {
+        if (datoEgresado.imagen.length == 0) {
             return Logo;
         }
-        if (egresado.imagen[0]?.file) {
+        if (datoEgresado.imagen[0]?.file) {
             return `${import.meta.env.VITE_URL_PHOTO}${
-                egresado.imagen[0].file
+                datoEgresado.imagen[0].file
             }`;
         } else {
-            return egresado.imagen[0]?.url;
+            return datoEgresado.imagen[0]?.url;
         }
     };
 
@@ -65,9 +78,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 .catch(({ response }) => console.log(response.data));
             setMessage(mensaje);
             setShow(true);
-            setTimeout(function () {
-                navigate(`/perfil/${egresado.id}`);
-            }, 3000);
+            Actualizar();
         } else {
             setShowAlert(true);
         }

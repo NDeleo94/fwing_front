@@ -213,6 +213,47 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [valueNivel, setValueNivel] = useState();
     /* Fin Select nivel de trabajo */
 
+    /* botón Delete */
+    const [showModalDelete, setShowModalDelete] = useState(false);
+    const [eliminarButtonDisabled, setEliminarButtonDisabled] = useState(false);
+    const [toDelete, setToDelete] = useState();
+    const handleCloseModalDelete = () => {
+        setShowModalDelete(false);
+    };
+    const messageEliminado = (
+        <>
+            <b>La actividad laboral ha sido eliminada correctamente.</b>
+        </>
+    );
+    const handleDelete = (e, trabajo) => {
+        e.preventDefault();
+        setToDelete(trabajo);
+        setShowModalDelete(true);
+        console.log(trabajo);
+    };
+    const handleSubmitModalDelete = (event) => {
+        event.preventDefault();
+        setEliminarButtonDisabled(true);
+        const url = `${baseUrl}/eliminar/actividades/${toDelete.id}/`;
+        axios
+            .delete(url, config)
+            .then(({ data }) => {
+                console.log(data);
+                setEliminarButtonDisabled(false);
+                setShowModalDelete(false);
+                setToDelete([]);
+                CallToast(messageEliminado, "primary");
+                Actualizar();
+            })
+            .catch(({ response }) => {
+                console.log(response);
+                CallToast(messageNegativo, "danger");
+                setShowModalDelete(false);
+                setToDelete([]);
+            });
+    };
+    /* FIN botón Delete */
+
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -257,7 +298,10 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                         <Col>
                                             <Button
                                                 variant="outline-danger"
-                                                className=" my-1"
+                                                className="my-1"
+                                                onClick={(e) =>
+                                                    handleDelete(e, egre)
+                                                }
                                             >
                                                 <i className="bi bi-trash"></i>
                                             </Button>
@@ -429,6 +473,34 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                         </Button>
                         <Button variant="primary" onClick={handleSubmit}>
                             Guardar Cambios
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>¿Eliminar actividad laboral?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        ¿Desea eliminar la siguiente actividad laboral? <br />
+                        <b>"{toDelete?.puesto?.puesto}"</b> en{" "}
+                        <b>{toDelete?.organizacion?.organizacion}</b>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={handleCloseModalDelete}
+                            disabled={eliminarButtonDisabled}
+                        >
+                            Cerrar
+                        </Button>
+                        <Button
+                            type="submit"
+                            onClick={handleSubmitModalDelete}
+                            variant="danger"
+                            disabled={eliminarButtonDisabled}
+                        >
+                            Eliminar
                         </Button>
                     </Modal.Footer>
                 </Modal>
