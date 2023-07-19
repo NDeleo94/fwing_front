@@ -92,7 +92,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formState);
         setWaitAxios(true);
         /* Validación React */
         if (
@@ -146,7 +145,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             setWaitAxios(false);
             setShow(false);
         }
-        console.log(formState);
     };
 
     /* Notificación Push */
@@ -260,7 +258,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         e.preventDefault();
         setToDelete(trabajo);
         setShowModalDelete(true);
-        console.log(trabajo);
     };
     const handleSubmitModalDelete = (event) => {
         event.preventDefault();
@@ -296,7 +293,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         formState.organizacion = trabajo.organizacion;
         formState.inicio = trabajo.inicio;
         formState.fin = trabajo?.fin;
-        console.log(trabajo.fin);
         if (!trabajo.fin) {
             setEsActual(true);
             formState.fin = null;
@@ -310,7 +306,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             value: trabajo.puesto.id,
         });
         setShow(true);
-        console.log(formState);
     };
     /* FIN Botón Change Trabajo */
 
