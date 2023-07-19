@@ -27,6 +27,18 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             .get(`${urlBase}/egresados/${egresado.id}`)
             .then(({ data }) => setDatoEgresado(data))
             .catch((error) => console.log(error));
+        axios
+            .get(`${urlBase}/ciudades/`)
+            .then(({ data }) => {
+                setOptions(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.ciudad,
+                    }))
+                );
+            })
+            .catch((error) => console.log(error));
+            console.log(options)
     }, [actualizador]);
     /* FIN Prueba actualizador */
     const initialForm = {
@@ -90,7 +102,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             formState.fecha_nac &&
             select_actual &&
             select_natal &&
-            formState.domicilio &&
+            /* formState.domicilio && */
             formState.sexo
         );
     }
@@ -113,7 +125,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             initial.fecha_nac == changed.fecha_nac &&
             initial.ciudad_actual == select_actual?.label &&
             initial.ciudad_natal == select_natal?.label &&
-            initial.domicilio == changed.domicilio &&
+            /* initial.domicilio == changed.domicilio && */
             initial.sexo == changed.sexo
         );
     }
@@ -124,7 +136,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         value: id,
     });
     // Aquí hay que traer la info del back
-    const defaultOptionsSelect_ciudades = [
+    /* const defaultOptionsSelect_ciudades = [
         // opciones por defecto
         createOption("Yerba Buena, Tucumán", 11),
         createOption("Trancas, Tucumán", 12),
@@ -132,17 +144,17 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         createOption("San Miguel de Tucuman", 15),
         createOption(`${initialForm.ciudad_natal}`, 25),
         createOption(`${initialForm.ciudad_actual}`, 35),
-    ];
+    ]; */
     const [isLoadingSelect_natal, setIsLoadingSelect_natal] = useState(false);
     const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
-    const [options, setOptions] = useState(defaultOptionsSelect_ciudades); // setea las opciones por defecto
+    const [options, setOptions] = useState([]); // setea las opciones por defecto
     const [select_natal, setSelect_natal] = useState(
-        defaultOptionsSelect_ciudades.find(
+        options?.find(
             (element) => element.label == initialForm.ciudad_natal
         )
     );
     const [select_actual, setSelect_actual] = useState(
-        defaultOptionsSelect_ciudades.find(
+        options?.find(
             (element) => element.label == initialForm.ciudad_actual
         )
     );
@@ -504,7 +516,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         formState.email &&
                         formState.nacionalidad &&
                         formState.fecha_nac &&
-                        formState.domicilio &&
                         formState.sexo &&
                         select_actual &&
                         select_natal
