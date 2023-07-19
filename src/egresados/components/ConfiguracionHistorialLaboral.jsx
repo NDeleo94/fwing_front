@@ -335,9 +335,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                     <tbody>
                         {datoEgresado?.historial.map((egre, index) => (
                             <tr key={egre.id}>
-                                <th scope="row">
-                                    {index + 1} {egre.id}
-                                </th>
+                                <th scope="row">{index + 1}</th>
                                 <td>{egre.puesto.puesto}</td>
                                 <td>{egre.organizacion.organizacion}</td>
                                 <td>{egre.inicio}</td>

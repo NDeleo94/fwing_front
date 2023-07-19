@@ -10,6 +10,7 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const { setIsLogged, setUser, setToken } = useContext(LoginContext);
+    const [waitAxios, setWaitAxios] = useState(false)
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
 
@@ -23,6 +24,7 @@ export const LoginPage = () => {
 
     const onLogin = (e) => {
         handleSubmit(e);
+        setWaitAxios(true);
         if (formState.username && formState.password) {
             Loguearse();
         }
@@ -48,6 +50,7 @@ export const LoginPage = () => {
                         setToken(data.token);
                         setUser(data.user);
                         setIsLogged(true);
+                        setWaitAxios(false)
                         navigate("/home", {
                             replace: true,
                         });
@@ -55,6 +58,7 @@ export const LoginPage = () => {
                 } else {
                     response.json().then((data) => {
                         console.error("Error:", data.error);
+                        setWaitAxios(false)
                         setShowAlert(true);
                     });
                 }
@@ -149,7 +153,7 @@ export const LoginPage = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={onLogin}>
+                    <Button variant="success" onClick={onLogin} disabled={waitAxios}>
                         Ingresar
                     </Button>
                 </Modal.Footer>
