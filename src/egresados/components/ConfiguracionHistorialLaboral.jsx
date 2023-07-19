@@ -9,6 +9,7 @@ import Select from "react-select";
 
 export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [show, setShow] = useState(false);
+    const [addMode, setAddMode] = useState(false);
 
     const [defaultOptionsPuestos, setDefaultOptionsPuestos] = useState([]);
     const [defaultOptionsOrganizaciones, setDefaultOptionsOrganizaciones] =
@@ -62,6 +63,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
+        setAddMode(true);
         setShowAlert(false);
         setEsActual(false);
         setValueOrganizacion();
@@ -91,6 +93,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(formState);
+        setWaitAxios(true);
         /* Validación React */
         if (
             !!valueOrganizacion &&
@@ -106,19 +109,42 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                 ? (formState.organizacion = valueOrganizacion.value)
                 : (formState.organizacion = valueOrganizacion.label);
 
-            setShow(false);
             /* post de agregar trabajo a egresado */
-            const url = `${baseUrl}/crear/actividades/`;
-            axios
-                .post(url, formState, config)
-                .then(({ data }) => {
-                    console.log(data);
-                    Actualizar();
-                    CallToast(messagePositivo, "primary");
-                })
-                .catch(({ response }) => CallToast(messageNegativo, "danger"));
+            if (addMode) {
+                const url = `${baseUrl}/crear/actividades/`;
+                axios
+                    .post(url, formState, config)
+                    .then(({ data }) => {
+                        console.log(data);
+                        setWaitAxios(false);
+                        Actualizar();
+                        CallToast(messagePositivo, "primary");
+                        setShow(false);
+                    })
+                    .catch(({ response }) =>
+                        CallToast(messageNegativo, "danger")
+                    );
+            } else {
+                const url = `${baseUrl}/editar/actividades/${formState.usuario}/`;
+                formState.usuario = egresado.id;
+                axios
+                    .put(url, formState, config)
+                    .then(({ data }) => {
+                        console.log(data);
+                        setWaitAxios(false);
+                        Actualizar();
+                        CallToast(messageChangedPositivo, "primary");
+                        setShow(false);
+                    })
+                    .catch(({ response }) => {
+                        console.log(response);
+                        CallToast(messageNegativo, "danger");
+                    });
+            }
         } else {
             setShowAlert(true);
+            setWaitAxios(false);
+            setShow(false);
         }
         console.log(formState);
     };
@@ -130,6 +156,11 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const messagePositivo = (
         <>
             <b>¡Se agregó el nuevo trabajo!</b>
+        </>
+    );
+    const messageChangedPositivo = (
+        <>
+            <b>¡Modificación exitosa!</b>
         </>
     );
     const messageNegativo = (
@@ -254,6 +285,35 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     };
     /* FIN botón Delete */
 
+    /* Botón Change Trabajo */
+    const [waitAxios, setWaitAxios] = useState(false);
+    const handleChangeActividad = (e, trabajo) => {
+        e.preventDefault();
+        setEsActual(false);
+        setAddMode(false);
+        formState.usuario = trabajo.id;
+        formState.puesto = trabajo.puesto;
+        formState.organizacion = trabajo.organizacion;
+        formState.inicio = trabajo.inicio;
+        formState.fin = trabajo?.fin;
+        console.log(trabajo.fin);
+        if (!trabajo.fin) {
+            setEsActual(true);
+            formState.fin = null;
+        }
+        setValueOrganizacion({
+            label: trabajo.organizacion.organizacion,
+            value: trabajo.organizacion.id,
+        });
+        setValuePuesto({
+            label: trabajo.puesto.puesto,
+            value: trabajo.puesto.id,
+        });
+        setShow(true);
+        console.log(formState);
+    };
+    /* FIN Botón Change Trabajo */
+
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -280,7 +340,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                     <tbody>
                         {datoEgresado?.historial.map((egre, index) => (
                             <tr key={egre.id}>
-                                <th scope="row">{index + 1}</th>
+                                <th scope="row">
+                                    {index + 1} {egre.id}
+                                </th>
                                 <td>{egre.puesto.puesto}</td>
                                 <td>{egre.organizacion.organizacion}</td>
                                 <td>{egre.inicio}</td>
@@ -291,6 +353,12 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                             <Button
                                                 variant="outline-secondary"
                                                 className="my-1"
+                                                onClick={(e) => {
+                                                    handleChangeActividad(
+                                                        e,
+                                                        egre
+                                                    );
+                                                }}
                                             >
                                                 <i className="bi bi-pencil-square"></i>
                                             </Button>
@@ -321,7 +389,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Agregar Trabajo</Modal.Title>
+                        <Modal.Title>
+                            {addMode ? "Agregar" : "Modificar"} Trabajo
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form>
@@ -398,6 +468,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                             label="¿Es actual?"
                                             name="fin"
                                             onChange={handleChangeActual}
+                                            checked={esActual}
                                         />
                                     </Form.Group>
                                 </div>
@@ -468,10 +539,18 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                         )}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                        <Button
+                            variant="secondary"
+                            onClick={handleClose}
+                            disabled={waitAxios}
+                        >
                             Cerrar
                         </Button>
-                        <Button variant="primary" onClick={handleSubmit}>
+                        <Button
+                            variant="primary"
+                            onClick={handleSubmit}
+                            disabled={waitAxios}
+                        >
                             Guardar Cambios
                         </Button>
                     </Modal.Footer>
