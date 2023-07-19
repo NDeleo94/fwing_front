@@ -232,14 +232,20 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             };
             axios
                 .post(url, photo, config)
-                .then(({ data }) => console.log(data))
+                .then(({ data }) => {
+                    Actualizar();
+                    console.log(data);
+                })
                 .catch(({ response }) => console.log(response.data));
         }
         if (tipoModal == "danger") {
             const url = `${urlBase}/eliminar/imagenes/${egresado.id}/`;
             axios
                 .delete(url, config)
-                .then(({ data }) => console.log(data))
+                .then(({ data }) => {
+                    Actualizar();
+                    console.log(data);
+                })
                 .catch(({ response }) => console.log(response.data));
         }
         if (tipoModal == "primary") {
@@ -252,7 +258,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
             axios
                 .post(url, formData, config)
-                .then(({ data }) => console.log(data))
+                .then(({ data }) => {
+                    Actualizar();
+                    console.log(data);
+                })
                 .catch(({ response }) => console.log(response.data));
         }
         setShowModal(false);

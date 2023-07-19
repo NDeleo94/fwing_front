@@ -284,9 +284,16 @@ export const FiltrarEgresados = () => {
                             <tr>
                                 <td>Apellidos</td>
                                 <td>Nombres</td>
+                                <td>Sexo</td>
                                 <td>Fecha de egreso</td>
                                 <td>E-mail</td>
                                 <td>Último acceso</td>
+                                <td>Ciudad Actual</td>
+                                <td>Ciudad Natal</td>
+                                <td>Nacionalidad</td>
+                                <td>DNI</td>
+                                <td>Domicilio</td>
+                                <td>Fecha de Nacimiento</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -294,12 +301,19 @@ export const FiltrarEgresados = () => {
                                 <tr key={eg.id}>
                                     <td>{eg.apellidos}</td>
                                     <td>{eg.nombres}</td>
+                                    <td>{eg.sexo}</td>
                                     <td>{eg.egresos[eg.egresos.length-1]?.ciclo_egreso}</td>
                                     <td>{eg.email}</td>
                                     <td>
                                         {eg.last_login?.split("-")[0]}-
                                         {eg.last_login?.split("-")[1]}
                                     </td>
+                                    <td>{eg.ciudad_actual}</td>
+                                    <td>{eg.ciudad_natal}</td>
+                                    <td>{eg.nacionalidad}</td>
+                                    <td>{eg.dni}</td>
+                                    <td>{eg.domicilio}</td>
+                                    <td>{eg.fecha_nac}</td>
                                 </tr>
                             ))}
                         </tbody>

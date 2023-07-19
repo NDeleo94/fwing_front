@@ -10,7 +10,7 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const { setIsLogged, setUser, setToken } = useContext(LoginContext);
-    const [waitAxios, setWaitAxios] = useState(false)
+    const [waitAxios, setWaitAxios] = useState(false);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
 
@@ -20,6 +20,7 @@ export const LoginPage = () => {
         setShowAlert(false);
         setValidated(false);
         setShow(true);
+        setWaitAxios(false);
     };
 
     const onLogin = (e) => {
@@ -50,7 +51,7 @@ export const LoginPage = () => {
                         setToken(data.token);
                         setUser(data.user);
                         setIsLogged(true);
-                        setWaitAxios(false)
+                        setWaitAxios(false);
                         navigate("/home", {
                             replace: true,
                         });
@@ -58,13 +59,14 @@ export const LoginPage = () => {
                 } else {
                     response.json().then((data) => {
                         console.error("Error:", data.error);
-                        setWaitAxios(false)
+                        setWaitAxios(false);
                         setShowAlert(true);
                     });
                 }
             })
             .catch((error) => {
                 console.error("Error:", error);
+                setWaitAxios(false);
             });
     }
 
@@ -102,7 +104,8 @@ export const LoginPage = () => {
                 <h1>Iniciar Sesión</h1>
                 <hr />
                 <Button variant="success" onClick={handleShow}>
-                <i className="bi bi-key-fill"></i> Iniciar sesión con contraseña
+                    <i className="bi bi-key-fill"></i> Iniciar sesión con
+                    contraseña
                 </Button>
 
                 <hr />
@@ -153,7 +156,11 @@ export const LoginPage = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={onLogin} disabled={waitAxios}>
+                    <Button
+                        variant="success"
+                        onClick={onLogin}
+                        disabled={waitAxios}
+                    >
                         Ingresar
                     </Button>
                 </Modal.Footer>
