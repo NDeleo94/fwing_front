@@ -38,7 +38,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 );
             })
             .catch((error) => console.log(error));
-            console.log(options)
+        console.log(options);
     }, [actualizador]);
     /* FIN Prueba actualizador */
     const initialForm = {
@@ -149,14 +149,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
     const [options, setOptions] = useState([]); // setea las opciones por defecto
     const [select_natal, setSelect_natal] = useState(
-        options?.find(
-            (element) => element.label == initialForm.ciudad_natal
-        )
+        options?.find((element) => element.label == initialForm.ciudad_natal)
     );
     const [select_actual, setSelect_actual] = useState(
-        options?.find(
-            (element) => element.label == initialForm.ciudad_actual
-        )
+        options?.find((element) => element.label == initialForm.ciudad_actual)
     );
     const handleCreateSelect_natal = (inputValue) => {
         setIsLoadingSelect_natal(true);
@@ -537,7 +533,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                     {!formState.fecha_nac
                                         ? " Fecha de Nacimiento,"
                                         : ""}
-                                    {!formState.domicilio ? " Domicilio," : ""}
+                                    {/*                                     {!formState.domicilio ? " Domicilio," : ""}
+                                     */}{" "}
                                     {!formState.sexo ? " Sexo," : ""}
                                     {!select_natal ? " Ciudad Natal," : ""}
                                     {!select_actual ? " Ciudad Actual." : "."}
