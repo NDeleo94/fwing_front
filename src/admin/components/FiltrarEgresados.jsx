@@ -127,7 +127,7 @@ export const FiltrarEgresados = () => {
         setLoading(false);
     };
 
-    function NoHayCambios(initial, changed) {
+    /* function NoHayCambios(initial, changed) {
         return (
             initial.ciudad_actual == formState.ciudad_actual &&
             initial.ciudad_natal == formState.ciudad_natal &&
@@ -137,7 +137,7 @@ export const FiltrarEgresados = () => {
             initial.hasta == changed.hasta &&
             initial.sexo == changed.sexo
         );
-    }
+    } */
     return (
         <>
             <Container fluid>
@@ -308,8 +308,8 @@ export const FiltrarEgresados = () => {
                                         {eg.last_login?.split("-")[0]}-
                                         {eg.last_login?.split("-")[1]}
                                     </td>
-                                    <td>{eg.ciudad_actual}</td>
-                                    <td>{eg.ciudad_natal}</td>
+                                    <td>{eg.ciudad_actual?.ciudad}</td>
+                                    <td>{eg.ciudad_natal?.ciudad}</td>
                                     <td>{eg.nacionalidad}</td>
                                     <td>{eg.dni}</td>
                                     <td>{eg.domicilio}</td>
