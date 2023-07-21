@@ -167,7 +167,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelect_natal(false); // saca el loading
             setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
-            setSelect_natal(newOption); // setea el valor (aqui va el formstate)
+            setFormState({
+                ...formState,
+                ciudad_natal: newOption,
+            }); // setea el valor (aqui va el formstate)
         }, 1000);
     };
     const handleCreateSelect_actual = (inputValue) => {
@@ -176,7 +179,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelect_actual(false); // saca el loading
             setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
-            setSelect_actual(newOption); // setea el valor (aqui va el formstate)
+            setFormState({
+                ...formState,
+                ciudad_actual: newOption,
+            });  // setea el valor (aqui va el formstate)
         }, 1000);
     };
     /* Fin Input-Select */

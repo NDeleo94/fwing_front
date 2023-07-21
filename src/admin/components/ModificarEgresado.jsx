@@ -35,6 +35,11 @@ export const ModificarEgresado = () => {
         ],
     };
     const { formState, setFormState, onInputChange } = useForm(initialForm);
+    const [actualizador, setActualizador] = useState(false);
+    const actualizar = () => {
+        setLoading(true);
+        setActualizador((a) => !a);
+    };
 
     useEffect(() => {
         axios
@@ -50,13 +55,25 @@ export const ModificarEgresado = () => {
                 setEgresados(data);
             })
             .catch((error) => console.log(error));
-    }, []);
+        axios
+            .get(`${baseUrl}/ciudades/`)
+            .then(({ data }) => {
+                setOptionsCities(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.ciudad,
+                    }))
+                );
+            })
+            .catch((error) => console.log(error));
+    }, [actualizador]);
 
     const [egresados, setEgresados] = useState([]); // contiene la data
     const [choosed, setChoosed] = useState(); // trae el id del egresado elegido
     const [disabledButtonSearch, setDisabledButtonSearch] = useState(false); // para evitar sobreconsultas
     const [photo, setPhoto] = useState();
     const [original, setOriginal] = useState([]);
+    const [egresadoBuscado, setEgresadoBuscado] = useState(null);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -70,31 +87,47 @@ export const ModificarEgresado = () => {
     };
     useEffect(() => {
         setDisabledButtonSearch(false);
-        setFormState(egresados.find((a) => a.id == choosed));
-        setSelect_actual(
-            defaultOptionsSelect_ciudades.find(
-                (element) => element.label == formState?.ciudad_actual
-            )
-        );
-        setSelect_natal(
-            defaultOptionsSelect_ciudades.find(
-                (element) => element.label == formState?.ciudad_natal
-            )
-        );
+        /* setFormState(egresados.find((a) => a.id == choosed)); */
+        egresados.map((a) => {
+            if (a.id == choosed) {
+                setFormState({
+                    ...formState,
+                    id: a.id,
+                    apellidos: a.apellidos,
+                    nombres: a.nombres,
+                    ciudad_actual: {
+                        label: a.ciudad_actual?.ciudad,
+                        value: a.ciudad_actual.id,
+                    },
+                    ciudad_natal: {
+                        label: a.ciudad_natal?.ciudad,
+                        value: a.ciudad_natal.id,
+                    },
+                    email: a.email,
+                    fecha_nac: a.fecha_nac,
+                    dni: a.dni,
+                    nacionalidad: a.nacionalidad,
+                    sexo: a.sexo,
+                    imagen: {
+                        file: a?.imagen[0]?.file,
+                        url: a?.imagen[0]?.url,
+                    },
+                });
+            }
+        });
     }, [choosed]);
 
     useEffect(() => {
         setPhoto(urlPerfilPhoto());
-    }, [formState?.imagen]);
+    }, [formState.imagen]);
 
     const urlPerfilPhoto = () => {
-        if (formState?.imagen[0]?.file) {
-            return `${import.meta.env.VITE_URL_PHOTO}${
-                formState.imagen[0].file
-            }`;
+        if (formState?.imagen?.file) {
+            return `${import.meta.env.VITE_URL_PHOTO}${formState.imagen.file}`;
         }
-        if (formState?.imagen[0]?.url) {
-            return formState.imagen[0]?.url;
+
+        if (formState?.imagen?.url) {
+            return formState.imagen?.url;
         }
 
         return Logo;
@@ -105,31 +138,11 @@ export const ModificarEgresado = () => {
         label,
         value: id,
     });
-    // Aquí hay que traer la info del back
-    const defaultOptionsSelect_ciudades = [
-        // opciones por defecto
-        createOption("Yerba Buena, Tucumán", 11),
-        createOption("Trancas, Tucumán", 12),
-        createOption("Salta, Salta", 13),
-        createOption("San Miguel de Tucuman", 15),
-        createOption(`${initialForm.ciudad_natal}`, 25),
-        createOption(`${initialForm.ciudad_actual}`, 35),
-    ];
+
     const [isLoadingSelect_natal, setIsLoadingSelect_natal] = useState(false);
     const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
-    const [optionsCities, setOptionsCities] = useState(
-        defaultOptionsSelect_ciudades
-    ); // setea las opciones por defecto
-    const [select_natal, setSelect_natal] = useState(
-        defaultOptionsSelect_ciudades.find(
-            (element) => element.label == initialForm.ciudad_natal
-        )
-    );
-    const [select_actual, setSelect_actual] = useState(
-        defaultOptionsSelect_ciudades.find(
-            (element) => element.label == initialForm.ciudad_actual
-        )
-    );
+    const [optionsCities, setOptionsCities] = useState(); // setea las opciones por defecto
+
     const handleCreateSelect_natal = (inputValue) => {
         setIsLoadingSelect_natal(true);
         setTimeout(() => {
@@ -276,6 +289,7 @@ export const ModificarEgresado = () => {
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
+                    actualizar;
                 })
                 .catch(({ response }) => {
                     console.log(response.data);
@@ -521,13 +535,16 @@ export const ModificarEgresado = () => {
                                         isDisabled={isLoadingSelect_natal}
                                         isLoading={isLoadingSelect_natal}
                                         onChange={(newValue) =>
-                                            setSelect_natal(newValue)
+                                            setFormState({
+                                                ...formState,
+                                                ciudad_natal: newValue,
+                                            })
                                         }
                                         onCreateOption={
                                             handleCreateSelect_natal
                                         }
                                         options={optionsCities}
-                                        value={select_natal}
+                                        value={formState?.ciudad_natal}
                                     />
                                 </Form.Group>
 
@@ -541,26 +558,16 @@ export const ModificarEgresado = () => {
                                         isDisabled={isLoadingSelect_actual}
                                         isLoading={isLoadingSelect_actual}
                                         onChange={(newValue) =>
-                                            setSelect_actual(newValue)
+                                            setFormState({
+                                                ...formState,
+                                                ciudad_actual: newValue,
+                                            })
                                         }
                                         onCreateOption={
                                             handleCreateSelect_actual
                                         }
                                         options={optionsCities}
-                                        value={select_actual}
-                                    />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formDomicilio"
-                                >
-                                    <Form.Label>Domicilio</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        value={formState?.domicilio}
-                                        onChange={onInputChange}
-                                        name="domicilio"
-                                        required
+                                        value={formState?.ciudad_actual}
                                     />
                                 </Form.Group>
                                 <div className="col-12">
