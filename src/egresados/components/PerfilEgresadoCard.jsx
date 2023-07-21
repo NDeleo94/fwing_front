@@ -56,7 +56,7 @@ export const PerfilEgresadoCard = ({
                                     : "card-title"
                             }
                         >
-                            {ciudad_natal.ciudad}
+                            {ciudad_natal?.ciudad}
                         </h5>
                     )}
                 </div>

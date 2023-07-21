@@ -136,7 +136,7 @@ export const DatosPersonalesEgresadoCard = ({
                                         : "col-8"
                                 }
                             >
-                                {ciudad_natal.ciudad}
+                                {ciudad_natal?.ciudad}
                             </div>
                         </div>
                     </>
@@ -161,7 +161,7 @@ export const DatosPersonalesEgresadoCard = ({
                                         : "col-8"
                                 }
                             >
-                                {ciudad_actual.ciudad}
+                                {ciudad_actual?.ciudad}
                             </div>
                         </div>
                     </>
