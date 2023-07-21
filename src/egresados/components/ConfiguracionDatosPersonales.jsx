@@ -58,21 +58,21 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     }, [actualizador]);
     /* FIN Prueba actualizador */
     const initialForm = {
-        nombres: datoEgresado.nombres || "",
-        apellidos: datoEgresado.apellidos || "",
-        dni: datoEgresado.dni || "",
-        email: datoEgresado.email || "",
-        nacionalidad: datoEgresado.nacionalidad || "",
-        fecha_nac: datoEgresado.fecha_nac || "",
+        nombres: datoEgresado?.nombres || "",
+        apellidos: datoEgresado?.apellidos || "",
+        dni: datoEgresado?.dni || "",
+        email: datoEgresado?.email || "",
+        nacionalidad: datoEgresado?.nacionalidad || "",
+        fecha_nac: datoEgresado?.fecha_nac || "",
         ciudad_natal: {
-            label: datoEgresado.ciudad_natal.ciudad || "",
-            value: datoEgresado.ciudad_natal.id || "",
+            label: datoEgresado?.ciudad_natal?.ciudad || "",
+            value: datoEgresado?.ciudad_natal?.id || "",
         },
         ciudad_actual: {
-            label: datoEgresado.ciudad_actual.ciudad || "",
-            value: datoEgresado.ciudad_actual.id || "",
+            label: datoEgresado?.ciudad_actual?.ciudad || "",
+            value: datoEgresado?.ciudad_actual?.id || "",
         },
-        sexo: datoEgresado.sexo || "",
+        sexo: datoEgresado?.sexo || "",
     };
 
     const urlPerfilPhoto = () => {
