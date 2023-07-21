@@ -25,7 +25,24 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     useEffect(() => {
         axios
             .get(`${urlBase}/egresados/${egresado.id}`)
-            .then(({ data }) => setDatoEgresado(data))
+            .then(({ data }) => {
+                setDatoEgresado(data);
+                setFormState({
+                    ...formState,
+                    email: data.email || "",
+                    nacionalidad: data.nacionalidad || "",
+                    fecha_nac: data.fecha_nac || "",
+                    ciudad_natal: {
+                        label: data.ciudad_natal.ciudad || "",
+                        value: data.ciudad_natal.id || "",
+                    },
+                    ciudad_actual: {
+                        label: data.ciudad_actual.ciudad || "",
+                        value: data.ciudad_actual.id || "",
+                    },
+                    sexo: data.sexo || "",
+                });
+            })
             .catch((error) => console.log(error));
         axios
             .get(`${urlBase}/ciudades/`)
@@ -38,20 +55,24 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                 );
             })
             .catch((error) => console.log(error));
-        console.log(options);
     }, [actualizador]);
     /* FIN Prueba actualizador */
     const initialForm = {
-        nombres: egresado.nombres || "",
-        apellidos: egresado.apellidos || "",
-        dni: egresado.dni || "",
-        email: egresado.email || "",
-        nacionalidad: egresado.nacionalidad || "",
-        fecha_nac: egresado.fecha_nac || "",
-        ciudad_natal: egresado.ciudad_natal || "",
-        ciudad_actual: egresado.ciudad_actual || "",
-        domicilio: egresado.domicilio || "",
-        sexo: egresado.sexo || "",
+        nombres: datoEgresado.nombres || "",
+        apellidos: datoEgresado.apellidos || "",
+        dni: datoEgresado.dni || "",
+        email: datoEgresado.email || "",
+        nacionalidad: datoEgresado.nacionalidad || "",
+        fecha_nac: datoEgresado.fecha_nac || "",
+        ciudad_natal: {
+            label: datoEgresado.ciudad_natal.ciudad || "",
+            value: datoEgresado.ciudad_natal.id || "",
+        },
+        ciudad_actual: {
+            label: datoEgresado.ciudad_actual.ciudad || "",
+            value: datoEgresado.ciudad_actual.id || "",
+        },
+        sexo: datoEgresado.sexo || "",
     };
 
     const urlPerfilPhoto = () => {
@@ -67,7 +88,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         }
     };
 
-    const { formState, onInputChange } = useForm(initialForm);
+    const { formState, onInputChange, setFormState } = useForm(initialForm);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
@@ -76,33 +97,35 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         event.preventDefault();
 
         if (EstaCompleto()) {
-            select_natal.value
-                ? (formState.ciudad_natal = select_natal.value)
-                : (formState.ciudad_natal = select_natal.label);
-            select_actual.value
-                ? (formState.ciudad_actual = select_actual.value)
-                : (formState.ciudad_actual = select_actual.label);
+            formState.ciudad_natal.value
+                ? (formState.ciudad_natal = formState.ciudad_natal.value)
+                : (formState.ciudad_natal = formState.ciudad_natal.label);
+            formState.ciudad_actual.value
+                ? (formState.ciudad_actual = formState.ciudad_actual.value)
+                : (formState.ciudad_actual = formState.ciudad_actual.label);
 
             const url = `${urlBase}/editar/egresados/${egresado.id}/`;
             axios
                 .put(url, formState, config)
-                .then(({ data }) => console.log(data))
+                .then(({ data }) => {
+                    console.log(data);
+                    Actualizar();
+                })
                 .catch(({ response }) => console.log(response.data));
-            setMessage(mensaje);
-            setShow(true);
-            Actualizar();
         } else {
             setShowAlert(true);
         }
+        setMessage(mensaje);
+        setShow(true);
     };
+
     function EstaCompleto() {
         return (
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            select_actual &&
-            select_natal &&
-            /* formState.domicilio && */
+            formState.ciudad_actual.label != "" &&
+            formState.ciudad_natal.label != "" &&
             formState.sexo
         );
     }
@@ -123,9 +146,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             initial.email == changed.email &&
             initial.nacionalidad == changed.nacionalidad &&
             initial.fecha_nac == changed.fecha_nac &&
-            initial.ciudad_actual == select_actual?.label &&
-            initial.ciudad_natal == select_natal?.label &&
-            /* initial.domicilio == changed.domicilio && */
+            initial.ciudad_natal.label == changed.ciudad_natal.label &&
+            initial.ciudad_actual.label == changed.ciudad_actual.label &&
             initial.sexo == changed.sexo
         );
     }
@@ -135,25 +157,10 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         label,
         value: id,
     });
-    // Aquí hay que traer la info del back
-    /* const defaultOptionsSelect_ciudades = [
-        // opciones por defecto
-        createOption("Yerba Buena, Tucumán", 11),
-        createOption("Trancas, Tucumán", 12),
-        createOption("Salta, Salta", 13),
-        createOption("San Miguel de Tucuman", 15),
-        createOption(`${initialForm.ciudad_natal}`, 25),
-        createOption(`${initialForm.ciudad_actual}`, 35),
-    ]; */
+
     const [isLoadingSelect_natal, setIsLoadingSelect_natal] = useState(false);
     const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
     const [options, setOptions] = useState([]); // setea las opciones por defecto
-    const [select_natal, setSelect_natal] = useState(
-        options?.find((element) => element.label == initialForm.ciudad_natal)
-    );
-    const [select_actual, setSelect_actual] = useState(
-        options?.find((element) => element.label == initialForm.ciudad_actual)
-    );
     const handleCreateSelect_natal = (inputValue) => {
         setIsLoadingSelect_natal(true);
         setTimeout(() => {
@@ -275,6 +282,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
         setShowModal(false);
     };
     /* Fin modales para confirmar eliminar o cambiar foto */
+
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -454,11 +462,14 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 isDisabled={isLoadingSelect_natal}
                                 isLoading={isLoadingSelect_natal}
                                 onChange={(newValue) =>
-                                    setSelect_natal(newValue)
+                                    setFormState({
+                                        ...formState,
+                                        ciudad_natal: newValue,
+                                    })
                                 }
                                 onCreateOption={handleCreateSelect_natal}
                                 options={options}
-                                value={select_natal}
+                                value={formState.ciudad_natal}
                             />
                         </Form.Group>
 
@@ -472,21 +483,14 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 isDisabled={isLoadingSelect_actual}
                                 isLoading={isLoadingSelect_actual}
                                 onChange={(newValue) =>
-                                    setSelect_actual(newValue)
+                                    setFormState({
+                                        ...formState,
+                                        ciudad_actual: newValue,
+                                    })
                                 }
                                 onCreateOption={handleCreateSelect_actual}
                                 options={options}
-                                value={select_actual}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formDomicilio">
-                            <Form.Label>Domicilio</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={formState.domicilio}
-                                onChange={onInputChange}
-                                name="domicilio"
-                                required
+                                value={formState.ciudad_actual}
                             />
                         </Form.Group>
                         <div className="col-12">
@@ -533,8 +537,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                     {!formState.fecha_nac
                                         ? " Fecha de Nacimiento,"
                                         : ""}
-                                    {/*                                     {!formState.domicilio ? " Domicilio," : ""}
-                                     */}{" "}
+
                                     {!formState.sexo ? " Sexo," : ""}
                                     {!select_natal ? " Ciudad Natal," : ""}
                                     {!select_actual ? " Ciudad Actual." : "."}
