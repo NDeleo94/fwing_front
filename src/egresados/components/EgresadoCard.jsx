@@ -33,7 +33,7 @@ export const EgresadoCard = ({
                 <p className="card-text">
                   {ciudad_natal ? (
                     <>
-                      de {ciudad_natal} <br />
+                      de {ciudad_natal.ciudad} <br />
                     </>
                   ) : (
                     ""

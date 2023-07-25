@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Form, Row, Table } from "react-bootstrap";
+import { Badge, Col, Form, Row, Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "../hooks/useForm";
@@ -87,21 +87,28 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         carrera: "",
         facultad: "",
         universidad: "",
-        /* nivel: "",
-        posgrado: false, */
+        postgrado: false,
     };
-    const { formState, onInputChange, onResetForm } = useForm(initialForm);
+
+    const { formState, onInputChange, onResetForm, setFormState } =
+        useForm(initialForm);
+
+    const handleChangepostgrado = (e) => {
+        if (formState.postgrado) {
+            setFormState({ ...formState, postgrado: false });
+        } else {
+            setFormState({ ...formState, postgrado: true });
+        }
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         /* Validación React */
         if (
             formState.ciclo_egreso &&
             !!valueUniversidad &&
             !!valueFacultad &&
-            !!valueCarrera /* &&
-            !!valueNivel */
+            !!valueCarrera
         ) {
             formState.ciclo_egreso = `${formState.ciclo_egreso}-01-01`;
             valueCarrera.value
@@ -115,8 +122,9 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                 : (formState.universidad = valueUniversidad.label);
 
             setShow(false);
-            /* post de agregar egreso a egresado */
+
             if (addMode) {
+                console.log(formState);
                 const url = `${baseUrl}/crear/egresos/`;
                 axios
                     .post(url, formState, config)
@@ -167,7 +175,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     const [tipo, setTipo] = useState("");
     const messagePositivo = (
         <>
-            <b>¡Se agregó el nuevo título!</b>
+            <b>¡Se {addMode ? "agregó el nuevo" : "modificó el"} título!</b>
         </>
     );
     const messageNegativo = (
@@ -322,6 +330,13 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                             <tr key={egre.id}>
                                 <th scope="row">
                                     {egre.matricula ? egre.matricula : "--"}
+                                    {egre.postgrado && (
+                                        <>
+                                            <Badge pill bg="warning" text="dark">
+                                                POSTGRADO
+                                            </Badge>
+                                        </>
+                                    )}
                                 </th>
                                 <td>{egre.ciclo_egreso.split("-")[0]}</td>
                                 <td>{egre.carrera.carrera}</td>
@@ -491,14 +506,15 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                             </Form.Group>
                             <Form.Group
                                 className="mb-3"
-                                controlId="formPosgrado"
+                                controlId="formpostgrado"
                             >
                                 <Form.Check
                                     type="switch"
                                     id="custom-switch"
-                                    label="¿Es posgrado?"
+                                    label="¿Es postgrado?"
                                     name="fin"
-                                    /* onChange={handleChangeActual} */
+                                    onChange={handleChangepostgrado}
+                                    checked={formState.postgrado}
                                 />
                             </Form.Group>
                         </Form>
