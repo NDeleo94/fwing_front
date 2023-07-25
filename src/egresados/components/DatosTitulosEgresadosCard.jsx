@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Badge } from "react-bootstrap";
 
 export const DatosTitulosEgresadosCard = ({ egresos }) => {
     const [titulos, setTitulos] = useState([]);
@@ -7,7 +8,7 @@ export const DatosTitulosEgresadosCard = ({ egresos }) => {
             setTitulos(egresos);
         }
     }, [egresos]);
-
+    console.log(egresos);
     return (
         <>
             {titulos.length > 1 ? (
@@ -21,6 +22,18 @@ export const DatosTitulosEgresadosCard = ({ egresos }) => {
                                           key={element.id}
                                           className="list-group-item"
                                       >
+                                          {element.postgrado && (
+                                              <>
+                                                  <Badge
+                                                      pill
+                                                      bg="warning"
+                                                      text="dark"
+                                                  >
+                                                      POSTGRADO
+                                                  </Badge>
+                                              </>
+                                          )}
+                                          {"  "}
                                           <b>{element.carrera.carrera}</b> de
                                           <b>
                                               {" " +
