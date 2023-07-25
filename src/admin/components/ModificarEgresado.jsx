@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import axios from "axios";
 import { useConfig } from "../../auth/hooks/useConfig";
-import { Button, Col, Form, Image, Modal, Row } from "react-bootstrap";
+import {
+    Alert,
+    Button,
+    Col,
+    Container,
+    Form,
+    Image,
+    Modal,
+    Row,
+} from "react-bootstrap";
 import CreatableSelect from "react-select/creatable";
 import { Loading } from "../../ui/components/Loading";
 import { useForm } from "../../egresados/hooks/useForm";
@@ -25,7 +34,6 @@ export const ModificarEgresado = () => {
         fecha_nac: "",
         ciudad_natal: "",
         ciudad_actual: "",
-        domicilio: "",
         sexo: "",
         imagen: [
             {
@@ -39,6 +47,7 @@ export const ModificarEgresado = () => {
     const actualizar = () => {
         setLoading(true);
         setActualizador((a) => !a);
+        setChoosed(false);
     };
 
     useEffect(() => {
@@ -83,14 +92,35 @@ export const ModificarEgresado = () => {
             setDisabledButtonSearch(true);
         }
         setChoosed(value.value);
-        setOriginal(formState);
     };
     useEffect(() => {
         setDisabledButtonSearch(false);
-        /* setFormState(egresados.find((a) => a.id == choosed)); */
         egresados.map((a) => {
             if (a.id == choosed) {
                 setFormState({
+                    ...formState,
+                    id: a.id,
+                    apellidos: a.apellidos,
+                    nombres: a.nombres,
+                    ciudad_actual: {
+                        label: a.ciudad_actual?.ciudad,
+                        value: a.ciudad_actual.id,
+                    },
+                    ciudad_natal: {
+                        label: a.ciudad_natal?.ciudad,
+                        value: a.ciudad_natal.id,
+                    },
+                    email: a.email,
+                    fecha_nac: a.fecha_nac,
+                    dni: a.dni,
+                    nacionalidad: a.nacionalidad,
+                    sexo: a.sexo,
+                    imagen: {
+                        file: a?.imagen[0]?.file,
+                        url: a?.imagen[0]?.url,
+                    },
+                });
+                setOriginal({
                     ...formState,
                     id: a.id,
                     apellidos: a.apellidos,
@@ -149,7 +179,10 @@ export const ModificarEgresado = () => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelect_natal(false); // saca el loading
             setOptionsCities((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
-            setSelect_natal(newOption); // setea el valor (aqui va el formstate)
+            setFormState({
+                ...formState,
+                ciudad_natal: newOption,
+            }); // setea el valor (aqui va el formstate)
         }, 1000);
     };
     const handleCreateSelect_actual = (inputValue) => {
@@ -158,7 +191,10 @@ export const ModificarEgresado = () => {
             const newOption = createOption(inputValue); // crea la nueva opción
             setIsLoadingSelect_actual(false); // saca el loading
             setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
-            setSelect_actual(newOption); // setea el valor (aqui va el formstate)
+            setFormState({
+                ...formState,
+                ciudad_actual: newOption,
+            }); // setea el valor (aqui va el formstate)
         }, 1000);
     };
     /* FIN Create Selected funciones */
@@ -266,19 +302,19 @@ export const ModificarEgresado = () => {
     /* FIN Funciones para modificar foto */
 
     /* Botón para enviar cambios */
+    const [showAlert, setShowAlert] = useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
 
         if (EstaCompleto()) {
-            /* select_natal.value
-                ? (formState.ciudad_natal = select_natal.value)
-                : (formState.ciudad_natal = select_natal.label);
-            select_actual.value
-                ? (formState.ciudad_actual = select_actual.value)
-                : (formState.ciudad_actual = select_actual.label); */
+            console.log(formState);
+            formState.ciudad_natal.value
+                ? (formState.ciudad_natal = formState.ciudad_natal.value)
+                : (formState.ciudad_natal = formState.ciudad_natal.label);
+            formState.ciudad_actual.value
+                ? (formState.ciudad_actual = formState.ciudad_actual.value)
+                : (formState.ciudad_actual = formState.ciudad_actual.label);
 
-            formState.ciudad_actual = `pruebaCiudadActual`;
-            formState.ciudad_natal = `pruebaCiudadNatal`;
             const url = `${baseUrl}/editar/egresados/${formState.id}/`;
             axios
                 .put(url, formState, config)
@@ -289,7 +325,7 @@ export const ModificarEgresado = () => {
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
-                    actualizar;
+                    actualizar();
                 })
                 .catch(({ response }) => {
                     console.log(response.data);
@@ -300,7 +336,7 @@ export const ModificarEgresado = () => {
                     }, 5100);
                 });
         } else {
-            /* setShowAlert(true); */
+            setShowAlert(true);
         }
     };
     function EstaCompleto() {
@@ -311,10 +347,9 @@ export const ModificarEgresado = () => {
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            /* select_actual &&
-            select_natal && */
-            formState.domicilio &&
-            formState.sexo
+            formState.sexo &&
+            formState.ciudad_actual &&
+            formState.ciudad_natal
         );
     }
     function SeCambioAlgo(original, formState) {
@@ -326,7 +361,8 @@ export const ModificarEgresado = () => {
             original?.nacionalidad == formState?.nacionalidad &&
             original?.fecha_nac == formState?.fecha_nac &&
             original?.sexo == formState?.sexo &&
-            original?.domicilio == formState?.domicilio
+            original?.ciudad_actual?.label == formState?.ciudad_actual?.label &&
+            original?.ciudad_natal?.label == formState?.ciudad_natal?.label
         );
     }
     /* FIN Botón para enviar cambios */
@@ -588,43 +624,56 @@ export const ModificarEgresado = () => {
                                     </Form.Select>
                                 </div>
                             </div>
-                            {/* {showAlert &&
-                    !(
-                        formState.email &&
-                        formState.nacionalidad &&
-                        formState.fecha_nac &&
-                        formState.domicilio &&
-                        formState.sexo &&
-                        select_actual &&
-                        select_natal
-                    ) ? (
-                        <>
-                            <Container fluid className="my-3">
-                                <Alert
-                                    variant="danger"
-                                    onClose={() => setShowAlert(false)}
-                                    dismissible
-                                >
-                                    <b>
-                                        Formulario incompleto, falta: <br />
-                                    </b>
-                                    {!formState.email ? "E-mail," : ""}
-                                    {!formState.nacionalidad
-                                        ? " Nacionalidad,"
-                                        : ""}
-                                    {!formState.fecha_nac
-                                        ? " Fecha de Nacimiento,"
-                                        : ""}
-                                    {!formState.domicilio ? " Domicilio," : ""}
-                                    {!formState.sexo ? " Sexo," : ""}
-                                    {!select_natal ? " Ciudad Natal," : ""}
-                                    {!select_actual ? " Ciudad Actual." : "."}
-                                </Alert>
-                            </Container>
-                        </>
-                    ) : (
-                        ""
-                    )} */}
+                            {showAlert &&
+                            !(
+                                formState.email &&
+                                formState.nombres &&
+                                formState.apellidos &&
+                                formState.dni &&
+                                formState.nacionalidad &&
+                                formState.fecha_nac &&
+                                formState.sexo &&
+                                formState.ciudad_actual &&
+                                formState.ciudad_natal
+                            ) ? (
+                                <>
+                                    <Container fluid className="my-3">
+                                        <Alert
+                                            variant="danger"
+                                            onClose={() => setShowAlert(false)}
+                                            dismissible
+                                        >
+                                            <b>
+                                                Formulario incompleto, falta:{" "}
+                                                <br />
+                                            </b>
+                                            {!formState.email ? "E-mail," : ""}
+                                            {!formState.nombres
+                                                ? " Nombres,"
+                                                : ""}
+                                            {!formState.apellidos
+                                                ? " Apellidos,"
+                                                : ""}
+                                            {!formState.dni ? " DNI," : ""}
+                                            {!formState.nacionalidad
+                                                ? " Nacionalidad,"
+                                                : ""}
+                                            {!formState.fecha_nac
+                                                ? " Fecha de Nacimiento,"
+                                                : ""}
+                                            {!formState.sexo ? " Sexo," : ""}
+                                            {!formState.ciudad_natal
+                                                ? " Ciudad Natal,"
+                                                : ""}
+                                            {!formState.ciudad_actual
+                                                ? " Ciudad Actual."
+                                                : "."}
+                                        </Alert>
+                                    </Container>
+                                </>
+                            ) : (
+                                ""
+                            )}
                             <div className="col-12 my-4 d-grid">
                                 <Button
                                     type="submit"
@@ -635,36 +684,24 @@ export const ModificarEgresado = () => {
                                 </Button>
                             </div>
                         </Form>
-
-                        <ToastNotificacionPush
-                            mensaje={message}
-                            mostrar={show}
-                        />
-
-                        <Modal show={showModal} onHide={handleCloseModal}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>
-                                    Confirmar cambio de Foto
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>{mensajeModal}</Modal.Body>
-                            <Modal.Footer>
-                                <Button
-                                    variant="secondary"
-                                    onClick={handleCloseModal}
-                                >
-                                    Cerrar
-                                </Button>
-                                <Button
-                                    variant={tipoModal}
-                                    onClick={handleSubmitModal}
-                                >
-                                    {confirmarModal}
-                                </Button>
-                            </Modal.Footer>
-                        </Modal>
                     </>
                 )}
+                <ToastNotificacionPush mensaje={message} mostrar={show} />
+
+                <Modal show={showModal} onHide={handleCloseModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmar cambio de Foto</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{mensajeModal}</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                            Cerrar
+                        </Button>
+                        <Button variant={tipoModal} onClick={handleSubmitModal}>
+                            {confirmarModal}
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );

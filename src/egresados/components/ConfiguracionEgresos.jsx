@@ -125,9 +125,10 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                         CallToast(messagePositivo, "primary");
                         Actualizar();
                     })
-                    .catch(({ response }) =>
-                        CallToast(messageNegativo, "danger")
-                    );
+                    .catch(({ response }) => {
+                        CallToast(messageNegativo, "danger");
+                        console.log(response);
+                    });
             } else {
                 const url = `${baseUrl}/editar/egresos/${formState.usuario}/`;
                 console.log(formState);
