@@ -251,6 +251,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         formState.universidad = egreso.carrera.facultad.universidad;
         formState.facultad = egreso.carrera.facultad;
         formState.carrera = egreso.carrera;
+        formState.postgrado = egreso.postgrado;
         setValueUniversidad({
             label: egreso.carrera.facultad.universidad.universidad,
             value: egreso.carrera.facultad.universidad.id,
@@ -332,7 +333,11 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     {egre.matricula ? egre.matricula : "--"}
                                     {egre.postgrado && (
                                         <>
-                                            <Badge pill bg="warning" text="dark">
+                                            <Badge
+                                                pill
+                                                bg="warning"
+                                                text="dark"
+                                            >
                                                 POSTGRADO
                                             </Badge>
                                         </>

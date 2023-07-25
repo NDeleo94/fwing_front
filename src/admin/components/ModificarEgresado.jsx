@@ -42,6 +42,15 @@ export const ModificarEgresado = () => {
             },
         ],
     };
+    const initialFormFollowing = {
+        usuario: "",
+        matricula: "",
+        ciclo_egreso: "",
+        carrera: "",
+        facultad: "",
+        universidad: "",
+        postgrado: false,
+    };
     const { formState, setFormState, onInputChange } = useForm(initialForm);
     const [actualizador, setActualizador] = useState(false);
     const actualizar = () => {
@@ -202,12 +211,13 @@ export const ModificarEgresado = () => {
     /* Notificación Push */
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState();
-    const mensaje = (
+    const mensaje2 = (
         <>
             <b>¡Cambios guardados!</b>
             {` `}Actualizando perfil...
         </>
     );
+    const [tipo, setTipo] = useState("");
     /* Fin Notificación Push */
 
     /* Funciones para modificar foto */
@@ -320,7 +330,7 @@ export const ModificarEgresado = () => {
                 .put(url, formState, config)
                 .then(({ data }) => {
                     console.log(data);
-                    setMessage(mensaje);
+                    setMessage(mensaje2);
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
@@ -367,6 +377,56 @@ export const ModificarEgresado = () => {
     }
     /* FIN Botón para enviar cambios */
 
+    /* Eliminar Egresado */
+    const [waitAxiosDelete, setWaitAxiosDelete] = useState(false);
+    const [showModalDelete, setShowModalDelete] = useState(false);
+    const handleCloseModalDelete = () => {
+        setShowModalDelete(false);
+    };
+    function CallToast(mensaje, tipo) {
+        setTipo(tipo);
+        setMessage(mensaje);
+        setShow(true);
+        setTimeout(() => {
+            setShow(false);
+        }, 5100);
+    }
+    const messageEliminado = (
+        <>
+            <b>El egresado ha sido eliminado correctamente.</b>
+        </>
+    );
+    const messageNegativo = (
+        <>
+            <b>Problema con el servidor, intente nuevamente.</b>
+        </>
+    );
+    const handleSubmitModalDelete = (event) => {
+        event.preventDefault();
+
+        const url = `${baseUrl}/eliminar/egresados/${choosed}/`;
+        axios
+            .delete(url, config)
+            .then(({ data }) => {
+                console.log(data);
+                CallToast(messageEliminado, "primary");
+                setShowModalDelete(false);
+                setWaitAxiosDelete(true);
+                actualizar();
+            })
+            .catch(({ response }) => {
+                console.log(response);
+                CallToast(messageNegativo, "danger");
+                setShowModalDelete(false);
+                setWaitAxiosDelete(true);
+            });
+    };
+
+    const handleDelete = () => {
+        setShowModalDelete(true);
+        setWaitAxiosDelete(true);
+    };
+    /* FIN Eliminar Egresado */
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -394,6 +454,7 @@ export const ModificarEgresado = () => {
                 )}
                 {choosed && (
                     <>
+                        <h4>Foto de perfil:</h4>
                         <Form>
                             <Form.Group className="mb-3">
                                 <div className="row">
@@ -460,6 +521,7 @@ export const ModificarEgresado = () => {
 
                         <hr />
                         {/* react-bootstrap */}
+                        <h4>Datos personales:</h4>
                         <Form>
                             <div className="row mx-0">
                                 <div className="col-6">
@@ -684,9 +746,72 @@ export const ModificarEgresado = () => {
                                 </Button>
                             </div>
                         </Form>
+                        <hr />
+                        <h4>Datos de Seguimiento:</h4>
+                        <Form>
+                            <div className="row">
+                                <div className="col-6">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="formMatricula"
+                                    >
+                                        <Form.Label>Matrícula</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            /* value={formStateFollowing.matricula}
+                                            onChange={onInputChangeFollowing} */
+                                            name="matricula"
+                                        />
+                                    </Form.Group>
+                                </div>
+                                <div className="col-6">
+                                    <Form.Group
+                                        className="mb-3"
+                                        controlId="formAnioEgreso"
+                                    >
+                                        <Form.Label>Año de Egreso</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            /* value={
+                                                formStateFollowing.ciclo_egreso
+                                            }
+                                            onChange={onInputChangeFollowing} */
+                                            name="ciclo_egreso"
+                                            required
+                                        />
+                                    </Form.Group>
+                                </div>
+                            </div>
+                        </Form>
+                        <div className="col-12 mb-4 d-grid">
+                            <Button
+                                type="submit"
+                                /* onClick={handleSubmit}
+                                    disabled={SeCambioAlgo(original, formState)} */
+                            >
+                                Guardar cambios
+                            </Button>
+                        </div>
+                        <hr />
+                        <h4>Eliminar Egresado:</h4>
+                        <div className="col-12 mb-4 d-grid">
+                            <Button
+                                type="submit"
+                                variant="danger"
+                                onClick={handleDelete}
+                                disabled={waitAxiosDelete}
+                            >
+                                <strong>Eliminar Egresado</strong>
+                            </Button>
+                        </div>
                     </>
                 )}
-                <ToastNotificacionPush mensaje={message} mostrar={show} />
+
+                <ToastNotificacionPush
+                    mensaje={message}
+                    mostrar={show}
+                    tipo={tipo}
+                />
 
                 <Modal show={showModal} onHide={handleCloseModal}>
                     <Modal.Header closeButton>
@@ -699,6 +824,34 @@ export const ModificarEgresado = () => {
                         </Button>
                         <Button variant={tipoModal} onClick={handleSubmitModal}>
                             {confirmarModal}
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmar Eliminar Egresado</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        ¿Realmente desea eliminar a:
+                        <br />
+                        <b>
+                            {formState.apellidos}, {formState.nombres}
+                        </b>{" "}
+                        ?
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="secondary"
+                            onClick={handleCloseModalDelete}
+                        >
+                            Cerrar
+                        </Button>
+                        <Button
+                            variant="danger"
+                            onClick={handleSubmitModalDelete}
+                        >
+                            <strong>Eliminar</strong>
                         </Button>
                     </Modal.Footer>
                 </Modal>
