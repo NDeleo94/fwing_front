@@ -8,7 +8,6 @@ export const DatosTitulosEgresadosCard = ({ egresos }) => {
             setTitulos(egresos);
         }
     }, [egresos]);
-    console.log(egresos);
     return (
         <>
             {titulos.length > 1 ? (
