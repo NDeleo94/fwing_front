@@ -75,7 +75,6 @@ export const FiltrarEgresados = () => {
                 if (egre.carrera.following) {
                     ciclo_egreso_following = egre.ciclo_egreso;
                 }
-                console.log(ciclo_egreso_following)
             });
 
             if (formState.nombre !== "") {

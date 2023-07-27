@@ -41,14 +41,16 @@ export const ModificarEgresado = () => {
                 url: "",
             },
         ],
-    };
-    const initialFormFollowing = {
-        usuario: "",
         matricula: "",
         ciclo_egreso: "",
-        carrera: "",
-        facultad: "",
-        universidad: "",
+        id_egreso: "",
+    };
+    const modelFormFollowing = {
+        matricula: "",
+        ciclo_egreso: "",
+        carrera: 1,
+        facultad: 1,
+        universidad: 1,
         postgrado: false,
     };
     const { formState, setFormState, onInputChange } = useForm(initialForm);
@@ -107,6 +109,17 @@ export const ModificarEgresado = () => {
         setDisabledButtonSearch(false);
         egresados.map((a) => {
             if (a.id == choosed) {
+                console.log(a);
+                let ciclo_egreso_following;
+                let matricula_following;
+                let id_egreso_following;
+                a.egresos.map((egre) => {
+                    if (egre.carrera.following) {
+                        id_egreso_following = egre.id;
+                        ciclo_egreso_following = egre.ciclo_egreso;
+                        matricula_following = egre.matricula;
+                    }
+                });
                 setFormState({
                     ...formState,
                     id: a.id,
@@ -129,9 +142,15 @@ export const ModificarEgresado = () => {
                         file: a?.imagen[0]?.file,
                         url: a?.imagen[0]?.url,
                     },
+                    matricula: matricula_following,
+                    ciclo_egreso: ciclo_egreso_following,
+                    id_egreso: id_egreso_following,
                 });
                 setOriginal({
                     ...formState,
+                    matricula: matricula_following,
+                    id_egreso: id_egreso_following,
+                    ciclo_egreso: ciclo_egreso_following,
                     id: a.id,
                     apellidos: a.apellidos,
                     nombres: a.nombres,
@@ -228,6 +247,7 @@ export const ModificarEgresado = () => {
         event.preventDefault();
         if (!event.target.form[0].files[0]) {
             setMessage(<>¡Debe elegir una imagen!</>);
+            setTipo("danger");
             setShow(true);
             setTimeout(function () {
                 setShow(false);
@@ -279,12 +299,26 @@ export const ModificarEgresado = () => {
                     console.log(data);
                     setDisabledButtonDeletedPhoto(false);
                     setMessage(<>¡Foto eliminada con éxito!</>);
+                    setTipo("primary");
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
                 })
-                .catch(({ response }) => console.log(response.data));
+                .catch(({ response }) => {
+                    console.log(response.data);
+                    setDisabledButtonDeletedPhoto(false);
+                    setMessage(
+                        <>
+                            <b>{response.data}</b>
+                        </>
+                    );
+                    setTipo("danger");
+                    setShow(true);
+                    setTimeout(function () {
+                        setShow(false);
+                    }, 5100);
+                });
         }
         if (tipoModal == "primary") {
             const url = `${baseUrl}/crear/imagenes/`;
@@ -300,25 +334,38 @@ export const ModificarEgresado = () => {
                     console.log(data);
                     setDisabledButtonUploadPhoto(false);
                     setMessage(<>¡Foto agregada con éxito!</>);
+                    setTipo("primary");
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
                 })
-                .catch(({ response }) => console.log(response.data));
+                .catch(({ response }) => {
+                    console.log(response.data);
+                    setDisabledButtonUploadPhoto(false);
+                    setMessage(
+                        <>
+                            <b>{response.data}</b>
+                        </>
+                    );
+                    setTipo("danger");
+                    setShow(true);
+                    setTimeout(function () {
+                        setShow(false);
+                    }, 5100);
+                });
         }
         setShowModal(false);
     };
     /* Fin modales para confirmar eliminar o cambiar foto */
     /* FIN Funciones para modificar foto */
 
-    /* Botón para enviar cambios */
+    /* Botón para enviar cambios  de datos personales*/
     const [showAlert, setShowAlert] = useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
 
         if (EstaCompleto()) {
-            console.log(formState);
             formState.ciudad_natal.value
                 ? (formState.ciudad_natal = formState.ciudad_natal.value)
                 : (formState.ciudad_natal = formState.ciudad_natal.label);
@@ -327,12 +374,25 @@ export const ModificarEgresado = () => {
                 : (formState.ciudad_actual = formState.ciudad_actual.label);
 
             const url = `${baseUrl}/editar/egresados/${formState.id}/`;
+            let formDatosPersonales = {
+                id: formState.id,
+                nombres: formState.nombres,
+                apellidos: formState.apellidos,
+                dni: formState.dni,
+                email: formState.email,
+                nacionalidad: formState.nacionalidad,
+                fecha_nac: formState.fecha_nac,
+                ciudad_natal: formState.ciudad_natal,
+                ciudad_actual: formState.ciudad_actual,
+                sexo: formState.sexo,
+            };
+
             axios
-                .put(url, formState, config)
+                .put(url, formDatosPersonales, config)
                 .then(({ data }) => {
                     console.log(data);
                     setMessage(mensaje2);
-                    setTipo("primary")
+                    setTipo("primary");
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
@@ -342,7 +402,7 @@ export const ModificarEgresado = () => {
                 .catch(({ response }) => {
                     console.log(response.data);
                     setMessage(<>{response.data.detail}</>);
-                    setTipo("danger")
+                    setTipo("danger");
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
@@ -380,11 +440,58 @@ export const ModificarEgresado = () => {
     }
     /* FIN Botón para enviar cambios */
 
+    /* Botón para enviar cambios en datos de seguimiento */
+    const [showAlertFollowing, setShowAlertFollowing] = useState(false);
+    const [waitAxiosDatosDeEgreso, setWaitAxiosDatosDeEgreso] = useState(false);
+    const handleSubmitFollowing = (event) => {
+        event.preventDefault();
+        setWaitAxiosDatosDeEgreso(true);
+
+        if (EstaCompletoFollowing()) {
+            const url = `${baseUrl}/editar/egresos/${formState.id_egreso}/`;
+            let formDatosFollowing = {
+                ...modelFormFollowing,
+                matricula: formState.matricula || "",
+                ciclo_egreso: formState.ciclo_egreso,
+                usuario: formState.id,
+            };
+            console.log(formDatosFollowing);
+
+            axios
+                .put(url, formDatosFollowing, config)
+                .then(({ data }) => {
+                    console.log(data);
+                    CallToast(messagePositivo, "primary");
+                    setWaitAxiosDatosDeEgreso(false);
+                    actualizar();
+                })
+                .catch(({ response }) => {
+                    console.log(response);
+                    setWaitAxiosDatosDeEgreso(false);
+                    CallToast(messageNegativo, "danger");
+                });
+        } else {
+            setWaitAxiosDatosDeEgreso(false);
+            CallToast("¡Falta fecha de egreso!", "danger");
+        }
+    };
+    function EstaCompletoFollowing() {
+        return formState.ciclo_egreso;
+    }
+    function SeCambioAlgoFollowing(original, formState) {
+        return (
+            original?.matricula == formState?.matricula &&
+            original?.ciclo_egreso == formState?.ciclo_egreso
+        );
+    }
+    /* FIN Botón para enviar cambios en datos de seguimiento */
+
     /* Eliminar Egresado */
     const [waitAxiosDelete, setWaitAxiosDelete] = useState(false);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const handleCloseModalDelete = () => {
         setShowModalDelete(false);
+        setWaitAxiosDelete(false);
     };
     function CallToast(mensaje, tipo) {
         setTipo(tipo);
@@ -397,6 +504,11 @@ export const ModificarEgresado = () => {
     const messageEliminado = (
         <>
             <b>El egresado ha sido eliminado correctamente.</b>
+        </>
+    );
+    const messagePositivo = (
+        <>
+            <b>El egresado ha sido modificado correctamente.</b>
         </>
     );
     const messageNegativo = (
@@ -414,14 +526,14 @@ export const ModificarEgresado = () => {
                 console.log(data);
                 CallToast(messageEliminado, "primary");
                 setShowModalDelete(false);
-                setWaitAxiosDelete(true);
+                setWaitAxiosDelete(false);
                 actualizar();
             })
             .catch(({ response }) => {
                 console.log(response);
                 CallToast(messageNegativo, "danger");
                 setShowModalDelete(false);
-                setWaitAxiosDelete(true);
+                setWaitAxiosDelete(false);
             });
     };
 
@@ -761,8 +873,8 @@ export const ModificarEgresado = () => {
                                         <Form.Label>Matrícula</Form.Label>
                                         <Form.Control
                                             type="number"
-                                            /* value={formStateFollowing.matricula}
-                                            onChange={onInputChangeFollowing} */
+                                            value={formState.matricula}
+                                            onChange={onInputChange}
                                             name="matricula"
                                         />
                                     </Form.Group>
@@ -772,15 +884,12 @@ export const ModificarEgresado = () => {
                                         className="mb-3"
                                         controlId="formAnioEgreso"
                                     >
-                                        <Form.Label>Año de Egreso</Form.Label>
+                                        <Form.Label>Fecha de Egreso</Form.Label>
                                         <Form.Control
-                                            type="number"
-                                            /* value={
-                                                formStateFollowing.ciclo_egreso
-                                            }
-                                            onChange={onInputChangeFollowing} */
+                                            type="date"
+                                            value={formState.ciclo_egreso}
+                                            onChange={onInputChange}
                                             name="ciclo_egreso"
-                                            required
                                         />
                                     </Form.Group>
                                 </div>
@@ -789,8 +898,13 @@ export const ModificarEgresado = () => {
                         <div className="col-12 mb-4 d-grid">
                             <Button
                                 type="submit"
-                                /* onClick={handleSubmit}
-                                    disabled={SeCambioAlgo(original, formState)} */
+                                onClick={handleSubmitFollowing}
+                                disabled={
+                                    SeCambioAlgoFollowing(
+                                        original,
+                                        formState
+                                    ) || waitAxiosDatosDeEgreso
+                                }
                             >
                                 Guardar cambios
                             </Button>

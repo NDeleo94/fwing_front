@@ -139,8 +139,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                     });
             } else {
                 const url = `${baseUrl}/editar/egresos/${formState.usuario}/`;
-                console.log(formState);
                 formState.usuario = egresado.id;
+                console.log(formState);
                 axios
                     .put(url, formState, config)
                     .then(({ data }) => {

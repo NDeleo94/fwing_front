@@ -65,7 +65,7 @@ export const ConfiguracionPage = () => {
                                             action
                                             href="#modificarEgresado"
                                         >
-                                            Modificar Egresado
+                                            Modificar/Eliminar Egresado
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
