@@ -15,21 +15,25 @@ function tiene(obj, key, value) {
 
 function despuesDe(obj, value) {
     try {
-        if (value.split("-")[0] > obj.egresos[obj.egresos.length-1].ciclo_egreso.split("-")[0]) {
+        if (
+            value.split("-")[0] >
+            obj.split("-")[0]
+        ) {
             return false;
         } else if (
-            value.split("-")[0] == obj.egresos[obj.egresos.length-1].ciclo_egreso.split("-")[0]
+            value.split("-")[0] ==
+            obj.split("-")[0]
         ) {
             if (
-                value.split("-")[1] > obj.egresos[0].ciclo_egreso.split("-")[1]
+                value.split("-")[1] > obj.split("-")[1]
             ) {
                 return false;
             } else if (
-                value.split("-")[1] == obj.egresos[0].ciclo_egreso.split("-")[1]
+                value.split("-")[1] == obj.split("-")[1]
             ) {
                 if (
                     value.split("-")[2] >
-                    obj.egresos[0].ciclo_egreso.split("-")[2]
+                    obj.split("-")[2]
                 ) {
                     return false;
                 }
@@ -66,6 +70,13 @@ export const FiltrarEgresados = () => {
         setLoading(true);
         const egresadosFiltrados = data.filter((egresado) => {
             let deberiaEstar = true;
+            let ciclo_egreso_following;
+            egresado.egresos.map((egre) => {
+                if (egre.carrera.following) {
+                    ciclo_egreso_following = egre.ciclo_egreso;
+                }
+                console.log(ciclo_egreso_following)
+            });
 
             if (formState.nombre !== "") {
                 deberiaEstar =
@@ -98,12 +109,12 @@ export const FiltrarEgresados = () => {
 
             if (formState.desde !== "") {
                 deberiaEstar =
-                    deberiaEstar && despuesDe(egresado, formState.desde);
+                    deberiaEstar && despuesDe(ciclo_egreso_following, formState.desde);
             }
 
             if (formState.hasta !== "") {
                 deberiaEstar =
-                    deberiaEstar && !despuesDe(egresado, formState.hasta);
+                    deberiaEstar && !despuesDe(ciclo_egreso_following, formState.hasta);
             }
 
             if (formState.tieneEmail) {
@@ -302,7 +313,12 @@ export const FiltrarEgresados = () => {
                                     <td>{eg.apellidos}</td>
                                     <td>{eg.nombres}</td>
                                     <td>{eg.sexo}</td>
-                                    <td>{eg.egresos[eg.egresos.length-1]?.ciclo_egreso}</td>
+                                    <td>
+                                        {
+                                            eg.egresos[eg.egresos.length - 1]
+                                                ?.ciclo_egreso
+                                        }
+                                    </td>
                                     <td>{eg.email}</td>
                                     <td>
                                         {eg.last_login?.split("-")[0]}-
