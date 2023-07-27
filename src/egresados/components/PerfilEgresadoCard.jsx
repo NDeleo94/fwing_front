@@ -16,7 +16,11 @@ export const PerfilEgresadoCard = ({
 
     useEffect(() => {
         if (egresos) {
-            setPrimeraCarrera(egresos[egresos.length - 1].carrera.carrera);
+            egresos.map((egre)=>{
+                if(egre.carrera.following){
+                    setPrimeraCarrera(egre.carrera.carrera)
+                }
+            })
         }
         if (!privacidad) {
             setPrivacity({ ciudad_natal: true });

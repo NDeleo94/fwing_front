@@ -354,10 +354,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                               .universidad}{" "}
                                 </td>
                                 <td>
-                                    {egre.id !==
-                                    datoEgresado.egresos[
-                                        datoEgresado.egresos.length - 1
-                                    ].id ? (
+                                    {!egre.carrera.following ? (
                                         <>
                                             <Row>
                                                 <Col>

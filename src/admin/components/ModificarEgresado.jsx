@@ -57,6 +57,7 @@ export const ModificarEgresado = () => {
         setLoading(true);
         setActualizador((a) => !a);
         setChoosed(false);
+        setValue("");
     };
 
     useEffect(() => {
@@ -331,6 +332,7 @@ export const ModificarEgresado = () => {
                 .then(({ data }) => {
                     console.log(data);
                     setMessage(mensaje2);
+                    setTipo("primary")
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
@@ -340,6 +342,7 @@ export const ModificarEgresado = () => {
                 .catch(({ response }) => {
                     console.log(response.data);
                     setMessage(<>{response.data.detail}</>);
+                    setTipo("danger")
                     setShow(true);
                     setTimeout(function () {
                         setShow(false);
