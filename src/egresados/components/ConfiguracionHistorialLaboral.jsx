@@ -7,6 +7,23 @@ import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
 import Select from "react-select";
 
+const seniority = [
+    { value: null, label: "NS/NC" },
+    { value: 1, label: "Trainee" },
+    { value: 2, label: "Junior" },
+    { value: 3, label: "Semi-Senior" },
+    { value: 4, label: "Senior" },
+    { value: 5, label: "Director" },
+    { value: 6, label: "Vice-Presidente" },
+    { value: 7, label: "Jefe" },
+];
+
+const modalidad = [
+    { value: 1, label: "Presencial" },
+    { value: 2, label: "Híbrido" },
+    { value: 3, label: "Remoto" },
+];
+
 export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [show, setShow] = useState(false);
     const [addMode, setAddMode] = useState(false);
@@ -14,6 +31,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [defaultOptionsPuestos, setDefaultOptionsPuestos] = useState([]);
     const [defaultOptionsOrganizaciones, setDefaultOptionsOrganizaciones] =
         useState([]);
+    const [defaultOptionsCiudades, setDefaultOptionsCiudades] = useState([]);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
 
@@ -53,12 +71,17 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             .get(`${baseUrl}/egresados/${egresado.id}`)
             .then(({ data }) => setDatoEgresado(data))
             .catch((error) => console.log(error));
-        setOptions(
-            niveles.map((u) => ({
-                value: `${u}`,
-                label: `${u}`,
-            }))
-        );
+        axios
+            .get(`${baseUrl}/ciudades/`)
+            .then(({ data }) => {
+                setDefaultOptionsCiudades(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.ciudad,
+                    }))
+                );
+            })
+            .catch((error) => console.log(error));
     }, [actualizador]);
 
     const handleClose = () => setShow(false);
@@ -67,9 +90,13 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setShowAlert(false);
         setEsActual(false);
         setValueOrganizacion();
+        setValueCiudad();
         setValuePuesto();
+        setValueModalidad();
+        setValueNivel();
         onResetForm();
         setShow(true);
+        setWaitAxios(false);
     };
 
     const [esActual, setEsActual] = useState(false);
@@ -80,6 +107,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         organizacion: "",
         inicio: "",
         fin: "",
+        ciudad: "",
+        seniority: "",
+        modalidad: "",
     };
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
@@ -97,6 +127,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         if (
             !!valueOrganizacion &&
             !!valuePuesto &&
+            !!valueNivel &&
+            !!valueModalidad &&
+            !!valueCiudad &&
             formState.inicio &&
             (esActual || formState.fin) &&
             EsInicioAntesQueFin()
@@ -107,8 +140,13 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             valueOrganizacion.value
                 ? (formState.organizacion = valueOrganizacion.value)
                 : (formState.organizacion = valueOrganizacion.label);
-
+            valueCiudad.value
+                ? (formState.ciudad = valueCiudad.value)
+                : (formState.ciudad = valueCiudad.label);
+            formState.seniority = valueNivel.value;
+            formState.modalidad = valueModalidad.value;
             /* post de agregar trabajo a egresado */
+            console.log(formState);
             if (addMode) {
                 const url = `${baseUrl}/crear/actividades/`;
                 axios
@@ -120,9 +158,11 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                         CallToast(messagePositivo, "primary");
                         setShow(false);
                     })
-                    .catch(({ response }) =>
-                        CallToast(messageNegativo, "danger")
-                    );
+                    .catch(({ response }) => {
+                        setWaitAxios(false);
+                        console.log(response);
+                        CallToast(messageNegativo, "danger");
+                    });
             } else {
                 const url = `${baseUrl}/editar/actividades/${formState.usuario}/`;
                 formState.usuario = egresado.id;
@@ -136,6 +176,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                         setShow(false);
                     })
                     .catch(({ response }) => {
+                        setWaitAxios(false);
                         console.log(response);
                         CallToast(messageNegativo, "danger");
                     });
@@ -143,7 +184,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         } else {
             setShowAlert(true);
             setWaitAxios(false);
-            setShow(false);
         }
     };
 
@@ -185,9 +225,12 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     const [isLoadingSelectPuesto, setIsLoadingSelectPuesto] = useState(false);
     const [isLoadingSelectOrganizacion, setIsLoadingSelectOrganizacion] =
         useState(false);
+    const [isLoadingSelectCiudad, setIsLoadingSelectCiudad] = useState(false);
 
     const [valuePuesto, setValuePuesto] = useState();
     const [valueOrganizacion, setValueOrganizacion] = useState();
+    const [valueCiudad, setValueCiudad] = useState();
+
     const handleCreateSelectPuesto = (inputValue) => {
         setIsLoadingSelectPuesto(true);
         setTimeout(() => {
@@ -204,6 +247,15 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             setIsLoadingSelectOrganizacion(false); // saca el loading
             setDefaultOptionsOrganizaciones((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
             setValueOrganizacion(newOption); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    const handleCreateSelectCiudad = (inputValue) => {
+        setIsLoadingSelectCiudad(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelectCiudad(false); // saca el loading
+            setDefaultOptionsCiudades((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setValueCiudad(newOption); // setea el valor (aqui va el formstate)
         }, 1000);
     };
     /* Fin Select-input de carrera-facultad-universidad */
@@ -227,19 +279,8 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
     }
 
     /* Select nivel de trabajo */
-    const niveles = [
-        "NS/NC",
-        "Trainee",
-        "Junior",
-        "Semi-Senior",
-        "Senior",
-        "Corporativo",
-        "Socio",
-        "Socio Fundador",
-    ];
-
-    const [options, setOptions] = useState([]);
     const [valueNivel, setValueNivel] = useState();
+    const [valueModalidad, setValueModalidad] = useState();
     /* Fin Select nivel de trabajo */
 
     /* botón Delete */
@@ -301,6 +342,24 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             label: trabajo.organizacion.organizacion,
             value: trabajo.organizacion.id,
         });
+        setValueNivel(
+            seniority.map((s) => {
+                if (s.value == trabajo.seniority) {
+                    return s;
+                }
+            })
+        );
+        setValueModalidad(
+            modalidad.map((s) => {
+                if (s.value == trabajo.modalidad) {
+                    return s;
+                }
+            })
+        );
+        setValueCiudad({
+            label: trabajo.ciudad.ciudad,
+            value: trabajo.ciudad.id,
+        });
         setValuePuesto({
             label: trabajo.puesto.puesto,
             value: trabajo.puesto.id,
@@ -308,7 +367,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setShow(true);
     };
     /* FIN Botón Change Trabajo */
-
+    console.log(datoEgresado);
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -327,6 +386,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                             <th scope="col">#</th>
                             <th scope="col">Puesto</th>
                             <th scope="col">Organización</th>
+                            <th scope="col">Ciudad</th>
+                            <th scope="col">Seniority</th>
+                            <th scope="col">Modalidad</th>
                             <th scope="col">Inicio</th>
                             <th scope="col">Fin</th>
                             <th scope="col">Acciones</th>
@@ -338,6 +400,21 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                 <th scope="row">{index + 1}</th>
                                 <td>{egre.puesto.puesto}</td>
                                 <td>{egre.organizacion.organizacion}</td>
+                                <td>{egre.ciudad.ciudad}</td>
+                                <td>
+                                    {seniority.map((s) => {
+                                        if (s.value == egre.seniority) {
+                                            return `${s.label}`;
+                                        }
+                                    })}
+                                </td>
+                                <td>
+                                    {modalidad.map((s) => {
+                                        if (s.value == egre.modalidad) {
+                                            return `${s.label}`;
+                                        }
+                                    })}
+                                </td>
                                 <td>{egre.inicio}</td>
                                 <td>{egre.fin ? egre.fin : "Actual"}</td>
                                 <td>
@@ -421,6 +498,22 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                     value={valueOrganizacion}
                                 />
                             </Form.Group>
+                            <Form.Group className="mb-3" controlId="formCiudad">
+                                <Form.Label>
+                                    Ciudad de la Organización
+                                </Form.Label>
+                                <CreatableSelect
+                                    isClearable
+                                    isDisabled={isLoadingSelectCiudad}
+                                    isLoading={isLoadingSelectCiudad}
+                                    onChange={(newValue) =>
+                                        setValueCiudad(newValue)
+                                    }
+                                    onCreateOption={handleCreateSelectCiudad}
+                                    options={defaultOptionsCiudades}
+                                    value={valueCiudad}
+                                />
+                            </Form.Group>
                             <div className="row">
                                 <div className="col-6">
                                     <Form.Group
@@ -466,18 +559,35 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                     </Form.Group>
                                 </div>
                             </div>
-                            <Form.Label>Nivel Laboral</Form.Label>
-                            <Select
-                                options={options}
-                                value={valueNivel}
-                                onChange={(newValue) => setValueNivel(newValue)}
-                            />
+                            <Form.Group className="mb-3">
+                                <Form.Label>Nivel Laboral</Form.Label>
+                                <Select
+                                    options={seniority}
+                                    value={valueNivel}
+                                    onChange={(newValue) =>
+                                        setValueNivel(newValue)
+                                    }
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Modalidad</Form.Label>
+                                <Select
+                                    options={modalidad}
+                                    value={valueModalidad}
+                                    onChange={(newValue) =>
+                                        setValueModalidad(newValue)
+                                    }
+                                />
+                            </Form.Group>
                         </Form>
                         {showAlert &&
                         !(
                             formState.inicio &&
                             valuePuesto &&
                             valueOrganizacion &&
+                            valueCiudad &&
+                            valueModalidad &&
+                            valueNivel &&
                             (esActual || formState.fin) &&
                             EsInicioAntesQueFin()
                         ) ? (
@@ -491,6 +601,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                         formState.inicio &&
                                         valuePuesto &&
                                         valueOrganizacion &&
+                                        valueCiudad &&
+                                        valueModalidad &&
+                                        valueNivel &&
                                         (esActual || formState.fin)
                                     ) ? (
                                         <b>
@@ -505,6 +618,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                         : ""}
                                     {!valuePuesto ? " Puesto laboral," : ""}
                                     {!valueOrganizacion ? " Organizacion," : ""}
+                                    {!valueCiudad ? " Ciudad," : ""}
+                                    {!valueModalidad ? " Modalidad," : ""}
+                                    {!valueNivel ? " Nivel," : ""}
                                     {!(formState.fin || esActual)
                                         ? " Fin de Trabajo."
                                         : ""}
@@ -512,6 +628,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                         formState.inicio &&
                                         valuePuesto &&
                                         valueOrganizacion &&
+                                        valueCiudad &&
+                                        valueModalidad &&
+                                        valueNivel &&
                                         (esActual || formState.fin)
                                     ) ? (
                                         <br />

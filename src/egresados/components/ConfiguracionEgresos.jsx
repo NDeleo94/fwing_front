@@ -509,7 +509,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     onChange={(newValue) => {
                                         setValueCarrera(newValue);
                                         if (
-                                            newValue.label ==
+                                            newValue?.label ==
                                             "Ingeniería en Computación"
                                         ) {
                                             setCarreraRepetida(true);

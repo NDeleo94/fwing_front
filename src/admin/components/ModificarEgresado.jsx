@@ -127,11 +127,11 @@ export const ModificarEgresado = () => {
                     nombres: a.nombres,
                     ciudad_actual: {
                         label: a.ciudad_actual?.ciudad,
-                        value: a.ciudad_actual.id,
+                        value: a.ciudad_actual?.id,
                     },
                     ciudad_natal: {
                         label: a.ciudad_natal?.ciudad,
-                        value: a.ciudad_natal.id,
+                        value: a.ciudad_natal?.id,
                     },
                     email: a.email,
                     fecha_nac: a.fecha_nac,
@@ -156,11 +156,11 @@ export const ModificarEgresado = () => {
                     nombres: a.nombres,
                     ciudad_actual: {
                         label: a.ciudad_actual?.ciudad,
-                        value: a.ciudad_actual.id,
+                        value: a.ciudad_actual?.id,
                     },
                     ciudad_natal: {
                         label: a.ciudad_natal?.ciudad,
-                        value: a.ciudad_natal.id,
+                        value: a.ciudad_natal?.id,
                     },
                     email: a.email,
                     fecha_nac: a.fecha_nac,
