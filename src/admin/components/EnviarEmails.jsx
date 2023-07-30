@@ -37,7 +37,7 @@ export const EnviarEmails = () => {
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Título</th>
+                            <th scope="col">Asunto</th>
                             <th scope="col">Cuerpo</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -93,7 +93,7 @@ export const EnviarEmails = () => {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Fecha y Hora</th>
-                            <th scope="col">Título</th>
+                            <th scope="col">Asunto</th>
                             <th scope="col">Cuerpo</th>
                             <th scope="col">Enviado a:</th>
                         </tr>

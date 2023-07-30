@@ -20,6 +20,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         useState([]);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
+
     /* Prueba actualizador */
     const [datoEgresado, setDatoEgresado] = useState(egresado);
 
@@ -28,6 +29,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setActualizador(!actualizador);
     }
     /* FIN Prueba actualizador */
+
     useEffect(() => {
         axios
             .get(`${baseUrl}/universidades/`)
@@ -104,11 +106,13 @@ export const ConfiguracionEgresos = ({ egresado }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         /* Validación React */
+        console.log(valueCarrera);
         if (
             formState.ciclo_egreso &&
             !!valueUniversidad &&
             !!valueFacultad &&
-            !!valueCarrera
+            !!valueCarrera &&
+            !carreraRepetida
         ) {
             formState.ciclo_egreso = `${formState.ciclo_egreso}-01-01`;
             valueCarrera.value
@@ -304,7 +308,11 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         setToDelete([]);
     };
     /* Fin Función eliminar */
-
+    const [carreraRepetida, setCarreraRepetida] = useState(false);
+    function isFollowingRepeat(carrera) {
+        console.log(carrera);
+        return carrera == "Ingeniería en Computación";
+    }
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -498,9 +506,17 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                         !valueUniversidad
                                     }
                                     isLoading={isLoadingSelectCarrera}
-                                    onChange={(newValue) =>
-                                        setValueCarrera(newValue)
-                                    }
+                                    onChange={(newValue) => {
+                                        setValueCarrera(newValue);
+                                        if (
+                                            newValue.label ==
+                                            "Ingeniería en Computación"
+                                        ) {
+                                            setCarreraRepetida(true);
+                                        } else {
+                                            setCarreraRepetida(false);
+                                        }
+                                    }}
                                     onCreateOption={handleCreateSelectCarrera}
                                     options={defaultOptionsCarreras}
                                     value={valueCarrera}
@@ -525,7 +541,8 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                             formState.ciclo_egreso &&
                             valueUniversidad &&
                             valueFacultad &&
-                            valueCarrera
+                            valueCarrera &&
+                            !carreraRepetida
                         ) ? (
                             <>
                                 <Alert
@@ -534,15 +551,33 @@ export const ConfiguracionEgresos = ({ egresado }) => {
                                     onClose={() => setShowAlert(false)}
                                     dismissible
                                 >
-                                    <b>
-                                        Formulario incompleto, falta: <br />
-                                    </b>
-                                    {!formState.ciclo_egreso
-                                        ? "Año de Egreso,"
-                                        : ""}
-                                    {!valueUniversidad ? " Universidad," : ""}
-                                    {!valueFacultad ? " Facultad," : ""}
-                                    {!valueCarrera ? " Carrera." : "."}
+                                    {(!formState.ciclo_egreso ||
+                                        !valueUniversidad ||
+                                        !valueFacultad ||
+                                        !valueCarrera) && (
+                                        <>
+                                            <b>
+                                                Formulario incompleto, falta:{" "}
+                                                <br />
+                                            </b>
+                                            {!formState.ciclo_egreso
+                                                ? "Año de Egreso,"
+                                                : ""}
+                                            {!valueUniversidad
+                                                ? " Universidad,"
+                                                : ""}
+                                            {!valueFacultad ? " Facultad," : ""}
+                                            {!valueCarrera ? " Carrera." : "."}
+                                            <br />
+                                            <br />
+                                        </>
+                                    )}
+                                    {carreraRepetida && (
+                                        <>
+                                            No se puede repetir la carrera{"  "}
+                                            <b>Ingeniería en Computación</b>
+                                        </>
+                                    )}
                                 </Alert>
                             </>
                         ) : (
