@@ -147,6 +147,8 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             formState.modalidad = valueModalidad.value;
             /* post de agregar trabajo a egresado */
             console.log(formState);
+            console.log(valueNivel);
+            console.log(valueModalidad);
             if (addMode) {
                 const url = `${baseUrl}/crear/actividades/`;
                 axios
@@ -334,6 +336,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         formState.organizacion = trabajo.organizacion;
         formState.inicio = trabajo.inicio;
         formState.fin = trabajo?.fin;
+
         if (!trabajo.fin) {
             setEsActual(true);
             formState.fin = null;
@@ -342,19 +345,9 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             label: trabajo.organizacion.organizacion,
             value: trabajo.organizacion.id,
         });
-        setValueNivel(
-            seniority.map((s) => {
-                if (s.value == trabajo.seniority) {
-                    return s;
-                }
-            })
-        );
+        setValueNivel(seniority.find((vv) => vv.value == trabajo.seniority));
         setValueModalidad(
-            modalidad.map((s) => {
-                if (s.value == trabajo.modalidad) {
-                    return s;
-                }
-            })
+            modalidad.find((vv) => vv.value == trabajo.modalidad)
         );
         setValueCiudad({
             label: trabajo.ciudad.ciudad,
@@ -367,7 +360,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setShow(true);
     };
     /* FIN Botón Change Trabajo */
-    console.log(datoEgresado);
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
