@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "../../egresados/hooks/useForm";
 import { ToastNotificacionPush } from "../../egresados/components/ToastNotificacionPush";
 import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
+import CreatableSelect from "react-select/creatable";
+import { Form } from "react-bootstrap";
 
 export const IngresarEgresadoForm = () => {
     const initialForm = {
@@ -10,6 +12,7 @@ export const IngresarEgresadoForm = () => {
         nombres: "",
         dni: 0,
         email: "",
+        fecha_nac: "",
         ciclo_egreso: "",
         nacionalidad: "",
         ciudad_natal: "",
@@ -17,27 +20,101 @@ export const IngresarEgresadoForm = () => {
         sexo: "",
         carrera: 0,
     };
-    const { formState, onInputChange, onResetForm } = useForm(initialForm);
+    const { formState, onInputChange, onResetForm, setFormState } =
+        useForm(initialForm);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setWaitAxios(true);
         console.log(formState);
-        const url = `${urlBase}/crear/egresados/`;
-
-        axios
-            .post(url, formState, config)
-            .then(({ data }) => {
-                console.log(data);
-                CallToast(mensajePositivo, "primary");
-            })
-            .catch(({ response }) => {
-                CallToast(mensajeNegativo, "danger");
-                console.log(response);
-            });
+        if (
+            formState.apellidos &&
+            formState.nombres &&
+            formState.dni &&
+            formState.fecha_nac &&
+            formState.nacionalidad &&
+            formState.sexo &&
+            formState.carrera &&
+            formState.ciclo_egreso
+        ) {
+            const url = `${urlBase}/crear/egresados/`;
+            formState.ciudad_natal.value
+                ? (formState.ciudad_natal = formState.ciudad_natal.value)
+                : (formState.ciudad_natal = formState.ciudad_natal.label);
+            formState.ciudad_actual.value
+                ? (formState.ciudad_actual = formState.ciudad_actual.value)
+                : (formState.ciudad_actual = formState.ciudad_actual.label);
+            axios
+                .post(url, formState, config)
+                .then(({ data }) => {
+                    console.log(data);
+                    CallToast(mensajePositivo, "primary");
+                    onResetForm();
+                    setWaitAxios(false);
+                })
+                .catch(({ response }) => {
+                    CallToast(mensajeNegativo, "danger");
+                    console.log(response);
+                    setWaitAxios(false);
+                });
+        } else {
+            CallToast(mensajeFaltanDatos, "danger");
+            setWaitAxios(false);
+        }
     };
+
+    useEffect(() => {
+        axios
+            .get(`${urlBase}/ciudades/`)
+            .then(({ data }) => {
+                setOptionsCities(
+                    data.map((u) => ({
+                        value: u.id,
+                        label: u.ciudad,
+                    }))
+                );
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    /* Create Selected funciones */
+    const createOption = (label, id) => ({
+        label,
+        value: id,
+    });
+
+    const [isLoadingSelect_natal, setIsLoadingSelect_natal] = useState(false);
+    const [isLoadingSelect_actual, setIsLoadingSelect_actual] = useState(false);
+    const [optionsCities, setOptionsCities] = useState(); // setea las opciones por defecto
+
+    const handleCreateSelect_natal = (inputValue) => {
+        setIsLoadingSelect_natal(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelect_natal(false); // saca el loading
+            setOptionsCities((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setFormState({
+                ...formState,
+                ciudad_natal: newOption,
+            }); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    const handleCreateSelect_actual = (inputValue) => {
+        setIsLoadingSelect_actual(true);
+        setTimeout(() => {
+            const newOption = createOption(inputValue); // crea la nueva opción
+            setIsLoadingSelect_actual(false); // saca el loading
+            setOptions((prev) => [...prev, newOption]); // lo agrega a las opciones de arriba
+            setFormState({
+                ...formState,
+                ciudad_actual: newOption,
+            }); // setea el valor (aqui va el formstate)
+        }, 1000);
+    };
+    /* FIN Create Selected funciones */
 
     /* Notificacion push */
     const mensajePositivo = (
@@ -48,6 +125,11 @@ export const IngresarEgresadoForm = () => {
     const mensajeNegativo = (
         <>
             <b>Problemas con el servidor, intente nuevamente.</b>
+        </>
+    );
+    const mensajeFaltanDatos = (
+        <>
+            <b>Por favor, complete todos los datos</b>
         </>
     );
     const [show, setShow] = useState(false);
@@ -63,6 +145,7 @@ export const IngresarEgresadoForm = () => {
     }
     /* Fin Notificacion push */
 
+    const [waitAxios, setWaitAxios] = useState(false);
     return (
         <>
             <div className="container ">
@@ -81,6 +164,7 @@ export const IngresarEgresadoForm = () => {
                                     type="text"
                                     id="apellidoEgresado"
                                     name="apellidos"
+                                    value={formState.apellidos}
                                     onChange={onInputChange}
                                 />
                             </div>
@@ -88,6 +172,7 @@ export const IngresarEgresadoForm = () => {
                                 <input
                                     className="form-control"
                                     placeholder="Nombres"
+                                    value={formState.nombres}
                                     type="text"
                                     id="nombreEgresado"
                                     name="nombres"
@@ -105,6 +190,7 @@ export const IngresarEgresadoForm = () => {
                             <input
                                 className="form-control"
                                 placeholder="DNI"
+                                value={formState.dni}
                                 type="number"
                                 id="dniEgresado"
                                 name="dni"
@@ -122,6 +208,7 @@ export const IngresarEgresadoForm = () => {
                                 className="form-control"
                                 placeholder="Email address"
                                 type="email"
+                                value={formState.email}
                                 id="emailEgresado"
                                 name="email"
                                 onChange={onInputChange}
@@ -139,6 +226,7 @@ export const IngresarEgresadoForm = () => {
                                 placeholder="Fecha de Nacimiento"
                                 type="date"
                                 id="fechaNacimientoEgresado"
+                                value={formState.fecha_nac}
                                 name="fecha_nac"
                                 onChange={onInputChange}
                             />
@@ -153,6 +241,7 @@ export const IngresarEgresadoForm = () => {
                             <input
                                 className="form-control"
                                 placeholder="Nacionalidad"
+                                value={formState.nacionalidad}
                                 type="text"
                                 id="nacionalidadEgresado"
                                 name="nacionalidad"
@@ -160,39 +249,7 @@ export const IngresarEgresadoForm = () => {
                             />
                         </div>
 
-                        <div className="form-group input-group">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                    <i className="bi bi-houses"></i>
-                                </span>
-                            </div>
-                            <input
-                                className="form-control"
-                                placeholder="Localidad de nacimiento"
-                                type="text"
-                                id="localidadNacEgresado"
-                                name="ciudad_natal"
-                                onChange={onInputChange}
-                            />
-                        </div>
-
-                        <div className="form-group input-group">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                    <i className="bi bi-building"></i>
-                                </span>
-                            </div>
-                            <input
-                                className="form-control"
-                                placeholder="Localidad Actual"
-                                type="text"
-                                id="localidadActualEgresado"
-                                name="ciudad_actual"
-                                onChange={onInputChange}
-                            />
-                        </div>
-
-                        <div className="form-group input-group">
+                        <div className="form-group input-group mb-3">
                             <div className="input-group-prepend">
                                 <span className="input-group-text">
                                     <i className="bi bi-person-circle"></i>
@@ -202,6 +259,7 @@ export const IngresarEgresadoForm = () => {
                                 className="form-control"
                                 name="sexo"
                                 id="sexoEgresado"
+                                value={formState.sexo}
                                 onChange={onInputChange}
                                 placeholder="Sexo"
                             >
@@ -212,6 +270,38 @@ export const IngresarEgresadoForm = () => {
                                 <option value="M">Masculino</option>
                             </select>
                         </div>
+                        <hr />
+                        <Form.Label>Ciudad Natal</Form.Label>
+                        <CreatableSelect
+                            isClearable
+                            isDisabled={isLoadingSelect_natal}
+                            isLoading={isLoadingSelect_natal}
+                            onChange={(newValue) =>
+                                setFormState({
+                                    ...formState,
+                                    ciudad_natal: newValue,
+                                })
+                            }
+                            onCreateOption={handleCreateSelect_natal}
+                            options={optionsCities}
+                            value={formState?.ciudad_natal}
+                        />
+
+                        <Form.Label>Ciudad Actual</Form.Label>
+                        <CreatableSelect
+                            isClearable
+                            isDisabled={isLoadingSelect_actual}
+                            isLoading={isLoadingSelect_actual}
+                            onChange={(newValue) =>
+                                setFormState({
+                                    ...formState,
+                                    ciudad_actual: newValue,
+                                })
+                            }
+                            onCreateOption={handleCreateSelect_actual}
+                            options={optionsCities}
+                            value={formState?.ciudad_actual}
+                        />
 
                         <hr />
                         <h5>Datos del Egreso</h5>
@@ -227,6 +317,7 @@ export const IngresarEgresadoForm = () => {
                                 name="carrera"
                                 id="carreraEgresado"
                                 onChange={onInputChange}
+                                value={formState.carrera}
                                 placeholder="Carrera"
                             >
                                 <option value={"0"}>
@@ -249,6 +340,7 @@ export const IngresarEgresadoForm = () => {
                                 placeholder="Fecha Egreso"
                                 type="date"
                                 id="fechaEgresoEgresado"
+                                value={formState.ciclo_egreso}
                                 name="ciclo_egreso"
                                 onChange={onInputChange}
                             />
@@ -260,6 +352,7 @@ export const IngresarEgresadoForm = () => {
                                 className="btn btn-primary my-2 d-grid mx-auto"
                                 id="submitButton"
                                 onClick={(e) => handleSubmit(e)}
+                                disabled={waitAxios}
                             >
                                 Crear Egresado
                             </button>
