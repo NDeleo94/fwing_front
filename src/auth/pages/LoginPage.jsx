@@ -21,6 +21,7 @@ export const LoginPage = () => {
         setValidated(false);
         setShow(true);
         setWaitAxios(false);
+        setForgotPassword(false);
     };
 
     const onLogin = (e) => {
@@ -85,7 +86,7 @@ export const LoginPage = () => {
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
     const [showAlert, setShowAlert] = useState(false);
-
+    const [forgotPassword, setForgotPassword] = useState(false);
     const [validated, setValidated] = useState(false);
 
     const handleSubmit = (event) => {
@@ -114,55 +115,125 @@ export const LoginPage = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Ingresar a Following</Modal.Title>
+                    {forgotPassword ? (
+                        <>
+                            <Modal.Title>¿Olvidaste tu contraseña?</Modal.Title>
+                        </>
+                    ) : (
+                        <Modal.Title>Ingresar a Following</Modal.Title>
+                    )}
                 </Modal.Header>
                 <Modal.Body>
-                    <Form noValidate validated={validated} onSubmit={onLogin}>
-                        <Form.Group className="mb-3" controlId="formFacultad">
-                            <Form.Label>E-mail o DNI</Form.Label>
-                            <Form.Control
-                                type="username"
-                                value={formState.username}
-                                name="username"
-                                onChange={onInputChange}
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="formUniversidad"
-                        >
-                            <Form.Label>Contraseña</Form.Label>
-                            <Form.Control
-                                type="password"
-                                value={formState.password}
-                                name="password"
-                                onChange={onInputChange}
-                                onKeyDown={enterPulsed}
-                                required
-                            />
-                        </Form.Group>
-                    </Form>
-                    {showAlert ? (
-                        <Alert
-                            variant="danger"
-                            onClose={() => setShowAlert(false)}
-                            dismissible
-                        >
-                            <b>¡Usuario o Contraseña incorrectas!</b>
-                        </Alert>
+                    {forgotPassword ? (
+                        <>
+                            Ingresa tu e-mail y te enviaremos un link de
+                            recuperación.
+                            <br />
+                            <br />
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formFacultad"
+                            >
+                                <Form.Label>E-mail</Form.Label>
+                                <Form.Control
+                                    type="username"
+                                    value={formState.username}
+                                    name="username"
+                                    onChange={onInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <br />
+                            <a
+                                onClick={() => setForgotPassword(false)}
+                                className="text-reset"
+                            >
+                                <span style={{ fontSize: "10pt" }}>
+                                    <p className="text-end">Volver</p>
+                                </span>
+                            </a>
+                        </>
                     ) : (
-                        ""
+                        <>
+                            <Form
+                                noValidate
+                                validated={validated}
+                                onSubmit={onLogin}
+                            >
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formFacultad"
+                                >
+                                    <Form.Label>E-mail o DNI</Form.Label>
+                                    <Form.Control
+                                        type="username"
+                                        value={formState.username}
+                                        name="username"
+                                        onChange={onInputChange}
+                                        required
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formUniversidad"
+                                >
+                                    <Form.Label>Contraseña</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={formState.password}
+                                        name="password"
+                                        onChange={onInputChange}
+                                        onKeyDown={enterPulsed}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Form>
+                            {showAlert ? (
+                                <Alert
+                                    variant="danger"
+                                    onClose={() => setShowAlert(false)}
+                                    dismissible
+                                >
+                                    <b>¡Usuario o Contraseña incorrectas!</b>
+                                </Alert>
+                            ) : (
+                                ""
+                            )}
+                            <br />
+                            <a
+                                onClick={() => setForgotPassword(true)}
+                                className="text-reset"
+                            >
+                                <span
+                                    className="mb-3 mb-md-0"
+                                    style={{ fontSize: "10pt" }}
+                                >
+                                    <p className="text-end">
+                                        ¿Olvidaste tu contraseña?
+                                    </p>
+                                </span>
+                            </a>
+                        </>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        variant="success"
-                        onClick={onLogin}
-                        disabled={waitAxios}
-                    >
-                        Ingresar
-                    </Button>
+                    {forgotPassword ? (
+                        <Button
+                            variant="success"
+                            onClick={onLogin}
+                            disabled={waitAxios}
+                        >
+                            Enviar enlace
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="success"
+                            onClick={onLogin}
+                            disabled={waitAxios}
+                        >
+                            Ingresar
+                        </Button>
+                    )}
                 </Modal.Footer>
             </Modal>
         </>
