@@ -17,6 +17,7 @@ import { Administradores } from "../../admin/components/Administradores";
 import { EnviarEmails } from "../../admin/components/EnviarEmails";
 import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
 import { AdminEmpresas } from "../../admin/components/AdminEmpresas";
+import { SeguridadEgresados } from "../../admin/components/SeguridadEgresados";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -117,7 +118,7 @@ export const ConfiguracionPage = () => {
                                     />
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="#seguridad" mountOnEnter unmountOnExit>
-                                    Seguridad
+                                    <SeguridadEgresados egresado={data} />
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="#privacidad" mountOnEnter unmountOnExit>
                                     <ConfiguracionPrivacidad egresado={data} />

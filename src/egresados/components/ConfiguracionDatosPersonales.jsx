@@ -431,7 +431,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                 value={formState.email}
                                 onChange={onInputChange}
                                 name="email"
-                                required
+                                disabled
                             />
                         </Form.Group>
                         <Form.Group
