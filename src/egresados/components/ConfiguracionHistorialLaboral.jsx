@@ -146,9 +146,6 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
             formState.seniority = valueNivel.value;
             formState.modalidad = valueModalidad.value;
             /* post de agregar trabajo a egresado */
-            console.log(formState);
-            console.log(valueNivel);
-            console.log(valueModalidad);
             if (addMode) {
                 const url = `${baseUrl}/crear/actividades/`;
                 axios

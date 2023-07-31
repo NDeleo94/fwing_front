@@ -16,6 +16,7 @@ import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
 import { Administradores } from "../../admin/components/Administradores";
 import { EnviarEmails } from "../../admin/components/EnviarEmails";
 import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
+import { AdminEmpresas } from "../../admin/components/AdminEmpresas";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -49,12 +50,21 @@ export const ConfiguracionPage = () => {
                                 <ListGroup.Item action href="#privacidad">
                                     Privacidad
                                 </ListGroup.Item>
+                                <ListGroup.Item action href="#seguridad">
+                                    Seguridad
+                                </ListGroup.Item>
                             </ListGroup>
                             <hr />
                             {user.is_admin ? (
                                 <>
                                     Administración
                                     <ListGroup>
+                                        <ListGroup.Item
+                                            action
+                                            href="#filtrarEgresados"
+                                        >
+                                            Superfiltro
+                                        </ListGroup.Item>
                                         <ListGroup.Item
                                             action
                                             href="#agregarEgresado"
@@ -65,25 +75,13 @@ export const ConfiguracionPage = () => {
                                             action
                                             href="#modificarEgresado"
                                         >
-                                            Modificar/Eliminar Egresado
-                                        </ListGroup.Item>
-                                        <ListGroup.Item
-                                            action
-                                            href="#filtrarEgresados"
-                                        >
-                                            Superfiltro
-                                        </ListGroup.Item>
-                                        <ListGroup.Item
-                                            action
-                                            href="#administrarEgresados"
-                                        >
-                                            Egresados
+                                            Administrar Egresado
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
                                             href="#administrarEmpresas"
                                         >
-                                            Empresas
+                                            Administrar Empresas
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
@@ -118,6 +116,9 @@ export const ConfiguracionPage = () => {
                                         egresado={data}
                                     />
                                 </Tab.Pane>
+                                <Tab.Pane eventKey="#seguridad" mountOnEnter unmountOnExit>
+                                    Seguridad
+                                </Tab.Pane>
                                 <Tab.Pane eventKey="#privacidad" mountOnEnter unmountOnExit>
                                     <ConfiguracionPrivacidad egresado={data} />
                                 </Tab.Pane>
@@ -132,11 +133,8 @@ export const ConfiguracionPage = () => {
                                         <Tab.Pane eventKey="#filtrarEgresados" mountOnEnter unmountOnExit>
                                             <FiltrarEgresados />
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administrarEgresados" mountOnEnter unmountOnExit>
-                                            administrar Egresados
-                                        </Tab.Pane>
                                         <Tab.Pane eventKey="#administrarEmpresas" mountOnEnter unmountOnExit>
-                                            Administrar Empresas
+                                            <AdminEmpresas />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#administradores" mountOnEnter unmountOnExit>
                                             <Administradores />
