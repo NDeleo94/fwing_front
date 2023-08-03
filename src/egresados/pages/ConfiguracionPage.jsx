@@ -7,11 +7,17 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import { Container } from "react-bootstrap";
 import { ConfiguracionPrivacidad } from "../components/ConfiguracionPrivacidad";
-import { IngresarUsuarioForm } from "./IngresarUsuarioForm";
+import { IngresarEgresadoForm } from "../../admin/components/IngresarEgresadoForm";
 import { Loading } from "../../ui/components/Loading";
 import { useContext } from "react";
 import { LoginContext } from "../../context/LoginContext";
 import { useFetchEgresadosById } from "../hooks/useFetchEgresadosById";
+import { FiltrarEgresados } from "../../admin/components/FiltrarEgresados";
+import { Administradores } from "../../admin/components/Administradores";
+import { EnviarEmails } from "../../admin/components/EnviarEmails";
+import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
+import { AdminEmpresas } from "../../admin/components/AdminEmpresas";
+import { SeguridadEgresados } from "../../admin/components/SeguridadEgresados";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -22,7 +28,7 @@ export const ConfiguracionPage = () => {
     ) : (
         <>
             <Row className="my-3">
-                <h1>Configuración</h1>
+                <h1><i className="bi bi-house-gear"></i> Configuración</h1>
             </Row>
             <hr />
             <Tab.Container
@@ -45,6 +51,9 @@ export const ConfiguracionPage = () => {
                                 <ListGroup.Item action href="#privacidad">
                                     Privacidad
                                 </ListGroup.Item>
+                                <ListGroup.Item action href="#seguridad">
+                                    Seguridad
+                                </ListGroup.Item>
                             </ListGroup>
                             <hr />
                             {user.is_admin ? (
@@ -53,21 +62,39 @@ export const ConfiguracionPage = () => {
                                     <ListGroup>
                                         <ListGroup.Item
                                             action
+                                            href="#filtrarEgresados"
+                                        >
+                                            Superfiltro
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
                                             href="#agregarEgresado"
                                         >
                                             Agregar Egresado
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
-                                            href="#administrarEgresados"
+                                            href="#modificarEgresado"
                                         >
-                                            Administrar Egresados
+                                            Administrar Egresado
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
                                             href="#administrarEmpresas"
                                         >
                                             Administrar Empresas
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#administradores"
+                                        >
+                                            Administradores
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#enviarEmails"
+                                        >
+                                            Enviar e-mails
                                         </ListGroup.Item>
                                     </ListGroup>
                                 </>
@@ -77,32 +104,44 @@ export const ConfiguracionPage = () => {
                         </Col>
                         <Col sm={9}>
                             <Tab.Content>
-                                <Tab.Pane eventKey="#datosPersonales">
+                                <Tab.Pane eventKey="#datosPersonales" mountOnEnter unmountOnExit>
                                     <ConfiguracionDatosPersonales
                                         egresado={data}
                                     />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#titulos">
+                                <Tab.Pane eventKey="#titulos" mountOnEnter unmountOnExit>
                                     <ConfiguracionEgresos egresado={data} />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#historialLaboral">
+                                <Tab.Pane eventKey="#historialLaboral" mountOnEnter unmountOnExit>
                                     <ConfiguracionHistorialLaboral
                                         egresado={data}
                                     />
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="#privacidad">
-                                    <ConfiguracionPrivacidad />
+                                <Tab.Pane eventKey="#seguridad" mountOnEnter unmountOnExit>
+                                    <SeguridadEgresados egresado={data} />
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="#privacidad" mountOnEnter unmountOnExit>
+                                    <ConfiguracionPrivacidad egresado={data} />
                                 </Tab.Pane>
                                 {user.is_admin ? (
                                     <>
-                                        <Tab.Pane eventKey="#agregarEgresado">
-                                            <IngresarUsuarioForm />
+                                        <Tab.Pane eventKey="#agregarEgresado" mountOnEnter unmountOnExit>
+                                            <IngresarEgresadoForm />
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administrarEgresados">
-                                            administrar Egresados
+                                        <Tab.Pane eventKey="#modificarEgresado" mountOnEnter unmountOnExit>
+                                        <ModificarEgresado />
                                         </Tab.Pane>
-                                        <Tab.Pane eventKey="#administrarEmpresas">
-                                            Administrar Empresas
+                                        <Tab.Pane eventKey="#filtrarEgresados" mountOnEnter unmountOnExit>
+                                            <FiltrarEgresados />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administrarEmpresas" mountOnEnter unmountOnExit>
+                                            <AdminEmpresas />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administradores" mountOnEnter unmountOnExit>
+                                            <Administradores />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#enviarEmails" mountOnEnter unmountOnExit>
+                                            <EnviarEmails />
                                         </Tab.Pane>
                                     </>
                                 ) : (

@@ -22,8 +22,11 @@ ChartJS.register(
     Legend
 );
 
-export const TablaEgrePorAnio = ({datos}) => {
+export const TablaEgrePorAnio = ({ datos }) => {
     const labels = [
+        "1995",
+        "1996",
+        "1997",
         "1998",
         "1999",
         "2000",

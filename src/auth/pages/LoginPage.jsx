@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { GoogleButton } from "../components/GoogleButton";
 import Modal from "react-bootstrap/Modal";
@@ -10,18 +10,27 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const { setIsLogged, setUser, setToken } = useContext(LoginContext);
+    const [waitAxios, setWaitAxios] = useState(false);
 
     const urlBase = import.meta.env.VITE_URL_LOCAL;
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    const onLogin = (e) => {
-        e.preventDefault();
-        Loguearse();
+    const handleShow = () => {
+        onResetForm();
+        setShowAlert(false);
+        setValidated(false);
+        setShow(true);
+        setWaitAxios(false);
+        setForgotPassword(false);
     };
 
-    /* PRueba */
+    const onLogin = (e) => {
+        handleSubmit(e);
+        setWaitAxios(true);
+        if (formState.username && formState.password) {
+            Loguearse();
+        }
+    };
 
     function Loguearse() {
         console.log(formState);
@@ -43,6 +52,7 @@ export const LoginPage = () => {
                         setToken(data.token);
                         setUser(data.user);
                         setIsLogged(true);
+                        setWaitAxios(false);
                         navigate("/home", {
                             replace: true,
                         });
@@ -50,11 +60,14 @@ export const LoginPage = () => {
                 } else {
                     response.json().then((data) => {
                         console.error("Error:", data.error);
+                        setWaitAxios(false);
+                        setShowAlert(true);
                     });
                 }
             })
             .catch((error) => {
                 console.error("Error:", error);
+                setWaitAxios(false);
             });
     }
 
@@ -64,14 +77,27 @@ export const LoginPage = () => {
             Loguearse();
         }
     };
-    /* PRueba */
 
     const initialForm = {
         username: "",
         password: "",
     };
 
-    const { formState, onInputChange } = useForm(initialForm);
+    const { formState, onInputChange, onResetForm } = useForm(initialForm);
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [validated, setValidated] = useState(false);
+
+    const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        setValidated(true);
+    };
 
     return (
         <>
@@ -79,7 +105,8 @@ export const LoginPage = () => {
                 <h1>Iniciar Sesión</h1>
                 <hr />
                 <Button variant="success" onClick={handleShow}>
-                    Ingresar con e-mail
+                    <i className="bi bi-key-fill"></i> Iniciar sesión con
+                    contraseña
                 </Button>
 
                 <hr />
@@ -88,38 +115,125 @@ export const LoginPage = () => {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Ingresar</Modal.Title>
+                    {forgotPassword ? (
+                        <>
+                            <Modal.Title>¿Olvidaste tu contraseña?</Modal.Title>
+                        </>
+                    ) : (
+                        <Modal.Title>Ingresar a Following</Modal.Title>
+                    )}
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="formFacultad">
-                            <Form.Label>E-mail</Form.Label>
-                            <Form.Control
-                                type="username"
-                                value={formState.username}
-                                name="username"
-                                onChange={onInputChange}
-                            />
-                        </Form.Group>
-                        <Form.Group
-                            className="mb-3"
-                            controlId="formUniversidad"
-                        >
-                            <Form.Label>Contraseña</Form.Label>
-                            <Form.Control
-                                type="password"
-                                value={formState.password}
-                                name="password"
-                                onChange={onInputChange}
-                                onKeyDown={enterPulsed}
-                            />
-                        </Form.Group>
-                    </Form>
+                    {forgotPassword ? (
+                        <>
+                            Ingresa tu e-mail y te enviaremos un link de
+                            recuperación.
+                            <br />
+                            <br />
+                            <Form.Group
+                                className="mb-3"
+                                controlId="formFacultad"
+                            >
+                                <Form.Label>E-mail</Form.Label>
+                                <Form.Control
+                                    type="username"
+                                    value={formState.username}
+                                    name="username"
+                                    onChange={onInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <br />
+                            <a
+                                onClick={() => setForgotPassword(false)}
+                                className="text-reset"
+                            >
+                                <span style={{ fontSize: "10pt" }}>
+                                    <p className="text-end">Volver</p>
+                                </span>
+                            </a>
+                        </>
+                    ) : (
+                        <>
+                            <Form
+                                noValidate
+                                validated={validated}
+                                onSubmit={onLogin}
+                            >
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formFacultad"
+                                >
+                                    <Form.Label>E-mail o DNI</Form.Label>
+                                    <Form.Control
+                                        type="username"
+                                        value={formState.username}
+                                        name="username"
+                                        onChange={onInputChange}
+                                        required
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formUniversidad"
+                                >
+                                    <Form.Label>Contraseña</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={formState.password}
+                                        name="password"
+                                        onChange={onInputChange}
+                                        onKeyDown={enterPulsed}
+                                        required
+                                    />
+                                </Form.Group>
+                            </Form>
+                            {showAlert ? (
+                                <Alert
+                                    variant="danger"
+                                    onClose={() => setShowAlert(false)}
+                                    dismissible
+                                >
+                                    <b>¡Usuario o Contraseña incorrectas!</b>
+                                </Alert>
+                            ) : (
+                                ""
+                            )}
+                            <br />
+                            <a
+                                onClick={() => setForgotPassword(true)}
+                                className="text-reset"
+                            >
+                                <span
+                                    className="mb-3 mb-md-0"
+                                    style={{ fontSize: "10pt" }}
+                                >
+                                    <p className="text-end">
+                                        ¿Olvidaste tu contraseña?
+                                    </p>
+                                </span>
+                            </a>
+                        </>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="success" onClick={onLogin}>
-                        Ingresar
-                    </Button>
+                    {forgotPassword ? (
+                        <Button
+                            variant="success"
+                            onClick={onLogin}
+                            disabled={waitAxios}
+                        >
+                            Enviar enlace
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="success"
+                            onClick={onLogin}
+                            disabled={waitAxios}
+                        >
+                            Ingresar
+                        </Button>
+                    )}
                 </Modal.Footer>
             </Modal>
         </>
