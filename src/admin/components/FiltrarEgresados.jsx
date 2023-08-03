@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { TablaEgresados } from "./TablaEgresados";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { DataContext } from "../../context/DataContext";
 import { useForm } from "../../egresados/hooks/useForm";
 import { convertirFecha } from "../../egresados/helpers/manejoFecha";
@@ -15,26 +15,13 @@ function tiene(obj, key, value) {
 
 function despuesDe(obj, value) {
     try {
-        if (
-            value.split("-")[0] >
-            obj.split("-")[0]
-        ) {
+        if (value.split("-")[0] > obj.split("-")[0]) {
             return false;
-        } else if (
-            value.split("-")[0] ==
-            obj.split("-")[0]
-        ) {
-            if (
-                value.split("-")[1] > obj.split("-")[1]
-            ) {
+        } else if (value.split("-")[0] == obj.split("-")[0]) {
+            if (value.split("-")[1] > obj.split("-")[1]) {
                 return false;
-            } else if (
-                value.split("-")[1] == obj.split("-")[1]
-            ) {
-                if (
-                    value.split("-")[2] >
-                    obj.split("-")[2]
-                ) {
+            } else if (value.split("-")[1] == obj.split("-")[1]) {
+                if (value.split("-")[2] > obj.split("-")[2]) {
                     return false;
                 }
             }
@@ -43,6 +30,21 @@ function despuesDe(obj, value) {
     } catch (e) {
         return false;
     }
+}
+
+function tienePostgrado(egresado) {
+    try {
+        if (!egresado.egresos) {
+            return false;
+        }
+        let tiene = false;
+        egresado.egresos.map((titulo) => {
+            if (titulo.postgrado) {
+                tiene = true;
+            }
+        });
+        return tiene;
+    } catch (error) {}
 }
 
 export const FiltrarEgresados = () => {
@@ -58,6 +60,7 @@ export const FiltrarEgresados = () => {
         sexo: "",
         seLogueo: false,
         tieneEmail: false,
+        postgrados: "",
     };
     const { formState, onInputChange, onResetForm, setFormState } =
         useForm(initialForm);
@@ -108,12 +111,14 @@ export const FiltrarEgresados = () => {
 
             if (formState.desde !== "") {
                 deberiaEstar =
-                    deberiaEstar && despuesDe(ciclo_egreso_following, formState.desde);
+                    deberiaEstar &&
+                    despuesDe(ciclo_egreso_following, formState.desde);
             }
 
             if (formState.hasta !== "") {
                 deberiaEstar =
-                    deberiaEstar && !despuesDe(ciclo_egreso_following, formState.hasta);
+                    deberiaEstar &&
+                    !despuesDe(ciclo_egreso_following, formState.hasta);
             }
 
             if (formState.tieneEmail) {
@@ -122,6 +127,14 @@ export const FiltrarEgresados = () => {
 
             if (formState.seLogueo) {
                 deberiaEstar = deberiaEstar && !egresado.last_login;
+            }
+
+            if (formState.postgrados == "Y") {
+                deberiaEstar = deberiaEstar && tienePostgrado(egresado);
+            }
+
+            if (formState.postgrados == "N") {
+                deberiaEstar = deberiaEstar && !tienePostgrado(egresado);
             }
 
             return deberiaEstar;
@@ -232,11 +245,26 @@ export const FiltrarEgresados = () => {
                                         value={formState.sexo}
                                         onChange={onInputChange}
                                     >
-                                        <option disabled>
-                                            Elija una opción...
-                                        </option>
+                                        <option value="">No filtrar</option>
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
+                                    </Form.Select>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>PostGrados</Form.Label>
+                                    <Form.Select
+                                        aria-label="Default select example"
+                                        name="postgrados"
+                                        value={formState.postgrados}
+                                        onChange={onInputChange}
+                                    >
+                                        <option value="">No Filtrar</option>
+                                        <option value="Y">
+                                            Egresados CON postgrados
+                                        </option>
+                                        <option value="N">
+                                            Egresados SIN postgrados
+                                        </option>
                                     </Form.Select>
                                 </Form.Group>
 
@@ -289,7 +317,7 @@ export const FiltrarEgresados = () => {
                 Egresados encontrados: {egresados.length}
                 <br />
                 <Container fluid>
-                    <table className="table table-hover responsive">
+                    <Table responsive className="table table-hover responsive">
                         <thead>
                             <tr>
                                 <td>Apellidos</td>
@@ -332,7 +360,7 @@ export const FiltrarEgresados = () => {
                                 </tr>
                             ))}
                         </tbody>
-                    </table>
+                    </Table>
                 </Container>
             </Container>
         </>
