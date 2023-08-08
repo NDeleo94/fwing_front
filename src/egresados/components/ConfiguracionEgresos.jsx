@@ -313,6 +313,7 @@ export const ConfiguracionEgresos = ({ egresado }) => {
         console.log(carrera);
         return carrera == "Ingeniería en Computación";
     }
+    console.log(datoEgresado.egresos)
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">

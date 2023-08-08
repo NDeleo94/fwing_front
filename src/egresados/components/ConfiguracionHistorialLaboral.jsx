@@ -357,6 +357,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setShow(true);
     };
     /* FIN Botón Change Trabajo */
+    console.log(datoEgresado.historial)
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">
@@ -389,7 +390,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
                                 <th scope="row">{index + 1}</th>
                                 <td>{egre.puesto.puesto}</td>
                                 <td>{egre.organizacion.organizacion}</td>
-                                <td>{egre.ciudad.ciudad}</td>
+                                <td>{egre.ciudad?.ciudad}</td>
                                 <td>
                                     {seniority.map((s) => {
                                         if (s.value == egre.seniority) {

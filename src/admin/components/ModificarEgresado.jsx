@@ -301,6 +301,7 @@ export const ModificarEgresado = () => {
                     setMessage(<>¡Foto eliminada con éxito!</>);
                     setTipo("primary");
                     setShow(true);
+                    actualizar();
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
@@ -315,6 +316,7 @@ export const ModificarEgresado = () => {
                     );
                     setTipo("danger");
                     setShow(true);
+                    actualizar();
                     setTimeout(function () {
                         setShow(false);
                     }, 5100);
