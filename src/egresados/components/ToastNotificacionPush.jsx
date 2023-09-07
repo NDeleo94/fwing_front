@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
 import Logo from "../../assets/imgs/Logo.png";
 
-export const ToastNotificacionPush = ({ mensaje, mostrar, tipo = "primary" }) => {
+export const ToastNotificacionPush = ({
+    mensaje,
+    mostrar,
+    tipo = "primary",
+}) => {
     const [show, setShow] = useState(false);
     useEffect(() => {
         setShow(mostrar);
@@ -29,7 +33,11 @@ export const ToastNotificacionPush = ({ mensaje, mostrar, tipo = "primary" }) =>
                         <strong className="me-auto">Following</strong>
                         <small>Ahora</small>
                     </Toast.Header>
-                    <Toast.Body className="text-white">{mensaje}</Toast.Body>
+                    <Toast.Body
+                        className={`${tipo != "warning" && "text-white"}`}
+                    >
+                        {mensaje}
+                    </Toast.Body>
                 </Toast>
             </ToastContainer>
         </>

@@ -17,7 +17,7 @@ import { Administradores } from "../../admin/components/Administradores";
 import { EnviarEmails } from "../../admin/components/EnviarEmails";
 import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
 import { AdminEmpresas } from "../../admin/components/AdminEmpresas";
-import { SeguridadEgresados } from "../../admin/components/SeguridadEgresados";
+import { SeguridadEgresados } from "../components/SeguridadEgresados";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
