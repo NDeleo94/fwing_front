@@ -7,10 +7,12 @@ export const Mapa = () => {
     const urlBase = import.meta.env.VITE_URL_LOCAL;
     const keyBingMaps = import.meta.env.VITE_KEY_BING_MAPS;
     const urlBingMaps = import.meta.env.VITE_URL_BING_MAPS;
-    console.log(urlBingMaps);
+
     const [actividadesActuales, setActividadesActuales] = useState([]);
     const [actividades, setActividades] = useState([]);
-    const [coordenadasSimples, setCoordenadasSimples] = useState([0,0])
+    const [coordenadasSimples, setCoordenadasSimples] = useState([0, 0]);
+    const [arrayCompleto, setArrayCompleto] = useState([]);
+
     useEffect(() => {
         axios
             .get(`${urlBase}/actividades/`)
@@ -30,18 +32,37 @@ export const Mapa = () => {
         axios
             .get(`${urlBingMaps}/Tafí Viejo?o=json&key=${keyBingMaps}`)
             .then(({ data }) => {
-                setCoordenadasSimples(data.resourceSets[0].resources[0].geocodePoints[0].coordinates);
+                setCoordenadasSimples(
+                    data.resourceSets[0].resources[0].geocodePoints[0]
+                        .coordinates
+                );
             })
             .catch((error) => console.log(error));
     }, []);
 
     console.log(actividadesActuales);
     useEffect(() => {
-        if (actividadesActuales) {
+        if (actividadesActuales && !arrayCompleto) {
+            let superArray = [];
             let arreglo = getCiudadesByActividadActual(actividadesActuales);
-            console.log(arreglo);
+            arreglo.map((a) => {
+                axios
+                    .get(`${urlBingMaps}/${a[0]}?o=json&key=${keyBingMaps}`)
+                    .then(({ data }) => {
+                        superArray.push([
+                            a[0],
+                            a[1],
+                            data.resourceSets[0].resources[0].geocodePoints[0]
+                                .coordinates,
+                        ]);
+                    })
+                    .catch((error) => console.log(error));
+            });
+            setArrayCompleto(superArray);
         }
     }, [actividadesActuales]);
+
+    console.log(arrayCompleto);
 
     return (
         <>
@@ -55,18 +76,17 @@ export const Mapa = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Marker position={[51.505, -0.09]}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
-                <Marker position={coordenadasSimples}>
-                    <Popup>
-                        '-26.5643582', lon: '-64.882397' A pretty CSS3 popup.{" "}
-                        -26.8303703', lon: '-65.2038133
-                        <br /> Easily customizable.
-                    </Popup>
-                </Marker>
+
+                {arrayCompleto.map((ciudad) => (
+                    <>
+                        <Marker position={ciudad[2]}>
+                            <Popup>
+                                Ciudad: {ciudad[0]}
+                                <br /> Cantidad de ingenieros: {ciudad[1]}
+                            </Popup>
+                        </Marker>
+                    </>
+                ))}
             </MapContainer>
         </>
     );
