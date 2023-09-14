@@ -3,9 +3,26 @@ import { Button, Form } from "react-bootstrap";
 import { useForm } from "../hooks/useForm";
 import { ToastNotificacionPush } from "./ToastNotificacionPush";
 import { LoginContext } from "../../context/LoginContext";
+import { useConfig } from "../../auth/hooks/useConfig";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const SeguridadEgresados = ({ egresado }) => {
-    const { tokenGoogle } = useContext(LoginContext);
+    const { user, setUser, setToken, tokenGoogle } = useContext(LoginContext);
+
+    const navigate = useNavigate();
+
+    const onLogout = () => {
+        setUser(null);
+        setToken(null);
+        navigate("/login", {
+            replace: true,
+        });
+    };
+
+    const baseUrl = import.meta.env.VITE_URL_LOCAL;
+    const config = useConfig();
+
     const initialState = {
         oldMail: "",
         newMail: "",
@@ -53,10 +70,36 @@ export const SeguridadEgresados = ({ egresado }) => {
             CallToast("Debe llenar todos los campos", "warning");
             return;
         }
+        if (validarEmail(formState?.newMail)) {
+            CallToast("Debe ingresar un e-mail válido", "warning");
+            return;
+        }
         if (!(formState?.newMail === formState?.newMailRepeat)) {
             CallToast("Los emails nuevos deben ser idénticos", "warning");
             return;
         }
+
+        const url = `${baseUrl}/change-email/`;
+        axios
+            .post(
+                url,
+                { old_email: formState.oldMail, new_email: formState.newMail },
+                config
+            )
+            .then(({ data }) => {
+                CallToast("¡E-mail cambiado! Cerrando sesión...", "success");
+                setTimeout(() => {
+                    onLogout();
+                }, 2000);
+            })
+            .catch(({ response }) => {
+                CallToast(`Problema: ${response.statusText}`, "danger");
+            });
+    };
+
+    const validarEmail = (email) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return !regex.test(email);
     };
 
     const handleChangePassword = () => {
