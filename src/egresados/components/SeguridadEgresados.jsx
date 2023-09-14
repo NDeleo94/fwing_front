@@ -79,7 +79,7 @@ export const SeguridadEgresados = ({ egresado }) => {
             return;
         }
 
-        const url = `${baseUrl}/change-email/`;
+        let url = `${baseUrl}/change-email/`;
         axios
             .post(
                 url,
@@ -93,7 +93,7 @@ export const SeguridadEgresados = ({ egresado }) => {
                 }, 2000);
             })
             .catch(({ response }) => {
-                CallToast(`Problema: ${response.statusText}`, "danger");
+                CallToast(`Problema: ${response.data.error}`, "danger");
             });
     };
 
@@ -112,12 +112,10 @@ export const SeguridadEgresados = ({ egresado }) => {
             CallToast("Debe llenar todos los campos", "warning");
             return;
         }
-
         if (!(formState?.newPassword === formState?.newPasswordRepeat)) {
             CallToast("Las nuevas contraseñas deben ser idénticas", "warning");
             return;
         }
-
         if (formState.newPassword.length < 8) {
             CallToast(
                 "La nueva contraseña debe tener al menos 8 caracteres alfanuméricos",
@@ -125,6 +123,66 @@ export const SeguridadEgresados = ({ egresado }) => {
             );
             return;
         }
+        if (formState?.oldPassword === formState?.newPassword) {
+            CallToast(
+                "La nueva contraseña no debe ser la misma que la contraseña actual",
+                "warning"
+            );
+            return;
+        }
+        if (!validarPassword(formState?.newPassword)) {
+            CallToast(
+                "La nueva contraseña no cumple con los requisitos mencionados",
+                "warning"
+            );
+            return;
+        }
+
+        let url = `${baseUrl}/change-password/`;
+        axios
+            .post(
+                url,
+                {
+                    old_password: formState.oldPassword,
+                    new_password: formState.newPassword,
+                },
+                config
+            )
+            .then(({ data }) => {
+                CallToast(
+                    "¡Contraseña cambiada! Cerrando sesión...",
+                    "success"
+                );
+                setTimeout(() => {
+                    onLogout();
+                }, 2000);
+            })
+            .catch(({ response }) => {
+                if (response.data.error == "Invalid old password") {
+                    CallToast(`Contraseña actual incorrecta`, "danger");
+                } else {
+                    CallToast(`Problema: ${response.data.error}`, "danger");
+                }
+            });
+    };
+
+    const validarPassword = (p) => {
+        const longitudMinima = 8;
+        const contieneMayuscula = /[A-Z]/.test(p);
+        const contieneMinuscula = /[a-z]/.test(p);
+        const contieneNumero = /[0-9]/.test(p);
+        const contieneCaracterEspecial = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(
+            p
+        );
+
+        const esValida =
+            p.length >= longitudMinima &&
+            contieneMayuscula &&
+            contieneMinuscula &&
+            contieneNumero &&
+            contieneCaracterEspecial;
+
+        return esValida;
     };
 
     /* Toast */
@@ -206,6 +264,11 @@ export const SeguridadEgresados = ({ egresado }) => {
                 {!tokenGoogle ? (
                     <>
                         <h5>Cambiar contraseña</h5>
+                        <div style={{ fontSize: "8pt" }} className="mb-3">
+                            La nueva contraseña debe tener al menos 8 caracteres
+                            alfanuméricos, 1 mayúscula, 1 minúscula y 1 caracter
+                            especial
+                        </div>
                         <Form onSubmit={handleChangePassword}>
                             <Form.Group
                                 className="mb-3"
@@ -248,7 +311,6 @@ export const SeguridadEgresados = ({ egresado }) => {
                             </Form.Group>
                             <div className="col-12 my-4 d-grid">
                                 <Button
-                                    type="submit"
                                     onClick={handleChangePassword}
                                     disabled={changePassBtnDisabled}
                                 >
