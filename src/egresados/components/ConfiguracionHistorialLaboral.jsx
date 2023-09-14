@@ -357,7 +357,7 @@ export const ConfiguracionHistorialLaboral = ({ egresado }) => {
         setShow(true);
     };
     /* FIN Botón Change Trabajo */
-    console.log(datoEgresado.historial)
+    
     return (
         <>
             <div className="container-fluid mt-2 text-secondary">

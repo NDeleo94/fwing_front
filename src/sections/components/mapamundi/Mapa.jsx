@@ -42,7 +42,8 @@ export const Mapa = () => {
 
     console.log(actividadesActuales);
     useEffect(() => {
-        if (actividadesActuales && !arrayCompleto) {
+        if (actividadesActuales != []) {
+            console.log("first");
             let superArray = [];
             let arreglo = getCiudadesByActividadActual(actividadesActuales);
             arreglo.map((a) => {
@@ -55,14 +56,23 @@ export const Mapa = () => {
                             data.resourceSets[0].resources[0].geocodePoints[0]
                                 .coordinates,
                         ]);
+                        console.log(superArray);
+                        if (a[0] == arreglo[arreglo.length - 1][0]) {
+                            console.log("third");
+                            setArrayCompleto(superArray);
+                        }
                     })
                     .catch((error) => console.log(error));
             });
-            setArrayCompleto(superArray);
+            console.log("superarray", superArray);
+            /* if (arrayCompleto == []) {
+                console.log("second");
+                setArrayCompleto(superArray);
+            } */
         }
     }, [actividadesActuales]);
 
-    console.log(arrayCompleto);
+    console.log("arraycompleto", arrayCompleto);
 
     return (
         <>
