@@ -4,7 +4,7 @@ import { ToastNotificacionPush } from "../../egresados/components/ToastNotificac
 import { useConfig } from "../../auth/hooks/useConfig";
 import axios from "axios";
 import CreatableSelect from "react-select/creatable";
-import { Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 
 export const IngresarEgresadoForm = () => {
     const initialForm = {
@@ -146,14 +146,49 @@ export const IngresarEgresadoForm = () => {
     /* Fin Notificacion push */
 
     const [waitAxios, setWaitAxios] = useState(false);
+
+    /* Botón agregar egresados desde siu */
+    const [showModal, setShowModal] = useState(false);
+    const [aceptarButtonDisabled, setAceptarButtonDisabled] = useState(false);
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+    const handleSiu = () => {
+        setAceptarButtonDisabled(false);
+        setShowModal(true);
+    };
+    const handleSubmitModal = () => {
+        setAceptarButtonDisabled(true);
+
+        const url = `${urlBase}/siu/`;
+        axios
+            .post(url, config)
+            .then(({ data }) => {
+                setAceptarButtonDisabled(false);
+                console.log(data);
+            })
+            .catch(({ response }) => {
+                setAceptarButtonDisabled(false);
+                console.log(response);
+            });
+    };
+    /* FIN Botón agregar egresados desde siu */
     return (
         <>
             <div className="container ">
+                <h4 className="card-title mt-3 text-center">
+                    Agregar Egresado SIU Guaraní
+                </h4>
+                <div className="col-12 mt-2 d-grid">
+                    <Button type="submit" onClick={handleSiu}>
+                        Agregar Egresados desde SIU Guaraní
+                    </Button>
+                </div>
+                <hr />
                 <article className="card-body mx-auto">
                     <h4 className="card-title mt-3 text-center">
-                        Agregar Egresado
+                        Agregar Egresado Manualmente
                     </h4>
-                    <hr />
                     <h5>Datos Personales</h5>
                     <form>
                         <div className="row">
@@ -365,6 +400,29 @@ export const IngresarEgresadoForm = () => {
                     tipo={tipo}
                 />
             </div>
+
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Agregar Egresados desde Siu</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    ¿Desea actualizar la Base de Datos de Following con nuevos
+                    egresados de SIU Guaraní?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Cancelar
+                    </Button>
+                    <Button
+                        type="submit"
+                        onClick={handleSubmitModal}
+                        variant="success"
+                        disabled={aceptarButtonDisabled}
+                    >
+                        Aceptar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
