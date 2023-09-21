@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { getCiudadesByActividadActual } from "../../helpers/getCiudadesByActividadActual";
+import { getArrayForMapamundi } from "../../helpers/getArrayForMapamundi";
 
 export const Mapa = () => {
     const urlBase = import.meta.env.VITE_URL_LOCAL;
@@ -15,7 +16,7 @@ export const Mapa = () => {
 
     useEffect(() => {
         axios
-            .get(`${urlBase}/actividades/`)
+            .get(`${urlBase}/mapamundi/`)
             .then(({ data }) => {
                 setActividades(data);
                 let actActual = [];
@@ -28,47 +29,10 @@ export const Mapa = () => {
             })
             .catch((error) => console.log(error));
     }, []);
-    useEffect(() => {
-        axios
-            .get(`${urlBingMaps}/Tafí Viejo?o=json&key=${keyBingMaps}`)
-            .then(({ data }) => {
-                setCoordenadasSimples(
-                    data.resourceSets[0].resources[0].geocodePoints[0]
-                        .coordinates
-                );
-            })
-            .catch((error) => console.log(error));
-    }, []);
 
-    console.log(actividadesActuales);
     useEffect(() => {
-        if (actividadesActuales != []) {
-            console.log("first");
-            let superArray = [];
-            let arreglo = getCiudadesByActividadActual(actividadesActuales);
-            arreglo.map((a) => {
-                axios
-                    .get(`${urlBingMaps}/${a[0]}?o=json&key=${keyBingMaps}`)
-                    .then(({ data }) => {
-                        superArray.push([
-                            a[0],
-                            a[1],
-                            data.resourceSets[0].resources[0].geocodePoints[0]
-                                .coordinates,
-                        ]);
-                        console.log(superArray);
-                        if (a[0] == arreglo[arreglo.length - 1][0]) {
-                            console.log("third");
-                            setArrayCompleto(superArray);
-                        }
-                    })
-                    .catch((error) => console.log(error));
-            });
-            console.log("superarray", superArray);
-            /* if (arrayCompleto == []) {
-                console.log("second");
-                setArrayCompleto(superArray);
-            } */
+        if (actividadesActuales) {
+            setArrayCompleto(getArrayForMapamundi(actividadesActuales));
         }
     }, [actividadesActuales]);
 
@@ -89,10 +53,10 @@ export const Mapa = () => {
 
                 {arrayCompleto.map((ciudad) => (
                     <>
-                        <Marker position={ciudad[2]}>
+                        <Marker position={ciudad[1]}>
                             <Popup>
                                 Ciudad: {ciudad[0]}
-                                <br /> Cantidad de ingenieros: {ciudad[1]}
+                                <br /> Cantidad de ingenieros: {ciudad[2]}
                             </Popup>
                         </Marker>
                     </>
