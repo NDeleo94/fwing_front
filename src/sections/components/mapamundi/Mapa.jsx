@@ -1,9 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import { getCiudadesByActividadActual } from "../../helpers/getCiudadesByActividadActual";
 import { getArrayForMapamundi } from "../../helpers/getArrayForMapamundi";
-import { Image } from "react-bootstrap";
 import { EgresadosEnCiudad } from "./components/EgresadosEnCiudad";
 
 export const Mapa = () => {
@@ -51,14 +49,14 @@ export const Mapa = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                {arrayCompleto.map((ciudad) => (
-                    <>
+                {arrayCompleto.map((ciudad, index) => (
+                    <Fragment key={index}>
                         <Marker position={ciudad[1]}>
                             <Popup>
                                 <EgresadosEnCiudad ciudad={ciudad} />
                             </Popup>
                         </Marker>
-                    </>
+                    </Fragment>
                 ))}
             </MapContainer>
         </>
