@@ -95,7 +95,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         if (EstaCompleto()) {
             formState.ciudad_natal.value
                 ? (formState.ciudad_natal = formState.ciudad_natal.value)
@@ -120,16 +119,20 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     };
 
     function EstaCompleto() {
+        if (formState.ciudad_actual == null) {
+            return false;
+        }
+        if (formState.ciudad_natal == null) {
+            return false;
+        }
         return (
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            formState.ciudad_actual != null &&
-            formState.ciudad_natal != null &&
             formState.sexo
         );
     }
-    console.log(formState);
+    
     /* Notificación Push */
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState();
