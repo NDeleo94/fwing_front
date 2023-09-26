@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-
-import { MapaMundi } from "./MapaMundi.jsx";
 import { AppRouter } from "./router/AppRouter.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
