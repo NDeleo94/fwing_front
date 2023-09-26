@@ -95,7 +95,6 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         if (EstaCompleto()) {
             formState.ciudad_natal.value
                 ? (formState.ciudad_natal = formState.ciudad_natal.value)
@@ -120,16 +119,20 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     };
 
     function EstaCompleto() {
+        if (formState.ciudad_actual == null) {
+            return false;
+        }
+        if (formState.ciudad_natal == null) {
+            return false;
+        }
         return (
             formState.email &&
             formState.nacionalidad &&
             formState.fecha_nac &&
-            formState.ciudad_actual.label != "" &&
-            formState.ciudad_natal.label != "" &&
             formState.sexo
         );
     }
-
+    
     /* Notificación Push */
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState();
@@ -142,6 +145,12 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
     /* Fin Notificación Push */
 
     function NoHayCambios(initial, changed) {
+        if (changed.ciudad_actual == null) {
+            return false;
+        }
+        if (changed.ciudad_natal == null) {
+            return false;
+        }
         return (
             initial.email == changed.email &&
             initial.nacionalidad == changed.nacionalidad &&
@@ -182,7 +191,7 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
             setFormState({
                 ...formState,
                 ciudad_actual: newOption,
-            });  // setea el valor (aqui va el formstate)
+            }); // setea el valor (aqui va el formstate)
         }, 1000);
     };
     /* Fin Input-Select */
@@ -523,8 +532,8 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                         formState.nacionalidad &&
                         formState.fecha_nac &&
                         formState.sexo &&
-                        select_actual &&
-                        select_natal
+                        formState.ciudad_natal &&
+                        formState.ciudad_actual
                     ) ? (
                         <>
                             <Container fluid className="my-3">
@@ -545,8 +554,12 @@ export const ConfiguracionDatosPersonales = ({ egresado }) => {
                                         : ""}
 
                                     {!formState.sexo ? " Sexo," : ""}
-                                    {!select_natal ? " Ciudad Natal," : ""}
-                                    {!select_actual ? " Ciudad Actual." : "."}
+                                    {!formState.ciudad_natal
+                                        ? " Ciudad Natal,"
+                                        : ""}
+                                    {!formState.ciudad_actual
+                                        ? " Ciudad Actual."
+                                        : "."}
                                 </Alert>
                             </Container>
                         </>
