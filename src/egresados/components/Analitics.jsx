@@ -7,6 +7,7 @@ import { getCantidadEgrPorCiudadNatal } from "../helpers/getCantidadEgrPorCiudad
 import { Container } from "react-bootstrap";
 import { TablaEgrePorAnio } from "../../sections/components/TablaEgrePorAnio";
 import { TortaDistribucionEgrePorSexo } from "../../sections/components/TortaDistribucionEgrePorSexo";
+import { TortaEgrConPostgrados } from "../../sections/components/TortaEgrConPostgrados";
 
 export const Analitics = ({ data }) => {
     const [c, setC] = useState(0);
@@ -25,8 +26,9 @@ export const Analitics = ({ data }) => {
     return (
         <>
             <Container fluid className="my-2">
-              <TablaEgrePorAnio datos={data} />
-              <TortaDistribucionEgrePorSexo datos={data} />
+                <TablaEgrePorAnio datos={data} />
+                <TortaDistribucionEgrePorSexo datos={data} />
+                <TortaEgrConPostgrados datos={data} />
                 <div>Analitics</div>
                 egresados de 2017: {c},
                 <br />
