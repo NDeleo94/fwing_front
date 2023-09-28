@@ -9,6 +9,7 @@ import { TablaEgrePorAnio } from "../../sections/components/TablaEgrePorAnio";
 import { TortaDistribucionEgrePorSexo } from "../../sections/components/TortaDistribucionEgrePorSexo";
 import { TortaEgrConPostgrados } from "../../sections/components/TortaEgrConPostgrados";
 import { TablaTiempoPromedioByNivel } from "../../sections/components/TablaTiempoPromedioByNivel";
+import { TablaDistribEgrByNivelActual } from "../../sections/components/TablaDistribEgrByNivelActual";
 
 export const Analitics = ({ data }) => {
     const [c, setC] = useState(0);
@@ -37,6 +38,11 @@ export const Analitics = ({ data }) => {
                     </Col>
                     <Col>
                         <TablaTiempoPromedioByNivel datos={data} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <TablaDistribEgrByNivelActual datos={data} />
                     </Col>
                 </Row>
                 <div>Analitics</div>
