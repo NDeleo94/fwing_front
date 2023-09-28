@@ -4,10 +4,11 @@ import { getCantidadEgrPorMes } from "../helpers/getCantidadEgrPorMes";
 import { getCantidadEgrPorSexo } from "../helpers/getCantidadEgrPorSexo";
 import { getCantidadEgrPorLapso } from "../helpers/getCantidadEgrPorLapso";
 import { getCantidadEgrPorCiudadNatal } from "../helpers/getCantidadEgrPorCiudadNatal";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { TablaEgrePorAnio } from "../../sections/components/TablaEgrePorAnio";
 import { TortaDistribucionEgrePorSexo } from "../../sections/components/TortaDistribucionEgrePorSexo";
 import { TortaEgrConPostgrados } from "../../sections/components/TortaEgrConPostgrados";
+import { TablaTiempoPromedioByNivel } from "../../sections/components/TablaTiempoPromedioByNivel";
 
 export const Analitics = ({ data }) => {
     const [c, setC] = useState(0);
@@ -27,8 +28,17 @@ export const Analitics = ({ data }) => {
         <>
             <Container fluid className="my-2">
                 <TablaEgrePorAnio datos={data} />
-                <TortaDistribucionEgrePorSexo datos={data} />
-                <TortaEgrConPostgrados datos={data} />
+                <Row>
+                    <Col>
+                        <TortaDistribucionEgrePorSexo datos={data} />
+                    </Col>
+                    <Col>
+                        <TortaEgrConPostgrados datos={data} />
+                    </Col>
+                    <Col>
+                        <TablaTiempoPromedioByNivel datos={data} />
+                    </Col>
+                </Row>
                 <div>Analitics</div>
                 egresados de 2017: {c},
                 <br />
