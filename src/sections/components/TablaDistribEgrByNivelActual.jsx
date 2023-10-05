@@ -30,7 +30,7 @@ export const TablaDistribEgrByNivelActual = ({ datos }) => {
         suma += arrayFiltered[i];
     }
 
-    console.log(arrayFiltered);
+    
 
     const data = {
         labels: [

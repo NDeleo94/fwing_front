@@ -7,11 +7,11 @@ import { useFetchEgresados } from "../hooks/useFetchEgresados";
 import { Loading } from "../../ui/components/Loading";
 import { Analitics } from "../components/Analitics";
 
-export const SearchPage = () => {
+export const SearchPage = ({ data }) => {
     const location = useLocation();
 
     const { q = "" } = queryString.parse(location.search);
-    const { data, loading } = useFetchEgresados();
+
     const [egresados, setEgresados] = useState([]);
     const [filteredEgresados, setFilteredEgresados] = useState([]);
     const [textSearched, setTextSearched] = useState("");
@@ -145,43 +145,37 @@ export const SearchPage = () => {
         }
     };
 
-    return loading ? (
-        <Loading />
-    ) : (
+    return (
         <>
-            <Analitics data={data} />
-            <hr />
-            <div className="row my-5 ">
-                <div className="col-3">
-                    <h4>Buscar Egresado</h4>
-                    <hr />
-                    <form>
-                        <input
-                            type="text"
-                            placeholder="Busca un egresado"
-                            className="form-control"
-                            name="searchText"
-                            autoComplete="off"
-                            value={searchText}
-                            onChange={onInputChange}
-                        />
+            <div className="row">
+                <h4>Buscar Egresado</h4>
+                <hr />
+                <form>
+                    <input
+                        type="text"
+                        placeholder="Busca un egresado"
+                        className="form-control"
+                        name="searchText"
+                        autoComplete="off"
+                        value={searchText}
+                        onChange={onInputChange}
+                    />
 
-                        <button
-                            className="btn btn-outline-primary mt-3"
-                            onClick={(event) => onSearchSubmit(event)}
-                        >
-                            Buscar
-                        </button>
-                    </form>
-                </div>
-                <div className="col-9">
-                    <h4>Resultados</h4>
-                    <hr />
-                    {!bandera ? <Loading /> : ""}
-                    {isEmpty(searchText)}
-                    {<EgresadoList data={filteredEgresados} />}
-                    {notFound(filteredEgresados, textSearched, bandera)}
-                </div>
+                    <button
+                        className="btn btn-outline-primary mt-3"
+                        onClick={(event) => onSearchSubmit(event)}
+                    >
+                        Buscar
+                    </button>
+                </form>
+            </div>
+            <div className="row mt-3">
+                <h4>Resultados</h4>
+                <hr />
+                {!bandera ? <Loading /> : ""}
+                {isEmpty(searchText)}
+                {<EgresadoList data={filteredEgresados} />}
+                {notFound(filteredEgresados, textSearched, bandera)}
             </div>
         </>
     );
