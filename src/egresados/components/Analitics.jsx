@@ -36,6 +36,8 @@ export const Analitics = ({ data }) => {
                     <Col>
                         <TortaEgrConPostgrados datos={data} />
                     </Col>
+                </Row>
+                <Row>
                     <Col>
                         <TablaTiempoPromedioByNivel datos={data} />
                     </Col>

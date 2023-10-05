@@ -16,6 +16,7 @@ import { useState } from "react";
 import { LoginContext } from "../context/LoginContext";
 import { PerfilPage, SearchPage } from "../egresados/pages";
 import { DataContext } from "../context/DataContext";
+import { PasswordPage } from "../sections/pages/PasswordPage";
 
 export const AppRouter = () => {
     // LoginContext
@@ -69,6 +70,10 @@ export const AppRouter = () => {
                             <Route path="honores" element={<HonoresPage />} />
                             <Route path="search" element={<SearchPage />} />
                             <Route path="perfil/:id" element={<PerfilPage />} />
+                            <Route
+                                path="password/:token"
+                                element={<PasswordPage />}
+                            />
                             <Route path="/*" element={<EgresadosRoutes />} />
                         </Routes>
                     </div>
