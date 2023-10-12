@@ -27,13 +27,17 @@ export const PasswordPage = () => {
 
     /* Botón de "actualizar contraseña" */
     const onSubmit = () => {
+        setWaitAxios(true);
+
         console.log(formState);
         if (formState?.repeatPassword == "" || formState?.newPassword == "") {
             CallToast("Debe llenar todos los campos", "warning");
+            setWaitAxios(false);
             return;
         }
         if (!(formState?.newPassword === formState?.repeatPassword)) {
             CallToast("Las nuevas contraseñas deben ser idénticas", "warning");
+            setWaitAxios(false);
             return;
         }
         if (formState.newPassword.length < 8) {
@@ -41,6 +45,7 @@ export const PasswordPage = () => {
                 "La nueva contraseña debe tener al menos 8 caracteres alfanuméricos",
                 "warning"
             );
+            setWaitAxios(false);
             return;
         }
 
@@ -49,6 +54,7 @@ export const PasswordPage = () => {
                 "La nueva contraseña no cumple con los requisitos mencionados",
                 "warning"
             );
+            setWaitAxios(false);
             return;
         }
 
@@ -75,8 +81,10 @@ export const PasswordPage = () => {
             .catch(({ response }) => {
                 if (response.data.error == "Invalid url") {
                     CallToast(`token de url inexistente o vencido`, "danger");
+                    setWaitAxios(false);
                 } else {
                     CallToast(`Problema: ${response.data.error}`, "danger");
+                    setWaitAxios(false);
                 }
             });
     };

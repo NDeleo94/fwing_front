@@ -23,21 +23,25 @@ export const LoginPage = () => {
         setShow(true);
         setWaitAxios(false);
         setForgotPassword(false);
+        setEmailSended(false);
     };
 
     const onLogin = (e) => {
         handleSubmit(e);
         setWaitAxios(true);
-        if (formState.username && formState.password) {
+        if ((formState.username && formState.password) || forgotPassword) {
             Loguearse();
         }
     };
+
+    const [emailSended, setEmailSended] = useState(false);
 
     function Loguearse() {
         console.log(formState);
         let url;
         if (forgotPassword) {
             url = `${urlBase}/reset-password/`;
+            console.log(url);
             const postData = { email: formState.username };
 
             const requestOptions = {
@@ -52,9 +56,8 @@ export const LoginPage = () => {
                 .then((response) => {
                     if (response.ok) {
                         response.json().then((data) => {
-                            setWaitAxios(false);
-							/* Falta esta parte cuando el backend funcione */
-							console.log(data)
+                            setEmailSended(`¡Email enviado! `);
+                            console.log(data);
                         });
                     } else {
                         response.json().then((data) => {
@@ -71,7 +74,7 @@ export const LoginPage = () => {
         } else {
             url = `${urlBase}/login/`;
             const postData = formState;
-
+            console.log("first");
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -122,7 +125,7 @@ export const LoginPage = () => {
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
 
     const [showAlert, setShowAlert] = useState(false);
-	const [showNotification, setShowNotification] = useState(false)
+    const [showNotification, setShowNotification] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     const [validated, setValidated] = useState(false);
 
@@ -257,13 +260,16 @@ export const LoginPage = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     {forgotPassword ? (
-                        <Button
-                            variant="success"
-                            onClick={onLogin}
-                            disabled={waitAxios}
-                        >
-                            Enviar enlace
-                        </Button>
+                        <>
+                            {emailSended}
+                            <Button
+                                variant="success"
+                                onClick={onLogin}
+                                disabled={waitAxios}
+                            >
+                                Enviar enlace
+                            </Button>
+                        </>
                     ) : (
                         <Button
                             variant="success"

@@ -71,7 +71,7 @@ export const AppRouter = () => {
                             <Route path="search" element={<SearchPage />} />
                             <Route path="perfil/:id" element={<PerfilPage />} />
                             <Route
-                                path="password/:token"
+                                path="reset-password/:token"
                                 element={<PasswordPage />}
                             />
                             <Route path="/*" element={<EgresadosRoutes />} />
