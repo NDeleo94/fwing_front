@@ -162,7 +162,7 @@ export const IngresarEgresadoForm = () => {
 
         const url = `${urlBase}/siu/`;
         axios
-            .post(url, config)
+            .post(url, { origen: 2 }, config)
             .then(({ data }) => {
                 setAceptarButtonDisabled(false);
                 console.log(data);
