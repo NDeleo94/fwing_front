@@ -28,10 +28,14 @@ export const Analitics = ({ data }) => {
     return (
         <>
             <Container fluid className="my-2">
-                <TablaEgrePorAnio datos={data} />
-                <Row>
+                <div className="card border-secondary pb-2 px-2">
+                    <TablaEgrePorAnio datos={data} />
+                </div>
+                <Row className="mt-2">
                     <Col>
-                        <TortaDistribucionEgrePorSexo datos={data} />
+                        <div className="card border-secondary pb-2">
+                            <TortaDistribucionEgrePorSexo datos={data} />
+                        </div>
                     </Col>
                     <Col>
                         <TortaEgrConPostgrados datos={data} />

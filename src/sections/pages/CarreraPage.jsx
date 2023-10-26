@@ -12,7 +12,7 @@ export const CarreraPage = () => {
     ) : (
         <>
             <Row className="my-3">
-                <h1>Carrera</h1>
+                <h1>Ingeniería en Computación</h1>
             </Row>
             <hr />
             <Tab.Container

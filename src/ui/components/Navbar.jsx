@@ -114,12 +114,23 @@ export const Navbar = () => {
                                             isActive ? "active" : ""
                                         } `
                                     }
-                                    to="/carrera"
+                                    to="/home"
                                 >
-                                    Carrera
+                                    Inicio
                                 </NavLink>
 
                                 <NavLink
+                                    className={({ isActive }) =>
+                                        `nav-item nav-link ${
+                                            isActive ? "active" : ""
+                                        } `
+                                    }
+                                    to="/carrera"
+                                >
+                                    Ingeniería en Computación
+                                </NavLink>
+
+                                {/* <NavLink
                                     className={({ isActive }) =>
                                         `nav-item nav-link ${
                                             isActive ? "active" : ""
@@ -159,10 +170,10 @@ export const Navbar = () => {
                                 <NavLink
                                     disabled
                                     className="nav-item nav-link"
-                                    /* to="/honores" */
+                                    //to="/honores"
                                 >
                                     Honores
-                                </NavLink>
+                                </NavLink> */}
                             </div>
                         </div>
 
