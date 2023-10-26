@@ -73,7 +73,7 @@ export const TablaEgrePorAnio = ({ datos }) => {
                 position: "top",
             },
             title: {
-                display: true,
+                display: false,
                 text: "Egresados de Ingeniería en Computación por Año",
             },
         },

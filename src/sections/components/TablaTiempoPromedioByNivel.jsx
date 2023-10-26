@@ -78,7 +78,7 @@ export const TablaTiempoPromedioByNivel = ({ datos }) => {
                 position: "top",
             },
             title: {
-                display: true,
+                display: false,
                 text: "Promedio de duración de un trabajo en días VS Nivel de trabajo",
             },
         },

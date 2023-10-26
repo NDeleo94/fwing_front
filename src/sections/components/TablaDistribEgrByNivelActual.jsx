@@ -30,8 +30,6 @@ export const TablaDistribEgrByNivelActual = ({ datos }) => {
         suma += arrayFiltered[i];
     }
 
-    
-
     const data = {
         labels: [
             `NS/NC : ${Math.trunc((1000 * arrayFiltered[0]) / suma) / 10}%`,
@@ -52,10 +50,24 @@ export const TablaDistribEgrByNivelActual = ({ datos }) => {
                 label: `Cantidad`,
                 data: [...arrayFiltered],
                 backgroundColor: [
-                    "rgba(236, 170, 4, 0.2)",
-                    "rgba(0, 0, 0, 0.2)",
+                    "rgba(255,255,255, 0.2)",
+                    "rgba(225,225,255, 0.2)",
+                    "rgba(200,200,255, 0.2)",
+                    "rgba(165,165,255, 0.2)",
+                    "rgba(135,135,255, 0.2)",
+                    "rgba(100,100,255, 0.2)",
+                    "rgba(45,45,255, 0.2)",
+                    "rgba(0, 0, 255, 0.2)",
                 ],
-                borderColor: ["rgba(236, 170, 4, 1)", "rgba(0, 0, 0, 1)"],
+                borderColor: [
+                    "rgba(255,255,255, 1)",
+                    "rgba(225,225,255, 1)",
+                    "rgba(200,200,255, 1)",
+                    "rgba(165,165,255, 1)",
+                    "rgba(135,135,255, 1)",
+                    "rgba(100,100,255, 1)",
+                    "rgba(45,45,255, 1)",
+                    "rgba(0, 0, 255, 1)",],
                 borderWidth: 1,
             },
         ],

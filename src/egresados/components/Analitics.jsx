@@ -28,40 +28,59 @@ export const Analitics = ({ data }) => {
     return (
         <>
             <Container fluid className="my-2">
-                <div className="card border-secondary pb-2 px-2">
-                    <TablaEgrePorAnio datos={data} />
+                <div className="card text-center">
+                    <div className="card-header">
+                        Egresados de Ingeniería en Computación por Año
+                    </div>
+                    <div className="card-body pb-2 px-2">
+                        <TablaEgrePorAnio datos={data} />
+                    </div>
                 </div>
                 <Row className="mt-2">
                     <Col>
-                        <div className="card border-secondary pb-2">
+                        <div className="card text-center pb-2">
+                            <div className="card-header">
+                                Egresados de Ingeniería en Computación por Sexo
+                            </div>
                             <TortaDistribucionEgrePorSexo datos={data} />
                         </div>
                     </Col>
                     <Col>
-                        <TortaEgrConPostgrados datos={data} />
+                        <div className="card text-center pb-2">
+                            <div className="card-header">
+                                Egresados de Ingeniería en Computación con
+                                Postgrados
+                            </div>
+                            <TortaEgrConPostgrados datos={data} />
+                        </div>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <TablaTiempoPromedioByNivel datos={data} />
+                        <div className="card text-center my-2">
+                            <div className="card-header">
+                                Duración de trabajo promedio (en días) respecto
+                                al Nivel de trabajo
+                            </div>
+                            <div className="card-body pb-2 px-2">
+                                <TablaTiempoPromedioByNivel datos={data} />
+                            </div>
+                        </div>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <TablaDistribEgrByNivelActual datos={data} />
+                        <div className="card text-center my-2">
+                            <div className="card-header">
+                                Distribución histórica porcentual de Ingenieros
+                                según nivel laboral
+                            </div>
+                            <div className="pb-2">
+                                <TablaDistribEgrByNivelActual datos={data} />
+                            </div>
+                        </div>
                     </Col>
                 </Row>
-                <div>Analitics</div>
-                egresados de 2017: {c},
-                <br />
-                egresados de diciembre 1998: {m},
-                <br />
-                egresados varones : {sexo[0]},
-                <br />
-                egresados mujeres : {sexo[1]}
-                <br />
-                egresados entre mayo 2011 y agosto 2020 : {lapso}
-                <br />
             </Container>
         </>
     );
