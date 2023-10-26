@@ -49,6 +49,8 @@ export const AdminCiudades = () => {
     const initialForm = {
         id: 0,
         ciudad: "",
+        lat: "",
+        long: "",
     };
     const [showAlert, setShowAlert] = useState(false);
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
@@ -196,14 +198,20 @@ export const AdminCiudades = () => {
                         </h3>
                         <hr />
 
-                        <Button variant="secondary" onClick={handleShow}>
+                        <Button variant="success" onClick={handleShow}>
                             <i className="bi bi-plus-circle"></i> Agregar ciudad
+                        </Button>
+                        <Button variant="secondary ms-3" onClick={handleShow}>
+                            <i className="bi bi-arrow-clockwise"></i> Actualizar
+                            coordenadas
                         </Button>
                         <Table responsive>
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nombre de la ciudad</th>
+                                    <th scope="col">Latitud</th>
+                                    <th scope="col">Longitud</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -212,6 +220,8 @@ export const AdminCiudades = () => {
                                     <tr key={o.id}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{o.ciudad}</td>
+                                        <td>{o.lat}</td>
+                                        <td>{o.long}</td>
                                         <td>
                                             <Row>
                                                 <Col>
