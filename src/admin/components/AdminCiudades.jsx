@@ -6,26 +6,6 @@ import { Loading } from "../../ui/components/Loading";
 import { useForm } from "../../egresados/hooks/useForm";
 import { ToastNotificacionPush } from "../../egresados/components/ToastNotificacionPush";
 
-function tipoOrganizacion(t) {
-    if (t == "e") return `Pública`;
-    if (t == "p") return `Privada`;
-    if (t == "i") {
-        return `Independiente`;
-    } else {
-        return `Sin Información`;
-    }
-}
-
-function cantidadEmpleados(c) {
-    if (c == 1) return `[1, 10]`;
-    if (c == 2) return `[11, 100]`;
-    if (c == 3) {
-        return `[101, 1000+)`;
-    } else {
-        return `Sin Información`;
-    }
-}
-
 export const AdminCiudades = () => {
     const [loading, setLoading] = useState(true);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
@@ -40,8 +20,9 @@ export const AdminCiudades = () => {
     };
     useEffect(() => {
         axios
-            .get(`${baseUrl}/organizaciones/`)
+            .get(`${baseUrl}/ciudades/`)
             .then(({ data }) => {
+                console.log(data);
                 setOrganizaciones(data);
                 if (data) {
                     setLoading(false);
@@ -66,12 +47,8 @@ export const AdminCiudades = () => {
     const [addMode, setAddMode] = useState(true);
     const [waitAxios, setWaitAxios] = useState(false);
     const initialForm = {
-        organizacion: "",
-        descripcion: "",
-        tipo: "",
-        email: "",
-        web: "",
-        empleados: "",
+        id: 0,
+        ciudad: "",
     };
     const [showAlert, setShowAlert] = useState(false);
     const { formState, onInputChange, onResetForm } = useForm(initialForm);
@@ -79,6 +56,7 @@ export const AdminCiudades = () => {
         setShow(false);
     };
     const handleShow = () => {
+        setAddMode(true);
         setShow(true);
         onResetForm();
         setShowAlert(false);
@@ -87,19 +65,9 @@ export const AdminCiudades = () => {
         e.preventDefault();
         setWaitAxios(true);
         /* controlar que todo esté bien */
-        if (
-            formState.organizacion &&
-            formState.tipo &&
-            formState.empleados &&
-            formState.web &&
-            formState.email &&
-            formState.descripcion
-        ) {
-            if (!formState.web.includes("http")) {
-                formState.web = `https://${formState.web}`;
-            }
+        if (formState.ciudad) {
             if (addMode) {
-                const url = `${baseUrl}/crear/organizaciones/`;
+                const url = `${baseUrl}/crear/ciudades/`;
                 console.log(formState);
                 axios
                     .post(url, formState, config)
@@ -116,7 +84,8 @@ export const AdminCiudades = () => {
                         setWaitAxios(false);
                     });
             } else {
-                const url = `${baseUrl}/editar/organizaciones/${formState.id}/`;
+                const url = `${baseUrl}/editar/ciudades/${formState.id}/`;
+                console.log(formState);
                 axios
                     .put(url, formState, config)
                     .then(({ data }) => {
@@ -142,13 +111,7 @@ export const AdminCiudades = () => {
         setAddMode(false);
         setShowAlert(false);
         formState.id = o.id;
-        formState.organizacion = o.organizacion;
-        formState.descripcion = o.descripcion || "";
-        formState.tipo = o.tipo || "";
-        formState.email = o.email || "";
-        formState.web = o.web || "";
-        formState.empleados = o.empleados || "";
-
+        formState.ciudad = o.ciudad;
         setShow(true);
     };
     /* Fin Modal agregar/editar organizacion */
@@ -163,7 +126,7 @@ export const AdminCiudades = () => {
     const handleSubmitModalDelete = () => {
         event.preventDefault();
         setEliminarButtonDisabled(true);
-        const url = `${baseUrl}/eliminar/organizaciones/${toDelete.id}/`;
+        const url = `${baseUrl}/eliminar/ciudades/${toDelete.id}/`;
         axios
             .delete(url, config)
             .then(({ data }) => {
@@ -194,7 +157,7 @@ export const AdminCiudades = () => {
     const [tipo, setTipo] = useState("");
     const messagePositivo = (
         <>
-            <b>¡Se agregó la nueva Organización!</b>
+            <b>¡Se agregó la Nueva Ciudad!</b>
         </>
     );
     const messageChangedPositivo = (
@@ -229,25 +192,18 @@ export const AdminCiudades = () => {
                 <>
                     <div className="container-fluid mt-2 text-secondary">
                         <h3>
-                            <i className="bi bi-globe2"></i> Empresas y
-                            Organizaciones
+                            <i className="bi bi-globe-americas"></i> Ciudades
                         </h3>
                         <hr />
 
                         <Button variant="secondary" onClick={handleShow}>
-                            <i className="bi bi-plus-circle"></i> Agregar
-                            Organización
+                            <i className="bi bi-plus-circle"></i> Agregar ciudad
                         </Button>
                         <Table responsive>
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Organización</th>
-                                    <th scope="col">Descripción</th>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">email</th>
-                                    <th scope="col">Web</th>
-                                    <th scope="col">Cantidad de Empleados</th>
+                                    <th scope="col">Nombre de la ciudad</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
@@ -255,14 +211,7 @@ export const AdminCiudades = () => {
                                 {organizaciones?.map((o, index) => (
                                     <tr key={o.id}>
                                         <th scope="row">{index + 1}</th>
-                                        <td>{o.organizacion}</td>
-                                        <td>{o?.descripcion}</td>
-                                        <td>{tipoOrganizacion(o?.tipo)}</td>
-                                        <td>{o?.email}</td>
-                                        <td>{o?.web}</td>
-                                        <td>
-                                            {cantidadEmpleados(o?.empleados)}
-                                        </td>
+                                        <td>{o.ciudad}</td>
                                         <td>
                                             <Row>
                                                 <Col>
@@ -301,135 +250,35 @@ export const AdminCiudades = () => {
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>
-                                {addMode ? "Agregar" : "Modificar"} organización
+                                {addMode ? "Agregar" : "Modificar"} ciudad
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group
                                     className="mb-3"
-                                    controlId="formOrganizacion"
+                                    controlId="formCity"
                                 >
                                     <Form.Label>
-                                        Nombre de la Organización:
+                                        Nombre de la Ciudad:
                                     </Form.Label>
                                     <Form.Control
                                         type="text"
-                                        value={formState.organizacion}
+                                        value={formState.ciudad}
                                         onChange={onInputChange}
-                                        name="organizacion"
+                                        name="ciudad"
                                     />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formOrganizacion"
-                                >
-                                    <Form.Label>Tipo:</Form.Label>
-                                    <Form.Select
-                                        aria-label="Default select example"
-                                        required
-                                        name="tipo"
-                                        value={formState.tipo}
-                                        onChange={onInputChange}
-                                    >
-                                        <option disabled value="">
-                                            Elija el tipo de organización
-                                        </option>
-                                        <option value="p">Privada</option>
-                                        <option value="e">Pública</option>
-                                        <option value="i">Independiente</option>
-                                    </Form.Select>
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formDescripcion"
-                                >
-                                    <Form.Label>Descripción:</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows={3}
-                                        value={formState.descripcion}
-                                        onChange={onInputChange}
-                                        name="descripcion"
-                                    />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formEmail"
-                                >
-                                    <Form.Label>E-mail:</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        value={formState.email}
-                                        onChange={onInputChange}
-                                        name="email"
-                                    />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formOrganizacion"
-                                >
-                                    <Form.Label>Sitio Web:</Form.Label>
-                                    <Form.Control
-                                        type="url"
-                                        value={formState.web}
-                                        onChange={onInputChange}
-                                        name="web"
-                                    />
-                                </Form.Group>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formOrganizacion"
-                                >
-                                    <Form.Label>
-                                        Cantidad de Empleados:
-                                    </Form.Label>
-                                    <Form.Select
-                                        aria-label="Default select example"
-                                        required
-                                        name="empleados"
-                                        value={formState.empleados}
-                                        onChange={onInputChange}
-                                    >
-                                        <option disabled value="">
-                                            Elija la cantidad de Empleados
-                                        </option>
-                                        <option value="1">
-                                            Chica: [1, 10] empleados
-                                        </option>
-                                        <option value="2">
-                                            Mediana: [11, 100] empleados
-                                        </option>
-                                        <option value="3">
-                                            Grande: [101, 1000+) empleados
-                                        </option>
-                                    </Form.Select>
                                 </Form.Group>
                             </Form>
 
-                            {showAlert &&
-                            !(
-                                formState.organizacion &&
-                                formState.tipo &&
-                                formState.empleados &&
-                                formState.descripcion &&
-                                formState.email &&
-                                formState.web
-                            ) ? (
+                            {showAlert && !formState.ciudad ? (
                                 <>
                                     <Alert
                                         variant="danger"
                                         onClose={() => setShowAlert(false)}
                                         dismissible
                                     >
-                                        {!(
-                                            formState.organizacion &&
-                                            formState.tipo &&
-                                            formState.empleados &&
-                                            formState.descripcion &&
-                                            formState.email &&
-                                            formState.web
-                                        ) ? (
+                                        {!formState.ciudad ? (
                                             <b>
                                                 - Formulario incompleto, falta:{" "}
                                                 <br />
@@ -437,20 +286,9 @@ export const AdminCiudades = () => {
                                         ) : (
                                             ""
                                         )}
-                                        {!formState.organizacion
-                                            ? "Nombre de la Organización,"
+                                        {!formState.ciudad
+                                            ? "Nombre de la ciudad."
                                             : ""}
-                                        {!formState.tipo
-                                            ? " Tipo de organización,"
-                                            : ""}
-                                        {!formState.empleados
-                                            ? " Cantidad de Empleados,"
-                                            : ""}
-                                        {!formState.descripcion
-                                            ? " Descripción,"
-                                            : ""}
-                                        {!formState.email ? " Email," : ""}
-                                        {!formState.web ? " Página Web." : ""}
                                     </Alert>
                                 </>
                             ) : (
@@ -480,11 +318,11 @@ export const AdminCiudades = () => {
                         onHide={handleCloseModalDelete}
                     >
                         <Modal.Header closeButton>
-                            <Modal.Title>¿Eliminar Organización?</Modal.Title>
+                            <Modal.Title>¿Eliminar Ciudad?</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            ¿Desea eliminar la siguiente Organización? <br />
-                            <b>"{toDelete?.organizacion}"</b>
+                            ¿Desea eliminar la siguiente ciudad? <br />
+                            <b>"{toDelete?.ciudad}"</b>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button
