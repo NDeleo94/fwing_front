@@ -18,6 +18,8 @@ import { EnviarEmails } from "../../admin/components/EnviarEmails";
 import { ModificarEgresado } from "../../admin/components/ModificarEgresado";
 import { AdminEmpresas } from "../../admin/components/AdminEmpresas";
 import { SeguridadEgresados } from "../components/SeguridadEgresados";
+import { AdminPuestos } from "../../admin/components/AdminPuestos";
+import { AdminCiudades } from "../../admin/components/AdminCiudades";
 
 export const ConfiguracionPage = () => {
     const { user } = useContext(LoginContext);
@@ -86,6 +88,18 @@ export const ConfiguracionPage = () => {
                                         </ListGroup.Item>
                                         <ListGroup.Item
                                             action
+                                            href="#administrarPuestos"
+                                        >
+                                            Administrar Puestos
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
+                                            href="#administrarCiudades"
+                                        >
+                                            Administrar Ciudades
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                            action
                                             href="#administradores"
                                         >
                                             Administradores
@@ -136,6 +150,12 @@ export const ConfiguracionPage = () => {
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#administrarEmpresas" mountOnEnter unmountOnExit>
                                             <AdminEmpresas />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administrarPuestos" mountOnEnter unmountOnExit>
+                                            <AdminPuestos />
+                                        </Tab.Pane>
+                                        <Tab.Pane eventKey="#administrarCiudades" mountOnEnter unmountOnExit>
+                                            <AdminCiudades />
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="#administradores" mountOnEnter unmountOnExit>
                                             <Administradores />

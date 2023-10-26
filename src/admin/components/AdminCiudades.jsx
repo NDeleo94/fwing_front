@@ -26,7 +26,7 @@ function cantidadEmpleados(c) {
     }
 }
 
-export const AdminEmpresas = () => {
+export const AdminCiudades = () => {
     const [loading, setLoading] = useState(true);
     const baseUrl = import.meta.env.VITE_URL_LOCAL;
     const config = useConfig();
@@ -79,7 +79,6 @@ export const AdminEmpresas = () => {
         setShow(false);
     };
     const handleShow = () => {
-        setAddMode(true);
         setShow(true);
         onResetForm();
         setShowAlert(false);
