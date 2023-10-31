@@ -22,7 +22,6 @@ export const AdminCiudades = () => {
         axios
             .get(`${baseUrl}/ciudades/`)
             .then(({ data }) => {
-                console.log(data);
                 setOrganizaciones(data);
                 if (data) {
                     setLoading(false);
@@ -47,6 +46,7 @@ export const AdminCiudades = () => {
     const [addMode, setAddMode] = useState(true);
     const [waitAxios, setWaitAxios] = useState(false);
     const initialForm = {
+        searchText: "",
         id: 0,
         ciudad: "",
         lat: "",
@@ -186,6 +186,52 @@ export const AdminCiudades = () => {
         }, 5100);
     }
     /* FIN Notificación Push */
+
+    
+    const [filteredOrganizations, setFilteredOrganizations] = useState([])
+
+    useEffect(() => {
+        const value = formState.searchText;
+        let updatedData = [];
+        let aux = [];
+        /* setTextSearched(searchText); */
+        if (value.length) {
+            const filterFirstName =
+                organizaciones &&
+                organizaciones.filter((item) => {
+                    const filter = item.ciudad
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+
+                    return filter ? filter : null;
+                });
+
+            /* const filterLastName =
+                egresados &&
+                egresados.filter((item) => {
+                    const filter = item.apellidos
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+
+                    return filter ? filter : null;
+                });
+
+            const result = filterFirstName
+                ? filterFirstName.concat(filterLastName)
+                : aux; */
+            updatedData = filterFirstName.reduce((acc, item) => {
+                if (!acc.includes(item)) {
+                    acc.push(item);
+                }
+                return acc;
+            }, []);
+            setFilteredOrganizations(updatedData);
+        } else {
+            setFilteredOrganizations(organizaciones);
+        }
+    }, [formState.searchText]);
+
+
     return (
         <>
             {loading ? (
@@ -205,6 +251,17 @@ export const AdminCiudades = () => {
                             <i className="bi bi-arrow-clockwise"></i> Actualizar
                             coordenadas
                         </Button>
+                        <Form className="mt-3">
+                            <input
+                                type="text"
+                                placeholder="Busca una Ciudad"
+                                className="form-control"
+                                name="searchText"
+                                autoComplete="off"
+                                value={formState.searchText}
+                                onChange={onInputChange}
+                            />
+                        </Form>
                         <Table responsive>
                             <thead>
                                 <tr>
@@ -216,7 +273,7 @@ export const AdminCiudades = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {organizaciones?.map((o, index) => (
+                                {filteredOrganizations?.map((o, index) => (
                                     <tr key={o.id}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{o.ciudad}</td>
