@@ -4,6 +4,7 @@ import { SearchPage } from "../../egresados/pages";
 import { Loading } from "../../ui/components/Loading";
 import { Col, Container, ListGroup, Row } from "react-bootstrap";
 import { Analitics } from "../../egresados/components/Analitics";
+import { TablaTiempoHastaMayorSeniority } from "../components/TablaTiempoHastaMayorSeniority";
 
 export const CarreraPage = () => {
     const { data, loading } = useFetchEgresados();

@@ -10,6 +10,7 @@ import { TortaDistribucionEgrePorSexo } from "../../sections/components/TortaDis
 import { TortaEgrConPostgrados } from "../../sections/components/TortaEgrConPostgrados";
 import { TablaTiempoPromedioByNivel } from "../../sections/components/TablaTiempoPromedioByNivel";
 import { TablaDistribEgrByNivelActual } from "../../sections/components/TablaDistribEgrByNivelActual";
+import { TablaTiempoHastaMayorSeniority } from "../../sections/components/TablaTiempoHastaMayorSeniority";
 
 export const Analitics = ({ data }) => {
     const [c, setC] = useState(0);
@@ -38,7 +39,7 @@ export const Analitics = ({ data }) => {
                 </div>
                 <Row className="mt-2">
                     <Col>
-                        <div className="card text-center pb-2">
+                        <div className="card text-center pb-2 mb-2">
                             <div className="card-header">
                                 Egresados de Ingeniería en Computación por Sexo
                             </div>
@@ -57,19 +58,19 @@ export const Analitics = ({ data }) => {
                 </Row>
                 <Row>
                     <Col>
-                        <div className="card text-center my-2">
+                        <div className="card text-center my-2 ">
                             <div className="card-header">
                                 Duración de trabajo promedio (en días) respecto
                                 al Nivel de trabajo
                             </div>
-                            <div className="card-body pb-2 px-2">
+                            <div className="pb-2 px-2">
                                 <TablaTiempoPromedioByNivel datos={data} />
                             </div>
                         </div>
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col md={{ span: 6, offset: 3 }}>
                         <div className="card text-center my-2">
                             <div className="card-header">
                                 Distribución histórica porcentual de Ingenieros
@@ -77,6 +78,19 @@ export const Analitics = ({ data }) => {
                             </div>
                             <div className="pb-2">
                                 <TablaDistribEgrByNivelActual datos={data} />
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <div className="card text-center my-2 ">
+                            <div className="card-header">
+                                Promedio de tiempo (en días) hasta alcanzar el
+                                mayor nivel de trabajo por egresado
+                            </div>
+                            <div className="pb-2 px-2">
+                                <TablaTiempoHastaMayorSeniority data={data} />
                             </div>
                         </div>
                     </Col>
