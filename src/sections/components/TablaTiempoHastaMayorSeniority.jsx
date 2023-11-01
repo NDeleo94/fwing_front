@@ -58,7 +58,7 @@ export const TablaTiempoHastaMayorSeniority = ({ data }) => {
                 );
             }
             if (actividad.seniority == nivelMax) {
-                // Si la actividad que estoy leyendo es igual en nivel, cargo el que tenga mayor días
+                // Si la actividad que estoy leyendo es igual en nivel, cargo el que tenga menor días
                 let fechaEgreso = egresado.egresos.filter(
                     (egreso) => egreso.carrera.following
                 );
@@ -66,7 +66,7 @@ export const TablaTiempoHastaMayorSeniority = ({ data }) => {
                     fechaEgreso[0]?.ciclo_egreso,
                     actividad.inicio
                 );
-                if (diasNuevos > dias) {
+                if (diasNuevos < dias) {
                     dias = diasNuevos;
                 }
             }
