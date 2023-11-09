@@ -113,8 +113,11 @@ export const TablaTiempoHastaMayorSeniority = ({ data }) => {
         datasets: [
             {
                 label: "",
-                data: labels.map((ce, index) =>
-                    Math.floor(aux[index][1] / aux[index][2])
+                data: labels.map(
+                    (ce, index) =>
+                        Math.floor(
+                            (aux[index][1] / (aux[index][2] * 365)) * 10
+                        ) / 10
                 ),
                 backgroundColor: "rgba(100, 99, 132, 0.5)",
             },

@@ -86,7 +86,7 @@ export const Analitics = ({ data }) => {
                     <Col>
                         <div className="card text-center my-2 ">
                             <div className="card-header">
-                                Promedio de tiempo (en días) hasta alcanzar el
+                                Promedio de tiempo (en años) hasta alcanzar el
                                 mayor nivel de trabajo por egresado
                             </div>
                             <div className="pb-2 px-2">
