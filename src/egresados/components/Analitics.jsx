@@ -73,7 +73,7 @@ export const Analitics = ({ data }) => {
                     <Col md={{ span: 6, offset: 3 }}>
                         <div className="card text-center my-2">
                             <div className="card-header">
-                                Distribución histórica porcentual de Ingenieros
+                                Distribución actual porcentual de Ingenieros
                                 según nivel laboral
                             </div>
                             <div className="pb-2">

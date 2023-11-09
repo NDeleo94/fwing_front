@@ -85,6 +85,7 @@ export const LoginPage = () => {
 
             fetch(url, requestOptions)
                 .then((response) => {
+                    console.log(response);
                     if (response.ok) {
                         response.json().then((data) => {
                             setToken(data.token);
@@ -96,11 +97,9 @@ export const LoginPage = () => {
                             });
                         });
                     } else {
-                        response.json().then((data) => {
-                            console.error("Error:", data.error);
-                            setWaitAxios(false);
-                            setShowAlert(true);
-                        });
+                        console.error("Error:", response.statusText);
+                        setWaitAxios(false);
+                        setShowAlert(true);
                     }
                 })
                 .catch((error) => {
