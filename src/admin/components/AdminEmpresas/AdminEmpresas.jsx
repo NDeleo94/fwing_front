@@ -8,6 +8,12 @@ import { ToastNotificacionPush } from "../../../egresados/components/ToastNotifi
 import { TablaEmpresas } from "./components/TablaEmpresas";
 import { ModalEditEmpresas } from "./components/ModalEditEmpresas";
 import { ModalDeleteEmpresas } from "./components/ModalDeleteEmpresas";
+import {
+  messageChangedPositivo,
+  messageEliminado,
+  messageNegativo,
+  messagePositivo,
+} from "../../constants/messages";
 
 export const AdminEmpresas = () => {
   const [loading, setLoading] = useState(true);
@@ -90,7 +96,7 @@ export const AdminEmpresas = () => {
           .post(url, formState, config)
           .then(({ data }) => {
             console.log(data);
-            CallToast(messagePositivo, "primary");
+            CallToast(messagePositivo("Organización"), "primary");
             actualizar();
             setShow(false);
             setWaitAxios(false);
@@ -177,26 +183,7 @@ export const AdminEmpresas = () => {
   const [mostrar, setMostrar] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [tipo, setTipo] = useState("");
-  const messagePositivo = (
-    <>
-      <b>¡Se agregó la nueva Organización!</b>
-    </>
-  );
-  const messageChangedPositivo = (
-    <>
-      <b>¡Modificación exitosa!</b>
-    </>
-  );
-  const messageEliminado = (
-    <>
-      <b>¡Eliminación exitosa!</b>
-    </>
-  );
-  const messageNegativo = (
-    <>
-      <b>Problema con el servidor, intente nuevamente.</b>
-    </>
-  );
+
   function CallToast(mensaje, tipo) {
     setTipo(tipo);
     setMensaje(mensaje);

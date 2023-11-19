@@ -8,6 +8,12 @@ import { ToastNotificacionPush } from "../../../egresados/components/ToastNotifi
 import { TablaCiudades } from "./components/TablaCiudades";
 import { ModalEditCiudades } from "./components/ModalEditCiudades";
 import { ModalDeleteCiudades } from "./components/ModalDeleteCiudades";
+import {
+  messageChangedPositivo,
+  messageEliminado,
+  messageNegativo,
+  messagePositivo,
+} from "../../constants/messages";
 
 export const AdminCiudades = () => {
   const [loading, setLoading] = useState(true);
@@ -78,7 +84,7 @@ export const AdminCiudades = () => {
           .post(url, formState, config)
           .then(({ data }) => {
             console.log(data);
-            CallToast(messagePositivo, "primary");
+            CallToast(messagePositivo("Ciudad"), "primary");
             actualizar();
             setShow(false);
             setWaitAxios(false);
@@ -160,26 +166,7 @@ export const AdminCiudades = () => {
   const [mostrar, setMostrar] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [tipo, setTipo] = useState("");
-  const messagePositivo = (
-    <>
-      <b>¡Se agregó la Nueva Ciudad!</b>
-    </>
-  );
-  const messageChangedPositivo = (
-    <>
-      <b>¡Modificación exitosa!</b>
-    </>
-  );
-  const messageEliminado = (
-    <>
-      <b>¡Eliminación exitosa!</b>
-    </>
-  );
-  const messageNegativo = (
-    <>
-      <b>Problema con el servidor, intente nuevamente.</b>
-    </>
-  );
+
   function CallToast(mensaje, tipo) {
     setTipo(tipo);
     setMensaje(mensaje);
