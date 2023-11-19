@@ -1,5 +1,5 @@
 import { ConfiguracionEgresos } from "../components/ConfiguracionEgresos/ConfiguracionEgresos";
-import { ConfiguracionDatosPersonales } from "../components/ConfiguracionDatosPersonales";
+import { ConfiguracionDatosPersonales } from "../components/ConfiguracionDatosPersonales/ConfiguracionDatosPersonales";
 import { ConfiguracionHistorialLaboral } from "../components/ConfiguracionHistorialLaboral/ConfiguracionHistorialLaboral";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
