@@ -6,6 +6,8 @@ import { Loading } from "../../../ui/components/Loading";
 import { useForm } from "../../../egresados/hooks/useForm";
 import { ToastNotificacionPush } from "../../../egresados/components/ToastNotificacionPush";
 import { TablaPuestos } from "./components/TablaPuestos";
+import { ModalEditPuestos } from "./components/ModalEditPuestos";
+import { ModalDeletePuestos } from "./components/ModalDeletePuestos";
 
 export const AdminPuestos = () => {
   const [loading, setLoading] = useState(true);
@@ -271,100 +273,24 @@ export const AdminPuestos = () => {
             )}
           </div>
 
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {addMode ? "Agregar" : "Modificar"} puesto
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formPuesto">
-                  <Form.Label>Nombre del Puesto:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formState.puesto}
-                    onChange={onInputChange}
-                    name="puesto"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formDescrpPuesto">
-                  <Form.Label>Descripción:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formState.descripcion}
-                    onChange={onInputChange}
-                    name="descripcion"
-                  />
-                </Form.Group>
-              </Form>
+          <ModalEditPuestos
+            show={show}
+            handleClose={handleClose}
+            formState={formState}
+            onInputChange={onInputChange}
+            addMode={addMode}
+            handleSubmit={handleSubmit}
+            showAlert={showAlert}
+            waitAxios={waitAxios}
+          />
 
-              {showAlert && !(formState.puesto && formState.descripcion) ? (
-                <>
-                  <Alert
-                    variant="danger"
-                    onClose={() => setShowAlert(false)}
-                    dismissible
-                  >
-                    {!(formState.puesto && formState.descripcion) ? (
-                      <b>
-                        - Formulario incompleto, falta: <br />
-                      </b>
-                    ) : (
-                      ""
-                    )}
-                    {!formState.puesto ? "Nombre del puesto," : ""}
-                    {!formState.descripcion ? " Descripción," : ""}
-                  </Alert>
-                </>
-              ) : (
-                ""
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                disabled={waitAxios}
-              >
-                Cerrar
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-                disabled={waitAxios}
-              >
-                Guardar Cambios
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
-            <Modal.Header closeButton>
-              <Modal.Title>¿Eliminar Puesto de Trabajo?</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              ¿Desea eliminar el siguiente puesto de trabajo? <br />
-              <b>"{toDelete?.puesto}"</b>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={handleCloseModalDelete}
-                disabled={eliminarButtonDisabled}
-              >
-                Cerrar
-              </Button>
-              <Button
-                type="submit"
-                onClick={handleSubmitModalDelete}
-                variant="danger"
-                disabled={eliminarButtonDisabled}
-              >
-                Eliminar
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <ModalDeletePuestos
+            showModalDelete={showModalDelete}
+            handleCloseModalDelete={handleCloseModalDelete}
+            eliminarButtonDisabled={eliminarButtonDisabled}
+            toDelete={toDelete}
+            handleSubmitModalDelete={handleSubmitModalDelete}
+          />
 
           <ToastNotificacionPush
             mensaje={mensaje}

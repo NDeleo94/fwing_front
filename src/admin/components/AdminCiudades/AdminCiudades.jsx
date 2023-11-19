@@ -6,6 +6,8 @@ import { Loading } from "../../../ui/components/Loading";
 import { useForm } from "../../../egresados/hooks/useForm";
 import { ToastNotificacionPush } from "../../../egresados/components/ToastNotificacionPush";
 import { TablaCiudades } from "./components/TablaCiudades";
+import { ModalEditCiudades } from "./components/ModalEditCiudades";
+import { ModalDeleteCiudades } from "./components/ModalDeleteCiudades";
 
 export const AdminCiudades = () => {
   const [loading, setLoading] = useState(true);
@@ -274,90 +276,24 @@ export const AdminCiudades = () => {
             )}
           </div>
 
-          <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                {addMode ? "Agregar" : "Modificar"} ciudad
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formCity">
-                  <Form.Label>Nombre de la Ciudad:</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={formState.ciudad}
-                    onChange={onInputChange}
-                    name="ciudad"
-                  />
-                </Form.Group>
-              </Form>
+          <ModalEditCiudades
+            show={show}
+            handleClose={handleClose}
+            formState={formState}
+            onInputChange={onInputChange}
+            addMode={addMode}
+            handleSubmit={handleSubmit}
+            showAlert={showAlert}
+            waitAxios={waitAxios}
+          />
 
-              {showAlert && !formState.ciudad ? (
-                <>
-                  <Alert
-                    variant="danger"
-                    onClose={() => setShowAlert(false)}
-                    dismissible
-                  >
-                    {!formState.ciudad ? (
-                      <b>
-                        - Formulario incompleto, falta: <br />
-                      </b>
-                    ) : (
-                      ""
-                    )}
-                    {!formState.ciudad ? "Nombre de la ciudad." : ""}
-                  </Alert>
-                </>
-              ) : (
-                ""
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                disabled={waitAxios}
-              >
-                Cerrar
-              </Button>
-              <Button
-                variant="primary"
-                onClick={handleSubmit}
-                disabled={waitAxios}
-              >
-                Guardar Cambios
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal show={showModalDelete} onHide={handleCloseModalDelete}>
-            <Modal.Header closeButton>
-              <Modal.Title>¿Eliminar Ciudad?</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              ¿Desea eliminar la siguiente ciudad? <br />
-              <b>"{toDelete?.ciudad}"</b>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={handleCloseModalDelete}
-                disabled={eliminarButtonDisabled}
-              >
-                Cerrar
-              </Button>
-              <Button
-                type="submit"
-                onClick={handleSubmitModalDelete}
-                variant="danger"
-                disabled={eliminarButtonDisabled}
-              >
-                Eliminar
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <ModalDeleteCiudades
+            showModalDelete={showModalDelete}
+            handleCloseModalDelete={handleCloseModalDelete}
+            eliminarButtonDisabled={eliminarButtonDisabled}
+            toDelete={toDelete}
+            handleSubmitModalDelete={handleSubmitModalDelete}
+          />
 
           <ToastNotificacionPush
             mensaje={mensaje}
