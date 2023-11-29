@@ -39,7 +39,7 @@ export const AdminPuestos = () => {
                 );
             })
             .catch((error) => console.log(error)); */
-    }, [actualizador]);
+    }, [actualizador, organizaciones]);
 
     /* Modal agregar/editar organizacion */
     const [show, setShow] = useState(false);
@@ -228,7 +228,7 @@ export const AdminPuestos = () => {
         } else {
             setFilteredOrganizations(organizaciones);
         }
-    }, [formState.searchText]);
+    }, [organizaciones, formState.searchText]);
 
     return (
         <>
