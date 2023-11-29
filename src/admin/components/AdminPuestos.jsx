@@ -39,7 +39,7 @@ export const AdminPuestos = () => {
                 );
             })
             .catch((error) => console.log(error)); */
-    }, [actualizador, organizaciones]);
+    }, [actualizador]);
 
     /* Modal agregar/editar organizacion */
     const [show, setShow] = useState(false);
