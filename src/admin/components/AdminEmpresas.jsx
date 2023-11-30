@@ -265,7 +265,7 @@ export const AdminEmpresas = () => {
         } else {
             setFilteredOrganizations(organizaciones);
         }
-    }, [formState.searchText]);
+    }, [organizaciones, formState.searchText]);
 
     return (
         <>

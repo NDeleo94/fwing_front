@@ -228,7 +228,7 @@ export const AdminPuestos = () => {
         } else {
             setFilteredOrganizations(organizaciones);
         }
-    }, [formState.searchText]);
+    }, [organizaciones, formState.searchText]);
 
     return (
         <>

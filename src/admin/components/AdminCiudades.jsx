@@ -229,7 +229,7 @@ export const AdminCiudades = () => {
         } else {
             setFilteredOrganizations(organizaciones);
         }
-    }, [formState.searchText]);
+    }, [organizaciones, formState.searchText]);
 
 
     return (
