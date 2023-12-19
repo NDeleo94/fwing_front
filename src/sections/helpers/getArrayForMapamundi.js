@@ -1,5 +1,8 @@
 /* Este método devuelve un array donde cada elemento contiene la siguiente información:
-    [Nombre Ciudad, [x,y], cantidad de egresados, [url de las fotos de perfil de los egresados]]
+    [Nombre Ciudad, [x,y], cantidad de egresados, [egresados que trabajan allí]]
+
+    El array [egresados que trabajan allí] contiene:
+    [id, url de foto de perfil, nombre, apellido]
 
     La entrada de data, cada elemento debe tener un atributo llamado "ciudad" 
     donde dentro se encuentra: "ciudad","lat" y "long"
@@ -37,14 +40,24 @@ export const getArrayForMapamundi = (data) => {
                 a,
                 b,
                 c + 1,
-                [...d, urlPerfilPhoto(actividad.usuario)],
+                [...d, [{
+                    id: actividad.usuario.id,
+                    url: urlPerfilPhoto(actividad.usuario),
+                    apellidos: actividad.usuario.apellidos,
+                    nombres: actividad.usuario.nombres
+                }]],
             ];
         } else {
             arreglo.push([
                 actividad.ciudad.ciudad,
                 [actividad.ciudad.lat, actividad.ciudad.long],
                 1,
-                [urlPerfilPhoto(actividad.usuario)],
+                [{
+                    id: actividad.usuario.id,
+                    url: urlPerfilPhoto(actividad.usuario),
+                    apellidos: actividad.usuario.apellidos,
+                    nombres: actividad.usuario.nombres
+                }]
             ]);
         }
     });

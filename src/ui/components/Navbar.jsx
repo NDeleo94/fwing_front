@@ -79,7 +79,7 @@ export const Navbar = () => {
     /* Fin DataContext */
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
                 <div className="container-fluid">
                     <button
                         className="navbar-toggler"
