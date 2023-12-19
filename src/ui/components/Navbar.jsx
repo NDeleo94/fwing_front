@@ -15,7 +15,7 @@ export const Navbar = () => {
     const onLogout = () => {
         setUser(null);
         setToken(null);
-        setIsLogged(false)
+        setIsLogged(false);
         navigate("/login", {
             replace: true,
         });
@@ -111,8 +111,7 @@ export const Navbar = () => {
                             <div className="navbar-nav">
                                 <NavLink
                                     className={({ isActive }) =>
-                                        `nav-item nav-link ${
-                                            isActive ? "active" : ""
+                                        `nav-item nav-link ${isActive ? "active" : ""
                                         } `
                                     }
                                     to="/home"
@@ -122,8 +121,7 @@ export const Navbar = () => {
 
                                 <NavLink
                                     className={({ isActive }) =>
-                                        `nav-item nav-link ${
-                                            isActive ? "active" : ""
+                                        `nav-item nav-link ${isActive ? "active" : ""
                                         } `
                                     }
                                     to="/carrera"
@@ -178,9 +176,10 @@ export const Navbar = () => {
                             </div>
                         </div>
 
-                        <div className="row justify-content-between">
-                            <div className="d-flex col-sm-12">
-                                {/* Sin loguear */}
+                        <div className="row">
+
+                            {/* Sin loguear */}
+                            <div className="col-lg-4 col-12">
                                 {!user ? (
                                     <Button variant="success" onClick={onLogin}>
                                         Ingresar
@@ -213,35 +212,33 @@ export const Navbar = () => {
                                         </NavDropdown>
                                     </div>
                                 )}
-                                <div>
-                                    <br />
-                                </div>
-                                <div className="input-group ms-3 col">
-                                    <Form>
-                                        <InputGroup>
-                                            <Form.Control
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Buscar"
-                                                aria-label="Buscar"
-                                                aria-describedby="button-addon2"
-                                                value={formState.q}
-                                                name="q"
-                                                onChange={onInputChange}
-                                                onKeyDown={enterPulsed}
-                                            />
-                                            <Button
-                                                variant="btn btn-outline-secondary"
-                                                type="button"
-                                                id="button-addon2"
-                                                onClick={toBusqueda}
-                                            >
-                                                <i className="bi bi-search"></i>
-                                            </Button>
-                                        </InputGroup>
-                                    </Form>
-                                </div>
                             </div>
+                            <div className="ms-lg-1 my-lg-0 mt-2 mb-1 col-lg-6 col-12">
+                                <Form>
+                                    <InputGroup>
+                                        <Form.Control
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Buscar"
+                                            aria-label="Buscar"
+                                            aria-describedby="button-addon2"
+                                            value={formState.q}
+                                            name="q"
+                                            onChange={onInputChange}
+                                            onKeyDown={enterPulsed}
+                                        />
+                                        <Button
+                                            variant="btn btn-outline-secondary"
+                                            type="button"
+                                            id="button-addon2"
+                                            onClick={toBusqueda}
+                                        >
+                                            <i className="bi bi-search"></i>
+                                        </Button>
+                                    </InputGroup>
+                                </Form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
