@@ -150,8 +150,6 @@ export const LoginPage = () => {
 
                 <hr />
                 <GoogleButton />
-                <hr />
-                <LinkedInButton />
             </div>
 
             <Modal show={show} onHide={handleClose}>
