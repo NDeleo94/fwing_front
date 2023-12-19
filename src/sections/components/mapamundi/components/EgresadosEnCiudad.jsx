@@ -10,7 +10,10 @@ export const EgresadosEnCiudad = ({ ciudad }) => {
         const j = Math.floor(Math.random() * (i + 1));
         [urlRandom[i], urlRandom[j]] = [urlRandom[j], urlRandom[i]];
     }
-
+console.log(ciudad[3][0])
+console.log(ciudad[3])
+console.log(ciudad[3])
+console.log(ciudad[3])
     return (
         <div className="text-center">
             Ciudad: {ciudad[0]}
@@ -21,7 +24,7 @@ export const EgresadosEnCiudad = ({ ciudad }) => {
                 <Fragment key={index}>
                     {index < 3 && ( // aquí pongo el límite para que me muestre solo 3 egresados por ciudad
                         <>
-                            <Link to={`/perfil/${ciudad[3].id}`}>
+                            <Link to={`/perfil/${ciudad[3][0].id}`}>
                                 <Image
                                     src={
                                         ciudad[3].length < 4 // Para evitar que se repitan fotos si hay menos de 4 ingenieros en esa ciudad
@@ -40,6 +43,7 @@ export const EgresadosEnCiudad = ({ ciudad }) => {
                                     className={
                                         index == 0 || index == 2 ? "" : "m-1"
                                     }
+                                    title={`${ciudad[3][0].nombres} ${ciudad[3][0].apellidos}`}
                                 />
                             </Link>
                         </>
