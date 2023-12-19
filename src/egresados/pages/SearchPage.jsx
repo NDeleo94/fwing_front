@@ -148,7 +148,7 @@ export const SearchPage = ({ data }) => {
     return (
         <>
             <div className="row">
-                <h4>Buscar Egresado</h4>
+                <h4 className="mt-3">Buscar Egresado</h4>
                 <hr />
                 <form>
                     <input

@@ -10,7 +10,7 @@ export const EgresadoList = ({ data }) => {
 
   return (
     <>
-      <div className="row rows-cols-1 row-cols-md-1 g-3">
+      <div className="row rows-cols-1 row-cols-1 g-3">
         {listaEgresados
           ? listaEgresados.map((egre) => (
               <EgresadoCard key={egre.id} {...egre} />

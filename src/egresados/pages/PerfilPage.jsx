@@ -34,7 +34,7 @@ export const PerfilPage = () => {
             <div className="container-fluid mt-4">
                 {user?.is_admin && (<h5 className="text-danger">**Celdas rojas indican información oculta al público.</h5>)}
                 <div className="row">
-                    <div className="col-4">
+                    <div className="col-md-4 col-12">
                         <PerfilEgresadoCard {...data} />
                         <p className="text-body-secondary">
                             {lastLoggin
@@ -42,7 +42,7 @@ export const PerfilPage = () => {
                                 : `Usuario sin loguearse a la fecha.`}
                         </p>
                     </div>
-                    <div className="col-8">
+                    <div className="col-md-8 col-12">
                         <DatosPersonalesEgresadoCard {...data} />
                         <DatosLaboralesEgresadosCard {...data} />
                         <DatosTitulosEgresadosCard {...data} />
