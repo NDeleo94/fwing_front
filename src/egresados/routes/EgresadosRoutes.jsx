@@ -11,8 +11,6 @@ export const EgresadosRoutes = () => {
       {user ? (
         <Routes>
           <Route path="configuracion" element={<ConfiguracionPage />} />
-
-          {/* ¿Faltaría cerrar Sesión? */}
         </Routes>
       ) : (
         <Navigate to="/home" replace />

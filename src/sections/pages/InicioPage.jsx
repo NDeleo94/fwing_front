@@ -1,11 +1,17 @@
+import { useContext } from "react";
+import { ToastNotificacionPush } from "../../egresados/components/ToastNotificacionPush";
 import {
-    EmpresasDestacadas,
     LogoFACETyUNT,
     QueEsFollowing,
 } from "../components";
 import { Mapa } from "../components/mapamundi/Mapa";
+import { LoginContext } from "../../context/LoginContext";
 
 export const InicioPage = () => {
+    const { isLogged, user } = useContext(LoginContext);
+
+    let message = '¡Bienvenido ' + user?.nombres + ' a Following!'
+
     return (
         <>
             <div className="container-fluid">
@@ -29,16 +35,18 @@ export const InicioPage = () => {
                     <div className="card-body text-center">
 
                         <h4>Mapamundi de Egresados por el mundo...</h4>
-                        <Mapa></Mapa>
+                        <Mapa />
                     </div>
                 </div>
                 {/* /Mapamundi */}
-                <div className="row my-2">
+                {/* <div className="row my-2">
                     <div className="col">
                         <EmpresasDestacadas />
                     </div>
-                </div>
+                </div> */}
             </div>
+            {isLogged && <ToastNotificacionPush mensaje={message} />
+            }
         </>
     );
 };

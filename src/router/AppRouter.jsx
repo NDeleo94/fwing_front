@@ -37,13 +37,10 @@ export const AppRouter = () => {
 
     // DataContext
     const [data, setData] = useState(null);
-    const [lastUpdate, setLastUpdate] = useState(null);
     const [loading, setLoading] = useState(false);
     const dataMain = {
         data,
         setData,
-        lastUpdate,
-        setLastUpdate,
         loading,
         setLoading,
     };
@@ -59,15 +56,6 @@ export const AppRouter = () => {
                             <Route path="home" element={<InicioPage />} />
                             <Route path="login" element={<LoginPage />} />
                             <Route path="carrera" element={<CarreraPage />} />
-                            <Route path="facultad" element={<FacultadPage />} />
-                            <Route
-                                path="universidad"
-                                element={<UniversidadPage />}
-                            />
-                            <Route path="mmundial" element={<MMundialPage />} />
-                            <Route path="mpais" element={<MPaisPage />} />
-                            <Route path="mlocal" element={<MLocalPage />} />
-                            <Route path="honores" element={<HonoresPage />} />
                             <Route path="search" element={<SearchPage />} />
                             <Route path="perfil/:id" element={<PerfilPage />} />
                             <Route
