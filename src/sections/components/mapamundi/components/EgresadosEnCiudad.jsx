@@ -10,10 +10,7 @@ export const EgresadosEnCiudad = ({ ciudad }) => {
         const j = Math.floor(Math.random() * (i + 1));
         [urlRandom[i], urlRandom[j]] = [urlRandom[j], urlRandom[i]];
     }
-console.log(ciudad[3][0])
-console.log(ciudad[3])
-console.log(ciudad[3])
-console.log(ciudad[3])
+    
     return (
         <div className="text-center">
             Ciudad: {ciudad[0]}
@@ -24,16 +21,16 @@ console.log(ciudad[3])
                 <Fragment key={index}>
                     {index < 3 && ( // aquí pongo el límite para que me muestre solo 3 egresados por ciudad
                         <>
-                            <Link to={`/perfil/${ciudad[3][0].id}`}>
+                            <Link to={`/perfil/${ciudad[4][index].id}`}>
                                 <Image
                                     src={
                                         ciudad[3].length < 4 // Para evitar que se repitan fotos si hay menos de 4 ingenieros en esa ciudad
-                                            ? foto.url == "Logo" // Corrijo para que pueda aparecer el logo
-                                                ? Logo
-                                                : foto.url
-                                            : urlRandom[index] == "Logo"
-                                                ? Logo
-                                                : urlRandom[index]
+                                        ? foto == "Logo" // Corrijo para que pueda aparecer el logo
+                                            ? Logo
+                                            : foto
+                                        : urlRandom[index] == "Logo"
+                                        ? Logo
+                                        : urlRandom[index]
                                     }
                                     style={{
                                         width: "45px",
@@ -43,7 +40,7 @@ console.log(ciudad[3])
                                     className={
                                         index == 0 || index == 2 ? "" : "m-1"
                                     }
-                                    title={`${ciudad[3][0].nombres} ${ciudad[3][0].apellidos}`}
+                                    title={`${ciudad[4][index].nombres} ${ciudad[4][index].apellidos}`}
                                 />
                             </Link>
                         </>

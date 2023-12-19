@@ -1,8 +1,15 @@
 /* Este método devuelve un array donde cada elemento contiene la siguiente información:
-    [Nombre Ciudad, [x,y], cantidad de egresados, [egresados que trabajan allí]]
-
-    El array [egresados que trabajan allí] contiene:
-    [id, url de foto de perfil, nombre, apellido]
+    [
+        Nombre Ciudad, 
+        [x,y], 
+        cantidad de egresados, 
+        [url de las fotos de perfil de los egresados]
+        [{
+            id: "",
+            nombres: "",
+            apellidos: "",
+        }]
+    ]
 
     La entrada de data, cada elemento debe tener un atributo llamado "ciudad" 
     donde dentro se encuentra: "ciudad","lat" y "long"
@@ -35,29 +42,29 @@ export const getArrayForMapamundi = (data) => {
         );
 
         if (c.length != 0) {
-            let [a, b, c, d] = arreglo[index];
+            let [a, b, c, d, e] = arreglo[index];
             arreglo[index] = [
                 a,
                 b,
                 c + 1,
-                [...d, [{
+                [...d, urlPerfilPhoto(actividad.usuario)],
+                [...e, {
                     id: actividad.usuario.id,
-                    url: urlPerfilPhoto(actividad.usuario),
-                    apellidos: actividad.usuario.apellidos,
-                    nombres: actividad.usuario.nombres
-                }]],
+                    nombres: actividad.usuario.nombres,
+                    apellidos: actividad.usuario.apellidos
+                }]
             ];
         } else {
             arreglo.push([
                 actividad.ciudad.ciudad,
                 [actividad.ciudad.lat, actividad.ciudad.long],
                 1,
+                [urlPerfilPhoto(actividad.usuario)],
                 [{
                     id: actividad.usuario.id,
-                    url: urlPerfilPhoto(actividad.usuario),
-                    apellidos: actividad.usuario.apellidos,
-                    nombres: actividad.usuario.nombres
-                }]
+                    nombres: actividad.usuario.nombres,
+                    apellidos: actividad.usuario.apellidos
+                }],
             ]);
         }
     });
