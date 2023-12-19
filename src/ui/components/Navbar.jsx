@@ -8,13 +8,14 @@ import { DataContext } from "../../context/DataContext";
 import { useFetchEgresados } from "../../egresados/hooks/useFetchEgresados";
 
 export const Navbar = () => {
-    const { user, setUser, setToken } = useContext(LoginContext);
+    const { user, setUser, setToken, setIsLogged } = useContext(LoginContext);
 
     const navigate = useNavigate();
 
     const onLogout = () => {
         setUser(null);
         setToken(null);
+        setIsLogged(false)
         navigate("/login", {
             replace: true,
         });
