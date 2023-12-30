@@ -35,7 +35,7 @@ export const Mapa = () => {
             setArrayCompleto(getArrayForMapamundi(actividadesActuales));
         }
     }, [actividadesActuales]);
-
+    console.log(arrayCompleto)
     return (
         <>
             <MapContainer

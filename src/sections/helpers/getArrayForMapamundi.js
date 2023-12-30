@@ -42,16 +42,16 @@ export const getArrayForMapamundi = (data) => {
         );
 
         if (c.length != 0) {
-            let [a, b, c, d, e] = arreglo[index];
+            let [a, b, c, d,] = arreglo[index];
             arreglo[index] = [
                 a,
                 b,
                 c + 1,
-                [...d, urlPerfilPhoto(actividad.usuario)],
-                [...e, {
+                [...d, {
                     id: actividad.usuario.id,
                     nombres: actividad.usuario.nombres,
-                    apellidos: actividad.usuario.apellidos
+                    apellidos: actividad.usuario.apellidos,
+                    url: urlPerfilPhoto(actividad.usuario),
                 }]
             ];
         } else {
@@ -59,11 +59,11 @@ export const getArrayForMapamundi = (data) => {
                 actividad.ciudad.ciudad,
                 [actividad.ciudad.lat, actividad.ciudad.long],
                 1,
-                [urlPerfilPhoto(actividad.usuario)],
                 [{
                     id: actividad.usuario.id,
                     nombres: actividad.usuario.nombres,
-                    apellidos: actividad.usuario.apellidos
+                    apellidos: actividad.usuario.apellidos,
+                    url: urlPerfilPhoto(actividad.usuario),
                 }],
             ]);
         }
